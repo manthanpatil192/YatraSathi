@@ -1,0 +1,98 @@
+@import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
+
+@theme {
+  --color-sand-50: #FFF8F0;
+  --color-sand-100: #FFEFDB;
+  --color-sand-200: #FFE0B8;
+  --color-sand-300: #E8A87C;
+  --color-sand-400: #D4956B;
+  --color-sand-500: #C4845C;
+  --color-ocean-50: #E6F7FA;
+  --color-ocean-100: #B3E8F0;
+  --color-ocean-200: #80D9E6;
+  --color-ocean-300: #4DC9DB;
+  --color-ocean-400: #2B9EB3;
+  --color-ocean-500: #1A7A8A;
+  --color-ocean-600: #0F5C68;
+  --color-ocean-900: #09343c;
+  --color-ocean-950: #041b20;
+  --color-seafoam-300: #7DD8C0;
+  --color-seafoam-400: #3CBEB5;
+  --color-seafoam-500: #2A9D8F;
+  --color-coral-400: #E76F51;
+  --color-coral-500: #D45D3F;
+  --color-sunset-400: #F4A261;
+  --color-sunset-500: #E88D3E;
+  --font-family-heading: 'Outfit', sans-serif;
+  --font-family-body: 'Inter', sans-serif;
+}
+
+/* Base styles */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f8fafc;
+  color: #0f172a;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Outfit', sans-serif;
+}
+
+/* Glassmorphism background utilities */
+.glass-beachy-bg {
+  background: linear-gradient(135deg, rgba(230, 247, 250, 0.6) 0%, rgba(255, 239, 219, 0.4) 50%, rgba(224, 242, 254, 0.6) 100%);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #f1f5f9; }
+::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #0f5c68; }
+
+/* Bounce animation for buttons */
+.btn-bounce {
+  transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.btn-bounce:hover {
+  transform: translateY(-2px) scale(1.02);
+}
+.btn-bounce:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+/* Fixed, smooth safety SOS pulse (replaces rapid flickering) */
+.smooth-sos-pulse {
+  animation: smoothPulse 2.5s infinite cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+@keyframes smoothPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(225, 29, 72, 0.5), 0 0 20px rgba(225, 29, 72, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 0 24px rgba(225, 29, 72, 0), 0 0 40px rgba(225, 29, 72, 0.6);
+  }
+}
