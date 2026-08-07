@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { FiShield, FiPhoneCall, FiClock, FiUsers, FiSun, FiCloudRain, FiWind, FiCheckCircle, FiAlertCircle, FiRefreshCw } from 'react-icons/fi';
 import SOSButton from '../components/safety/SOSButton';
 import CheckInTimer from '../components/safety/CheckInTimer';
@@ -11,7 +11,6 @@ export default function SafetyPage() {
 
   const selectedCity = destinations.find(d => String(d.id) === String(selectedCityId)) || destinations[0];
 
-  // Simulated Live Crowd Radar Data
   const crowdRadarData = {
     d1: { level: 'Moderate', density: '62%', status: '🟡 Moderate Footfall', peakTime: '05:00 PM - 09:00 PM', weather: '28°C Sunny', humidity: '68%', wind: '14 km/h' },
     d2: { level: 'High', density: '85%', status: '🔴 High Tourist Rush', peakTime: '11:00 AM - 04:00 PM', weather: '16°C Clear Mist', humidity: '45%', wind: '10 km/h' },
@@ -30,36 +29,44 @@ export default function SafetyPage() {
   };
 
   return (
-    <div className="min-h-screen pt-24 pb-32 text-white relative z-10 animate-fade-in">
+    <div className="min-h-screen pt-28 pb-32 text-white relative z-10 animate-fade-in">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         
-        {/* Safety Header */}
-        <div className="bg-slate-900/85 backdrop-blur-2xl rounded-3xl p-6 sm:p-8 border border-slate-700/80 shadow-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-          <div className="space-y-2">
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-rose-500/20 text-rose-300 border border-rose-500/30 rounded-full text-xs font-black uppercase tracking-wider">
-              <span>🛡️ 24/7 National Tourist Safety & Radar Command</span>
-            </div>
-            <h1 className="text-3xl sm:text-4xl font-heading font-extrabold text-white">
-              Emergency SOS & Live Crowd Radar
-            </h1>
-            <p className="text-slate-300 text-xs sm:text-sm font-medium max-w-2xl">
-              Access instant GPS SOS broadcasting, live real-time crowd density meters, weather status, and national helplines.
-            </p>
-          </div>
+        {/* Full-Bleed Coastal Ridge Hero Banner */}
+        <div className="relative rounded-3xl overflow-hidden min-h-[240px] border border-slate-700/80 shadow-2xl p-6 sm:p-10 flex flex-col justify-end">
+          <img 
+            src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80" 
+            alt="Misty Pine Forest Background" 
+            className="absolute inset-0 w-full h-full object-cover object-center filter brightness-[0.35] transform scale-105 pointer-events-none"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent"></div>
 
-          <button
-            onClick={handleRefresh}
-            className="px-4 py-2.5 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs border border-slate-700 flex items-center gap-2 transition-colors shrink-0"
-          >
-            <FiRefreshCw className={isRefreshing ? 'animate-spin' : ''} />
-            <span>Updated: {lastUpdated}</span>
-          </button>
+          <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+            <div className="space-y-2">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30 text-xs font-bold uppercase tracking-wider backdrop-blur-md">
+                <span>🛡️ 24/7 TOURIST SAFETY RADAR</span>
+              </div>
+              <h1 className="text-3xl sm:text-4xl font-heading font-extrabold text-white">
+                Emergency SOS & Live Crowd Radar
+              </h1>
+              <p className="text-slate-200 text-xs sm:text-sm font-medium max-w-2xl">
+                Access instant GPS SOS broadcasting, live real-time crowd density meters, weather status, and national helplines.
+              </p>
+            </div>
+
+            <button
+              onClick={handleRefresh}
+              className="px-4 py-2.5 rounded-2xl bg-slate-950/90 hover:bg-slate-900 text-slate-200 font-bold text-xs border border-slate-700 flex items-center gap-2 transition-colors shrink-0 backdrop-blur-md"
+            >
+              <FiRefreshCw className={isRefreshing ? 'animate-spin' : ''} />
+              <span>Updated: {lastUpdated}</span>
+            </button>
+          </div>
         </div>
 
         {/* Top SOS & Check-in Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           
-          {/* Left Column (5 cols): SOS Trigger Button */}
           <div className="lg:col-span-5 bg-slate-900/90 backdrop-blur-xl p-8 rounded-3xl border border-slate-700/80 shadow-xl flex flex-col items-center justify-center text-center space-y-6">
             <div className="space-y-1">
               <h2 className="text-2xl font-heading font-extrabold text-white">Emergency SOS Alert</h2>
@@ -69,7 +76,6 @@ export default function SafetyPage() {
             <SOSButton />
           </div>
 
-          {/* Right Column (7 cols): Safety Check-in Timer */}
           <div className="lg:col-span-7 bg-slate-900/90 backdrop-blur-xl p-8 rounded-3xl border border-slate-700/80 shadow-xl space-y-6">
             <div className="space-y-1 border-b border-slate-800 pb-4">
               <h2 className="text-2xl font-heading font-extrabold text-white">Solo Traveler Check-in Radar</h2>

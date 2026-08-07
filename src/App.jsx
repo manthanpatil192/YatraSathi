@@ -5,7 +5,6 @@ import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import OfflineIndicator from './components/OfflineIndicator';
 import YatraAIChatbot from './components/chat/YatraAIChatbot';
-import AuroraBackground from './components/background/AuroraBackground';
 
 // Lazy load pages
 const LoginPage = lazy(() => import('./pages/LoginPage'));
@@ -21,8 +20,8 @@ const EcoDiscoveryPage = lazy(() => import('./pages/EcoDiscoveryPage'));
 
 const LoadingFallback = () => (
   <div className="flex flex-col items-center justify-center min-h-screen bg-slate-950 text-white">
-    <div className="w-16 h-16 border-4 border-ocean-400 border-t-amber-400 rounded-full animate-spin"></div>
-    <p className="mt-4 text-amber-300 font-heading text-xl animate-pulse">Loading adventure...</p>
+    <div className="w-16 h-16 border-4 border-teal-400 border-t-amber-400 rounded-full animate-spin"></div>
+    <p className="mt-4 text-amber-300 font-heading text-xl animate-pulse">Loading YatraSathi...</p>
   </div>
 );
 
@@ -31,11 +30,8 @@ const AppContent = () => {
   const isLoginPage = location.pathname === '/';
 
   return (
-    <div className={`flex flex-col min-h-screen relative overflow-x-hidden ${!isLoginPage ? 'bg-slate-950 text-slate-100' : ''}`}>
+    <div className={`flex flex-col min-h-screen relative overflow-x-hidden ${!isLoginPage ? 'bg-slate-950 text-slate-100 font-sans' : ''}`}>
       
-      {/* 3D Northern Lights (Aurora Borealis) Canvas Background for all app pages */}
-      {!isLoginPage && <AuroraBackground />}
-
       {!isLoginPage && <Navbar />}
 
       <main className="flex-grow relative z-10">

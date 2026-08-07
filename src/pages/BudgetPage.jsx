@@ -86,36 +86,44 @@ export default function BudgetPage() {
   };
 
   return (
-    <div className="min-h-screen pt-24 pb-32 text-white relative z-10 animate-fade-in">
+    <div className="min-h-screen pt-28 pb-32 text-white relative z-10 animate-fade-in">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         
-        {/* Hackathon Header */}
-        <div className="bg-slate-900/85 backdrop-blur-2xl rounded-3xl p-6 sm:p-8 border border-slate-700/80 shadow-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-          <div className="space-y-2">
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-400/20 text-emerald-300 border border-emerald-400/30 rounded-full text-xs font-black uppercase tracking-wider">
-              <span>🏆 Hackathon-Winning AI Financial Engine</span>
-            </div>
-            <h1 className="text-3xl sm:text-4xl font-heading font-extrabold text-white">
-              Trip Budget & Group Cost Planner
-            </h1>
-            <p className="text-slate-300 text-xs sm:text-sm font-medium max-w-2xl">
-              Calculate running trip expenses, split costs for group travelers, and optimize savings with AI tariff benchmarks.
-            </p>
-          </div>
+        {/* Full-Bleed Travel Photography Hero Banner */}
+        <div className="relative rounded-3xl overflow-hidden min-h-[240px] border border-slate-700/80 shadow-2xl p-6 sm:p-10 flex flex-col justify-end">
+          <img 
+            src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1600&q=80" 
+            alt="Valley Lake Background" 
+            className="absolute inset-0 w-full h-full object-cover object-center filter brightness-[0.35] transform scale-105 pointer-events-none"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent"></div>
 
-          <button
-            onClick={handleSaveBudget}
-            className="btn-bounce px-6 py-3.5 rounded-2xl bg-gradient-to-r from-coral-500 to-sunset-500 text-white font-heading font-extrabold text-xs shadow-lg shadow-coral-500/20 flex items-center gap-2 shrink-0"
-          >
-            {savedSuccess ? <FiCheck /> : <FiSave />}
-            <span>{savedSuccess ? 'Saved to DB!' : 'Save Budget Plan'}</span>
-          </button>
+          <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+            <div className="space-y-2">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-400/20 text-emerald-300 border border-emerald-400/30 text-xs font-bold uppercase tracking-wider backdrop-blur-md">
+                <span>🏆 AI FINANCIAL ENGINE</span>
+              </div>
+              <h1 className="text-3xl sm:text-4xl font-heading font-extrabold text-white leading-tight">
+                Trip Budget & Group Cost Planner
+              </h1>
+              <p className="text-slate-200 text-xs sm:text-sm font-medium max-w-2xl">
+                Calculate running trip expenses, split costs for group travelers, and optimize savings with AI tariff benchmarks.
+              </p>
+            </div>
+
+            <button
+              onClick={handleSaveBudget}
+              className="btn-bounce px-6 py-3.5 rounded-2xl bg-gradient-to-r from-coral-500 to-sunset-500 text-white font-heading font-extrabold text-xs shadow-lg flex items-center gap-2 shrink-0"
+            >
+              {savedSuccess ? <FiCheck /> : <FiSave />}
+              <span>{savedSuccess ? 'Saved to DB!' : 'Save Budget Plan'}</span>
+            </button>
+          </div>
         </div>
 
         {/* Real-Time Stats Overview Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           
-          {/* Total Spent vs Limit */}
           <div className="bg-slate-900/90 backdrop-blur-xl p-6 rounded-3xl border border-slate-700/80 shadow-xl space-y-2">
             <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider">Total Est. Budget</span>
             <div className="text-3xl font-heading font-black text-amber-300">
@@ -124,7 +132,6 @@ export default function BudgetPage() {
             <p className="text-xs text-slate-400 font-medium">Target Limit: ₹{budgetLimit.toLocaleString('en-IN')}</p>
           </div>
 
-          {/* Per Person Split */}
           <div className="bg-slate-900/90 backdrop-blur-xl p-6 rounded-3xl border border-slate-700/80 shadow-xl space-y-2">
             <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider">Per Person Cost ({travelersCount} Travelers)</span>
             <div className="text-3xl font-heading font-black text-teal-300">
@@ -133,7 +140,6 @@ export default function BudgetPage() {
             <p className="text-xs text-slate-400 font-medium">Split evenly among group</p>
           </div>
 
-          {/* Per Day Average */}
           <div className="bg-slate-900/90 backdrop-blur-xl p-6 rounded-3xl border border-slate-700/80 shadow-xl space-y-2">
             <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider">Daily Expense Rate ({tripDays} Days)</span>
             <div className="text-3xl font-heading font-black text-sky-300">
@@ -142,7 +148,6 @@ export default function BudgetPage() {
             <p className="text-xs text-slate-400 font-medium">Estimated daily burn rate</p>
           </div>
 
-          {/* AI Health Score Meter */}
           <div className="bg-slate-900/90 backdrop-blur-xl p-6 rounded-3xl border border-slate-700/80 shadow-xl space-y-2">
             <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider">Budget Health Score</span>
             <div className="flex items-center gap-2">
@@ -159,7 +164,6 @@ export default function BudgetPage() {
         {/* Sliders & Charts Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           
-          {/* Left Column (7 cols): Category Sliders & Controls */}
           <div className="lg:col-span-7 space-y-6">
             
             <div className="bg-slate-900/90 backdrop-blur-xl p-6 sm:p-8 rounded-3xl border border-slate-700/80 shadow-xl space-y-6">
@@ -214,7 +218,6 @@ export default function BudgetPage() {
 
             </div>
 
-            {/* Smart Saving Recommendations */}
             <div className="bg-slate-900/90 backdrop-blur-xl p-6 rounded-3xl border border-slate-700/80 shadow-xl space-y-4">
               <h3 className="font-heading font-extrabold text-base text-amber-300 flex items-center gap-2">
                 <FiZap /> AI Tariff Saving Hacks for Indian Travel
@@ -232,10 +235,8 @@ export default function BudgetPage() {
 
           </div>
 
-          {/* Right Column (5 cols): Visual Charts */}
           <div className="lg:col-span-5 space-y-6">
             
-            {/* Doughnut Chart */}
             <div className="bg-slate-900/90 backdrop-blur-xl p-6 rounded-3xl border border-slate-700/80 shadow-xl space-y-4">
               <h3 className="font-heading font-extrabold text-base text-white flex items-center gap-2">
                 <FiPieChart className="text-teal-400" /> Expense Breakdown
@@ -245,7 +246,6 @@ export default function BudgetPage() {
               </div>
             </div>
 
-            {/* Bar Chart */}
             <div className="bg-slate-900/90 backdrop-blur-xl p-6 rounded-3xl border border-slate-700/80 shadow-xl space-y-4">
               <h3 className="font-heading font-extrabold text-base text-white flex items-center gap-2">
                 <FiTrendingUp className="text-sky-400" /> Daily Forecast Trend
