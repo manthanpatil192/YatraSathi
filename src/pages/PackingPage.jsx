@@ -1,204 +1,229 @@
-import React, { useState, useEffect } from 'react';
-import { Briefcase, Check, Plus, Trash2, Edit2, Save, Umbrella, Mountain, Castle, Leaf } from 'lucide-react';
+import React, { useState } from 'react';
+import { FiCheckSquare, FiPlus, FiTrash2, FiRefreshCw, FiSun, FiFeather, FiShield, FiCompass } from 'react-icons/fi';
 
-const destinations = [
-  { id: 'beach', name: 'Beach', icon: <Umbrella className="w-5 h-5" />, color: 'bg-cyan-100 text-cyan-700 border-cyan-200' },
-  { id: 'mountain', name: 'Mountain', icon: <Mountain className="w-5 h-5" />, color: 'bg-slate-100 text-slate-700 border-slate-200' },
-  { id: 'heritage', name: 'Heritage', icon: <Castle className="w-5 h-5" />, color: 'bg-amber-100 text-amber-700 border-amber-200' },
-  { id: 'nature', name: 'Nature', icon: <Leaf className="w-5 h-5" />, color: 'bg-emerald-100 text-emerald-700 border-emerald-200' },
-];
-
-const initialCategories = {
-  Essentials: [{ id: 1, text: 'Water Bottle', packed: false }, { id: 2, text: 'Snacks', packed: false }],
-  Clothing: [{ id: 3, text: 'T-Shirts', packed: false }, { id: 4, text: 'Comfortable Shoes', packed: false }],
-  Toiletries: [{ id: 5, text: 'Toothbrush', packed: false }, { id: 6, text: 'Sunscreen', packed: false }],
-  Electronics: [{ id: 7, text: 'Phone Charger', packed: false }, { id: 8, text: 'Power Bank', packed: false }],
-  Documents: [{ id: 9, text: 'ID Card', packed: false }, { id: 10, text: 'Tickets', packed: false }],
+const PACKING_TEMPLATES = {
+  Beach: [
+    { id: 'b1', category: 'Clothing', name: 'Swimwear & Beach Shorts', packed: false },
+    { id: 'b2', category: 'Clothing', name: 'Flip-Flops & Sandals', packed: false },
+    { id: 'b3', category: 'Toiletries', name: 'Sunscreen SPF 50+ Broad Spectrum', packed: false },
+    { id: 'b4', category: 'Essentials', name: 'Waterproof Pouch for Phone & Cash', packed: false },
+    { id: 'b5', category: 'Essentials', name: 'UV Protection Sunglasses', packed: false },
+    { id: 'b6', category: 'Essentials', name: 'Microfiber Quick-Dry Towel', packed: false },
+    { id: 'b7', category: 'Electronics', name: 'Portable Waterproof Bluetooth Speaker', packed: false }
+  ],
+  Mountain: [
+    { id: 'm1', category: 'Clothing', name: 'Thermal Inners & Woolen Socks', packed: false },
+    { id: 'm2', category: 'Clothing', name: 'Heavy Fleece Jacket & Windcheater', packed: false },
+    { id: 'm3', category: 'Clothing', name: 'Sturdy Waterproof Trekking Boots', packed: false },
+    { id: 'm4', category: 'Clothing', name: 'Woolen Beanie & Gloves', packed: false },
+    { id: 'm5', category: 'Essentials', name: 'Thermos Insulated Hot Water Flask', packed: false },
+    { id: 'm6', category: 'Toiletries', name: 'Hydrating Lip Balm & Cold Cream', packed: false },
+    { id: 'm7', category: 'First Aid', name: 'High-Altitude Sickness Medication (Diamox)', packed: false }
+  ],
+  Heritage: [
+    { id: 'h1', category: 'Clothing', name: 'Comfortable Walking Sneakers', packed: false },
+    { id: 'h2', category: 'Clothing', name: 'Breathable Cotton Kurtas & Modest Wear', packed: false },
+    { id: 'h3', category: 'Essentials', name: 'Wide-Brimmed Sun Hat & Scarf', packed: false },
+    { id: 'h4', category: 'Electronics', name: 'High-Capacity Power Bank (10,000mAh+)', packed: false },
+    { id: 'h5', category: 'Essentials', name: 'Reusable Stainless Steel Water Bottle', packed: false },
+    { id: 'h6', category: 'Toiletries', name: 'Hand Sanitizer & Wet Wipes', packed: false }
+  ],
+  Nature: [
+    { id: 'n1', category: 'Clothing', name: 'Waterproof Raincoat / Poncho', packed: false },
+    { id: 'n2', category: 'Clothing', name: 'Quick-Dry Cargo Trek Pants', packed: false },
+    { id: 'n3', category: 'Toiletries', name: 'DEET Mosquito & Bug Repellent Spray', packed: false },
+    { id: 'n4', category: 'Electronics', name: 'LED Headlamp / Flashlight', packed: false },
+    { id: 'n5', category: 'First Aid', name: 'Compact Medical Kit & Antiseptic Bandages', packed: false },
+    { id: 'n6', category: 'Essentials', name: 'Straw Water Purifier Filter', packed: false }
+  ]
 };
 
-const PackingPage = () => {
-  const [activeDest, setActiveDest] = useState('beach');
-  const [categories, setCategories] = useState(initialCategories);
-  const [newItemText, setNewItemText] = useState('');
-  const [activeCategory, setActiveCategory] = useState(null);
+export default function PackingPage() {
+  const [selectedVibe, setSelectedVibe] = useState('Mountain');
+  const [items, setItems] = useState(PACKING_TEMPLATES.Mountain);
+  const [newItemName, setNewItemName] = useState('');
+  const [newItemCategory, setNewItemCategory] = useState('Essentials');
 
-  const toggleItem = (catName, id) => {
-    setCategories(prev => ({
-      ...prev,
-      [catName]: prev[catName].map(item => item.id === id ? { ...item, packed: !item.packed } : item)
-    }));
+  const handleVibeChange = (vibe) => {
+    setSelectedVibe(vibe);
+    setItems(PACKING_TEMPLATES[vibe] || PACKING_TEMPLATES.Mountain);
   };
 
-  const deleteItem = (catName, id) => {
-    setCategories(prev => ({
-      ...prev,
-      [catName]: prev[catName].filter(item => item.id !== id)
-    }));
+  const toggleItem = (id) => {
+    setItems(items.map(item => item.id === id ? { ...item, packed: !item.packed } : item));
   };
 
-  const addItem = (catName) => {
-    if (!newItemText.trim()) return;
-    const newItem = { id: Date.now(), text: newItemText, packed: false };
-    setCategories(prev => ({
-      ...prev,
-      [catName]: [...prev[catName], newItem]
-    }));
-    setNewItemText('');
-    setActiveCategory(null);
+  const deleteItem = (id) => {
+    setItems(items.filter(item => item.id !== id));
   };
 
-  let totalItems = 0;
-  let packedItems = 0;
-  Object.values(categories).forEach(items => {
-    totalItems += items.length;
-    packedItems += items.filter(i => i.packed).length;
-  });
+  const addItem = (e) => {
+    e.preventDefault();
+    if (!newItemName.trim()) return;
+    const newItem = {
+      id: `custom-${Date.now()}`,
+      category: newItemCategory,
+      name: newItemName.trim(),
+      packed: false
+    };
+    setItems([...items, newItem]);
+    setNewItemName('');
+  };
 
-  const progress = totalItems === 0 ? 0 : Math.round((packedItems / totalItems) * 100);
+  const packedCount = items.filter(i => i.packed).length;
+  const progressPct = items.length > 0 ? Math.round((packedCount / items.length) * 100) : 0;
+
+  const categoriesList = ['Essentials', 'Clothing', 'Toiletries', 'Electronics', 'First Aid'];
 
   return (
-    <div className="min-h-screen bg-[#FFF8F0] font-sans pb-24">
-      {/* Hero Section */}
-      <header className="bg-white border-b border-slate-200 pt-24 pb-16 px-6 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-br from-[#FFEFDB] to-[#E8A87C] opacity-40 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none"></div>
+    <div className="min-h-screen pt-28 pb-32 text-white relative z-10 animate-fade-in">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         
-        <div className="max-w-4xl mx-auto relative z-10 text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-[#2B9EB3] to-[#1A7A8A] text-white shadow-xl mb-6 transform -rotate-6">
-            <Briefcase className="w-8 h-8" />
-          </div>
-          <h1 className="text-4xl md:text-5xl font-black text-slate-800 mb-6 tracking-tight">
-            Smart Packing Assistant
-          </h1>
-          <p className="text-slate-500 text-lg md:text-xl font-medium max-w-2xl mx-auto mb-10 leading-relaxed">
-            Select your destination vibe and let's get your bags sorted. Check off items as you pack them!
-          </p>
-          
-          <div className="flex flex-wrap items-center justify-center gap-4">
-            {destinations.map(dest => (
-              <button
-                key={dest.id}
-                onClick={() => setActiveDest(dest.id)}
-                className={`flex items-center gap-2 px-6 py-3 rounded-full font-bold transition-all duration-300 border-2 ${
-                  activeDest === dest.id 
-                    ? `${dest.color} shadow-lg transform -translate-y-1` 
-                    : 'bg-white text-slate-500 border-slate-100 hover:bg-slate-50'
-                }`}
-              >
-                {dest.icon}
-                {dest.name}
-              </button>
-            ))}
+        {/* Header Card with Clean Travel Background Image */}
+        <div className="relative overflow-hidden rounded-3xl p-6 sm:p-10 border border-slate-700/80 shadow-2xl space-y-4 min-h-[220px] flex flex-col justify-end">
+          <img 
+            src="https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?auto=format&fit=crop&w=1600&q=80" 
+            alt="Mountain Traveler Background" 
+            className="absolute inset-0 w-full h-full object-cover object-center filter brightness-[0.4] transform scale-105 pointer-events-none"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent"></div>
+
+          <div className="relative z-10 space-y-3">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/30 text-xs font-bold uppercase tracking-wider">
+              <FiCheckSquare />
+              <span>AI Destination Packing Assistant</span>
+            </div>
+
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-heading font-extrabold text-white leading-tight">
+              Smart Packing Assistant
+            </h1>
+
+            <p className="text-slate-200 text-xs sm:text-sm font-medium max-w-2xl leading-relaxed">
+              Select your destination vibe to load custom itemized packing suggestions tailored for weather and geography.
+            </p>
+
+            {/* Destination Vibe Tabs */}
+            <div className="flex items-center gap-3 pt-2 overflow-x-auto scrollbar-hide">
+              {[
+                { id: 'Beach', icon: '🏖️' },
+                { id: 'Mountain', icon: '🏔️' },
+                { id: 'Heritage', icon: '🏰' },
+                { id: 'Nature', icon: '🌿' }
+              ].map(vibe => (
+                <button
+                  key={vibe.id}
+                  onClick={() => handleVibeChange(vibe.id)}
+                  className={`px-5 py-2.5 rounded-2xl font-heading font-extrabold text-xs flex items-center gap-2 transition-all whitespace-nowrap ${
+                    selectedVibe === vibe.id
+                      ? 'bg-amber-400 text-slate-950 shadow-md font-black scale-105'
+                      : 'bg-slate-950/90 border border-slate-700 text-slate-300 hover:bg-slate-800'
+                  }`}
+                >
+                  <span>{vibe.icon}</span>
+                  <span>{vibe.id} Packing</span>
+                </button>
+              ))}
+            </div>
           </div>
         </div>
-      </header>
 
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 pt-12">
-        {/* Progress Bar */}
-        <div className="bg-white rounded-3xl p-6 md:p-8 shadow-xl shadow-slate-200/50 border border-slate-100 mb-12">
-          <div className="flex justify-between items-end mb-4">
-            <div>
-              <h2 className="text-2xl font-extrabold text-slate-800">Packing Progress</h2>
-              <p className="text-slate-500 font-medium text-sm mt-1">You're almost there!</p>
-            </div>
-            <div className="text-right">
-              <span className="text-3xl font-black text-[#2B9EB3]">{progress}%</span>
-              <p className="text-slate-400 font-bold text-xs uppercase tracking-wider">{packedItems} / {totalItems} Items</p>
-            </div>
+        {/* Progress Bar Card */}
+        <div className="bg-slate-900/90 backdrop-blur-xl rounded-3xl p-6 border border-slate-700/80 shadow-xl space-y-3">
+          <div className="flex justify-between items-center text-xs font-extrabold">
+            <span className="text-white">Packing Progress for {selectedVibe} Trip</span>
+            <span className="text-amber-300">{packedCount} of {items.length} items packed ({progressPct}%)</span>
           </div>
-          <div className="w-full bg-slate-100 h-4 rounded-full overflow-hidden">
+
+          <div className="w-full bg-slate-950 h-3 rounded-full overflow-hidden border border-slate-800">
             <div 
-              className="h-full bg-gradient-to-r from-[#2B9EB3] to-[#3CBEB5] rounded-full transition-all duration-1000 ease-out"
-              style={{ width: `${progress}%` }}
+              className="bg-gradient-to-r from-teal-400 to-amber-400 h-full transition-all duration-500 rounded-full"
+              style={{ width: `${progressPct}%` }}
             ></div>
           </div>
         </div>
 
-        {/* Categories */}
-        <div className="space-y-8">
-          {Object.entries(categories).map(([catName, items]) => (
-            <div key={catName} className="bg-white rounded-3xl p-6 md:p-8 shadow-lg shadow-slate-200/40 border border-slate-100 transition-all hover:shadow-xl">
-              <div className="flex justify-between items-center mb-6">
-                <h3 className="text-xl font-extrabold text-slate-800">{catName}</h3>
-                <span className="bg-slate-100 text-slate-600 font-bold text-xs px-3 py-1 rounded-full">
-                  {items.filter(i => i.packed).length}/{items.length}
-                </span>
-              </div>
-              
-              <div className="space-y-3 mb-6">
-                {items.map(item => (
-                  <div key={item.id} className="group flex items-center justify-between p-3 md:p-4 rounded-2xl hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100">
-                    <label className="flex items-center gap-4 cursor-pointer flex-1">
-                      <div className={`w-6 h-6 rounded-md flex items-center justify-center transition-colors ${item.packed ? 'bg-[#3CBEB5] text-white' : 'bg-slate-200 text-transparent hover:bg-slate-300'}`}>
-                        <Check className="w-4 h-4" />
-                      </div>
-                      <input 
-                        type="checkbox" 
-                        className="hidden" 
-                        checked={item.packed} 
-                        onChange={() => toggleItem(catName, item.id)} 
-                      />
-                      <span className={`font-semibold text-lg transition-all duration-300 ${item.packed ? 'text-slate-400 line-through' : 'text-slate-700'}`}>
-                        {item.text}
-                      </span>
-                    </label>
-                    <button 
-                      onClick={() => deleteItem(catName, item.id)}
-                      className="p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-xl opacity-0 group-hover:opacity-100 transition-all focus:opacity-100"
-                    >
-                      <Trash2 className="w-5 h-5" />
-                    </button>
-                  </div>
-                ))}
-              </div>
-
-              {/* Add Item */}
-              {activeCategory === catName ? (
-                <div className="flex items-center gap-3">
-                  <input
-                    type="text"
-                    value={newItemText}
-                    onChange={(e) => setNewItemText(e.target.value)}
-                    placeholder="Enter item name..."
-                    className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#2B9EB3] focus:border-transparent transition-all"
-                    onKeyDown={(e) => e.key === 'Enter' && addItem(catName)}
-                    autoFocus
-                  />
-                  <button
-                    onClick={() => addItem(catName)}
-                    className="bg-[#2B9EB3] text-white px-5 py-3 rounded-xl font-bold hover:bg-[#1A7A8A] transition-colors shadow-md"
-                  >
-                    Add
-                  </button>
-                  <button
-                    onClick={() => { setActiveCategory(null); setNewItemText(''); }}
-                    className="bg-slate-100 text-slate-600 px-5 py-3 rounded-xl font-bold hover:bg-slate-200 transition-colors"
-                  >
-                    Cancel
-                  </button>
+        {/* Packing Items Grid grouped by Category */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {categoriesList.map(catName => {
+            const catItems = items.filter(i => i.category === catName);
+            if (catItems.length === 0) return null;
+            return (
+              <div 
+                key={catName}
+                className="bg-slate-900/90 backdrop-blur-xl rounded-3xl p-6 border border-slate-700/80 shadow-xl space-y-4"
+              >
+                <div className="flex justify-between items-center border-b border-slate-800 pb-3">
+                  <h3 className="font-heading font-extrabold text-base text-teal-300">
+                    {catName}
+                  </h3>
+                  <span className="text-[10px] font-bold text-slate-400 bg-slate-950 px-2 py-0.5 rounded border border-slate-800">
+                    {catItems.filter(i => i.packed).length}/{catItems.length} packed
+                  </span>
                 </div>
-              ) : (
-                <button 
-                  onClick={() => setActiveCategory(catName)}
-                  className="flex items-center gap-2 text-[#2B9EB3] font-bold hover:text-[#1A7A8A] transition-colors py-2 px-4 rounded-xl hover:bg-cyan-50"
-                >
-                  <Plus className="w-5 h-5" />
-                  Add New Item
-                </button>
-              )}
-            </div>
-          ))}
+
+                <div className="space-y-2.5">
+                  {catItems.map(item => (
+                    <div 
+                      key={item.id}
+                      onClick={() => toggleItem(item.id)}
+                      className={`p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-3 ${
+                        item.packed
+                          ? 'bg-slate-950/90 border-slate-800 text-slate-500 line-through'
+                          : 'bg-slate-950 border-slate-800/90 text-white hover:border-slate-700'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className={`w-5 h-5 rounded-md flex items-center justify-center border transition-colors ${
+                          item.packed ? 'bg-amber-400 border-amber-400 text-slate-950' : 'border-slate-600'
+                        }`}>
+                          {item.packed && <FiCheckSquare size={12} />}
+                        </div>
+                        <span className="text-xs font-bold">{item.name}</span>
+                      </div>
+
+                      <button 
+                        onClick={(e) => { e.stopPropagation(); deleteItem(item.id); }}
+                        className="text-slate-500 hover:text-red-400 transition-colors p-1"
+                      >
+                        <FiTrash2 size={14} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
         </div>
 
-        {/* Save CTA */}
-        <div className="mt-12 flex justify-center">
-          <button className="flex items-center gap-3 bg-gradient-to-r from-[#E76F51] to-[#F4A261] text-white px-10 py-5 rounded-2xl font-black text-lg shadow-[0_10px_30px_rgba(231,111,81,0.3)] hover:shadow-[0_15px_40px_rgba(231,111,81,0.5)] transform hover:-translate-y-1 active:scale-[0.98] transition-all duration-300">
-            <Save className="w-6 h-6" />
-            Save My Checklist
+        {/* Add Custom Item Form */}
+        <form onSubmit={addItem} className="bg-slate-900/90 backdrop-blur-xl rounded-3xl p-6 border border-slate-700/80 shadow-xl flex flex-col sm:flex-row items-center gap-3">
+          <input
+            type="text"
+            value={newItemName}
+            onChange={(e) => setNewItemName(e.target.value)}
+            placeholder="Add custom packing item (e.g. GoPro, Camera Lens)..."
+            className="flex-1 bg-slate-950 border border-slate-800 rounded-2xl px-4 py-3 text-xs font-semibold text-white outline-none focus:ring-2 focus:ring-amber-400"
+          />
+
+          <select
+            value={newItemCategory}
+            onChange={(e) => setNewItemCategory(e.target.value)}
+            className="bg-slate-950 border border-slate-800 text-amber-300 rounded-2xl px-4 py-3 text-xs font-extrabold outline-none cursor-pointer"
+          >
+            {categoriesList.map(c => (
+              <option key={c} value={c}>{c}</option>
+            ))}
+          </select>
+
+          <button
+            type="submit"
+            className="w-full sm:w-auto px-6 py-3 rounded-2xl bg-gradient-to-r from-coral-500 to-sunset-500 text-white font-heading font-extrabold text-xs shadow-md btn-bounce flex items-center justify-center gap-1.5"
+          >
+            <FiPlus /> Add Item
           </button>
-        </div>
-      </main>
+        </form>
+
+      </div>
     </div>
   );
-};
-
-export default PackingPage;
+}
