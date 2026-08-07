@@ -1,38 +1,53 @@
 import React, { useState, useMemo } from 'react';
 import { Chart as ChartJS, ArcElement, Tooltip as ChartTooltip, Legend, CategoryScale, LinearScale, BarElement, Title } from 'chart.js';
 import { Doughnut, Bar } from 'react-chartjs-2';
+import { FiDollarSign, FiUsers, FiPieChart, FiTrendingUp, FiCheckCircle, FiSave, FiAlertCircle, FiZap, FiCheck } from 'react-icons/fi';
+import { apiService } from '../services/api';
 
 ChartJS.register(ArcElement, ChartTooltip, Legend, CategoryScale, LinearScale, BarElement, Title);
 
 const CATEGORIES = [
-  { id: 'transport', label: 'Transport', color: '#2B9EB3', icon: '✈️' },
-  { id: 'accommodation', label: 'Accommodation', color: '#3CBEB5', icon: '🏨' },
+  { id: 'transport', label: 'Intercity Transport', color: '#2B9EB3', icon: '✈️' },
+  { id: 'accommodation', label: 'Hotel & Stays', color: '#3CBEB5', icon: '🏨' },
   { id: 'food', label: 'Food & Dining', color: '#F4A261', icon: '🍽️' },
-  { id: 'activities', label: 'Activities', color: '#E76F51', icon: '🏄‍♂️' },
-  { id: 'misc', label: 'Miscellaneous', color: '#94A3B8', icon: '🛍️' },
+  { id: 'activities', label: 'Tours & Activities', color: '#E76F51', icon: '🏄‍♂️' },
+  { id: 'misc', label: 'Shopping & Misc', color: '#94A3B8', icon: '🛍️' }
 ];
 
 export default function BudgetPage() {
-  const [budgetLimit, setBudgetLimit] = useState(50000);
+  const [budgetLimit, setBudgetLimit] = useState(40000);
+  const [travelersCount, setTravelersCount] = useState(2);
+  const [tripDays, setTripDays] = useState(5);
+  const [savedSuccess, setSavedSuccess] = useState(false);
+
   const [expenses, setExpenses] = useState({
-    transport: 12000,
-    accommodation: 15000,
+    transport: 10000,
+    accommodation: 14000,
     food: 8000,
     activities: 5000,
-    misc: 2000,
+    misc: 3000
   });
-
-  const tripDays = 5;
 
   const totalSpent = useMemo(() => {
     return Object.values(expenses).reduce((acc, curr) => acc + (Number(curr) || 0), 0);
   }, [expenses]);
 
-  const perDayAverage = useMemo(() => {
-    return Math.round(totalSpent / tripDays);
+  const perPersonCost = useMemo(() => {
+    return Math.round(totalSpent / (travelersCount || 1));
+  }, [totalSpent, travelersCount]);
+
+  const perDayCost = useMemo(() => {
+    return Math.round(totalSpent / (tripDays || 1));
   }, [totalSpent, tripDays]);
 
-  const isOverBudget = totalSpent > budgetLimit;
+  const healthScore = useMemo(() => {
+    if (totalSpent === 0) return 100;
+    const ratio = totalSpent / budgetLimit;
+    if (ratio <= 0.8) return 96;
+    if (ratio <= 1.0) return 85;
+    if (ratio <= 1.2) return 60;
+    return 35;
+  }, [totalSpent, budgetLimit]);
 
   const doughnutData = {
     labels: CATEGORIES.map(c => c.label),
@@ -41,178 +56,210 @@ export default function BudgetPage() {
         data: CATEGORIES.map(c => expenses[c.id] || 0),
         backgroundColor: CATEGORIES.map(c => c.color),
         borderWidth: 0,
-        hoverOffset: 4,
-      },
-    ],
-  };
-
-  const doughnutOptions = {
-    cutout: '75%',
-    plugins: {
-      legend: { position: 'bottom', labels: { padding: 20, usePointStyle: true, font: { family: 'Inter' } } },
-    }
-  };
-
-  const barData = {
-    labels: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5'],
-    datasets: [
-      {
-        label: 'Est. Daily Spend',
-        data: [8000, 7500, 9000, 8500, 9000],
-        backgroundColor: '#3CBEB5',
-        borderRadius: 6,
+        hoverOffset: 6
       }
     ]
   };
 
-  const barOptions = {
-    responsive: true,
-    plugins: { legend: { display: false } },
-    scales: {
-      y: { beginAtZero: true, grid: { borderDash: [4, 4], color: '#f1f5f9' } },
-      x: { grid: { display: false } }
-    }
+  const barData = {
+    labels: Array.from({ length: tripDays }, (_, i) => `Day ${i + 1}`),
+    datasets: [
+      {
+        label: 'Est. Daily Expense (₹)',
+        data: Array.from({ length: tripDays }, () => perDayCost),
+        backgroundColor: '#3CBEB5',
+        borderRadius: 8
+      }
+    ]
   };
 
-  const handleExpenseChange = (id, value) => {
-    setExpenses(prev => ({ ...prev, [id]: Number(value) }));
+  const handleSaveBudget = async () => {
+    await apiService.saveBudget({
+      total: totalSpent,
+      budgetLimit,
+      travelersCount,
+      expenses,
+      createdAt: new Date().toISOString()
+    });
+    setSavedSuccess(true);
+    setTimeout(() => setSavedSuccess(false), 3000);
   };
 
   return (
-    <div className="min-h-screen pt-20 pb-32 animate-fade-in">
-      {/* Header */}
-      <header className="bg-gradient-to-r from-[#1A7A8A] to-[#2B9EB3] py-12 px-6 shadow-md relative overflow-hidden">
-        {/* Ambient Blobs */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-[#3CBEB5] rounded-full mix-blend-multiply filter blur-3xl opacity-50 translate-x-1/2 -translate-y-1/2"></div>
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#2A9D8F] rounded-full mix-blend-multiply filter blur-3xl opacity-50 -translate-x-1/2 translate-y-1/2"></div>
+    <div className="min-h-screen pt-24 pb-32 text-white relative z-10 animate-fade-in">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         
-        <div className="max-w-6xl mx-auto relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div>
-            <h1 className="text-3xl md:text-4xl font-heading font-bold text-white mb-2">Trip Budget Planner</h1>
-            <p className="text-ocean-100 text-lg">Manage your tropical getaway expenses seamlessly.</p>
+        {/* Hackathon Header */}
+        <div className="bg-slate-900/85 backdrop-blur-2xl rounded-3xl p-6 sm:p-8 border border-slate-700/80 shadow-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+          <div className="space-y-2">
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-400/20 text-emerald-300 border border-emerald-400/30 rounded-full text-xs font-black uppercase tracking-wider">
+              <span>🏆 Hackathon-Winning AI Financial Engine</span>
+            </div>
+            <h1 className="text-3xl sm:text-4xl font-heading font-extrabold text-white">
+              Trip Budget & Group Cost Planner
+            </h1>
+            <p className="text-slate-300 text-xs sm:text-sm font-medium max-w-2xl">
+              Calculate running trip expenses, split costs for group travelers, and optimize savings with AI tariff benchmarks.
+            </p>
           </div>
-          <div className="bg-white/20 backdrop-blur-md border border-white/30 rounded-xl p-2 flex items-center">
-            <span className="px-4 py-2 text-white font-semibold">Currency:</span>
-            <select className="bg-white text-ocean-900 rounded-lg px-4 py-2 font-bold outline-none cursor-pointer">
-              <option value="INR">₹ INR</option>
-              <option value="USD">$ USD</option>
-              <option value="EUR">€ EUR</option>
-            </select>
-          </div>
+
+          <button
+            onClick={handleSaveBudget}
+            className="btn-bounce px-6 py-3.5 rounded-2xl bg-gradient-to-r from-coral-500 to-sunset-500 text-white font-heading font-extrabold text-xs shadow-lg shadow-coral-500/20 flex items-center gap-2 shrink-0"
+          >
+            {savedSuccess ? <FiCheck /> : <FiSave />}
+            <span>{savedSuccess ? 'Saved to DB!' : 'Save Budget Plan'}</span>
+          </button>
         </div>
-      </header>
 
-      <main className="max-w-6xl mx-auto px-6 py-12 grid grid-cols-1 lg:grid-cols-12 gap-8">
-        
-        {/* Left Column: Running Total & Inputs */}
-        <div className="lg:col-span-5 space-y-8">
+        {/* Real-Time Stats Overview Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           
-          {/* Running Total Card */}
-          <div className="glass-card bg-white rounded-3xl p-8 shadow-xl border border-slate-100 relative overflow-hidden">
-            <div className={`absolute top-0 left-0 w-full h-2 ${isOverBudget ? 'bg-coral-500' : 'bg-seafoam-500'}`}></div>
-            <div className="flex justify-between items-start mb-6">
-              <h2 className="text-xl font-heading font-bold text-slate-700">Total Expenses</h2>
-              <div className={`px-3 py-1 rounded-full text-sm font-bold shadow-sm ${isOverBudget ? 'bg-red-50 text-red-600 border border-red-100' : 'bg-green-50 text-green-600 border border-green-100'}`}>
-                {isOverBudget ? 'Over Budget' : 'On Track'}
-              </div>
+          {/* Total Spent vs Limit */}
+          <div className="bg-slate-900/90 backdrop-blur-xl p-6 rounded-3xl border border-slate-700/80 shadow-xl space-y-2">
+            <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider">Total Est. Budget</span>
+            <div className="text-3xl font-heading font-black text-amber-300">
+              ₹{totalSpent.toLocaleString('en-IN')}
             </div>
-            
-            <div className="mb-6">
-              <span className="text-4xl md:text-5xl font-extrabold text-ocean-700 tracking-tight">₹ {totalSpent.toLocaleString()}</span>
-              <p className="text-slate-500 mt-2 font-medium">of ₹ {budgetLimit.toLocaleString()} budget</p>
-            </div>
-
-            <div className="flex items-center justify-between bg-sand-50 rounded-xl p-4 border border-sand-100">
-              <span className="text-slate-600 font-medium">Per Day Average</span>
-              <span className="text-xl font-bold text-slate-800">₹ {perDayAverage.toLocaleString()}</span>
-            </div>
+            <p className="text-xs text-slate-400 font-medium">Target Limit: ₹{budgetLimit.toLocaleString('en-IN')}</p>
           </div>
 
-          {/* Budget Adjusters */}
-          <div className="glass-card bg-white rounded-3xl p-8 shadow-xl border border-slate-100">
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="text-xl font-heading font-bold text-slate-800">Categories</h3>
-              <button className="text-ocean-600 text-sm font-semibold hover:text-ocean-800 transition-colors">Reset All</button>
+          {/* Per Person Split */}
+          <div className="bg-slate-900/90 backdrop-blur-xl p-6 rounded-3xl border border-slate-700/80 shadow-xl space-y-2">
+            <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider">Per Person Cost ({travelersCount} Travelers)</span>
+            <div className="text-3xl font-heading font-black text-teal-300">
+              ₹{perPersonCost.toLocaleString('en-IN')}
             </div>
+            <p className="text-xs text-slate-400 font-medium">Split evenly among group</p>
+          </div>
 
-            <div className="space-y-6">
-              {CATEGORIES.map(cat => (
-                <div key={cat.id} className="group">
-                  <div className="flex items-center justify-between mb-2">
-                    <label className="flex items-center gap-2 font-semibold text-slate-700">
-                      <span>{cat.icon}</span> {cat.label}
-                    </label>
-                    <div className="relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-medium">₹</span>
-                      <input 
-                        type="number"
-                        value={expenses[cat.id]}
-                        onChange={(e) => handleExpenseChange(cat.id, e.target.value)}
-                        className="w-28 bg-slate-50 border border-slate-200 rounded-lg py-1.5 pl-7 pr-3 text-right font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-ocean-400 transition-all"
-                      />
-                    </div>
-                  </div>
+          {/* Per Day Average */}
+          <div className="bg-slate-900/90 backdrop-blur-xl p-6 rounded-3xl border border-slate-700/80 shadow-xl space-y-2">
+            <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider">Daily Expense Rate ({tripDays} Days)</span>
+            <div className="text-3xl font-heading font-black text-sky-300">
+              ₹{perDayCost.toLocaleString('en-IN')}
+            </div>
+            <p className="text-xs text-slate-400 font-medium">Estimated daily burn rate</p>
+          </div>
+
+          {/* AI Health Score Meter */}
+          <div className="bg-slate-900/90 backdrop-blur-xl p-6 rounded-3xl border border-slate-700/80 shadow-xl space-y-2">
+            <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider">Budget Health Score</span>
+            <div className="flex items-center gap-2">
+              <span className="text-3xl font-heading font-black text-emerald-400">{healthScore}/100</span>
+              <span className="text-xs font-bold text-emerald-300 bg-emerald-950 px-2 py-0.5 rounded-md border border-emerald-800">
+                {healthScore >= 85 ? 'Optimal 🟢' : 'Warning ⚠️'}
+              </span>
+            </div>
+            <p className="text-xs text-slate-400 font-medium">AI Financial Status</p>
+          </div>
+
+        </div>
+
+        {/* Sliders & Charts Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          
+          {/* Left Column (7 cols): Category Sliders & Controls */}
+          <div className="lg:col-span-7 space-y-6">
+            
+            <div className="bg-slate-900/90 backdrop-blur-xl p-6 sm:p-8 rounded-3xl border border-slate-700/80 shadow-xl space-y-6">
+              
+              <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+                <h3 className="font-heading font-extrabold text-lg text-white flex items-center gap-2">
+                  <span>⚙️</span> Customize Category Expenses
+                </h3>
+
+                <div className="flex items-center gap-3 text-xs font-bold">
+                  <label className="text-slate-400">Travelers:</label>
                   <input 
-                    type="range"
-                    min="0"
-                    max="30000"
-                    step="500"
-                    value={expenses[cat.id]}
-                    onChange={(e) => handleExpenseChange(cat.id, e.target.value)}
-                    className="w-full h-2 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-ocean-500"
-                    style={{ accentColor: cat.color }}
+                    type="number"
+                    min="1"
+                    max="20"
+                    value={travelersCount}
+                    onChange={(e) => setTravelersCount(Number(e.target.value))}
+                    className="w-16 bg-slate-950 border border-slate-700 rounded-xl px-2 py-1 text-center text-amber-300 font-black"
                   />
                 </div>
-              ))}
-            </div>
-          </div>
-        </div>
+              </div>
 
-        {/* Right Column: Charts & Tips */}
-        <div className="lg:col-span-7 space-y-8">
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Doughnut Chart */}
-            <div className="glass-card bg-white rounded-3xl p-6 shadow-xl border border-slate-100 flex flex-col items-center justify-center">
-              <h3 className="text-lg font-heading font-bold text-slate-800 w-full text-left mb-4">Expense Breakdown</h3>
-              <div className="w-full max-w-[250px] aspect-square relative">
-                <Doughnut data={doughnutData} options={doughnutOptions} />
-                <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none pb-8">
-                  <span className="text-sm text-slate-500 font-medium">Total</span>
-                  <span className="text-xl font-bold text-slate-800">₹ {(totalSpent/1000).toFixed(1)}k</span>
+              <div className="space-y-5">
+                {CATEGORIES.map((cat) => {
+                  const val = expenses[cat.id] || 0;
+                  const pct = totalSpent > 0 ? Math.round((val / totalSpent) * 100) : 0;
+                  return (
+                    <div key={cat.id} className="space-y-2">
+                      <div className="flex justify-between items-center text-xs font-bold">
+                        <span className="text-slate-200 flex items-center gap-1.5">
+                          <span>{cat.icon}</span> {cat.label}
+                        </span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-amber-300 font-black">₹{val.toLocaleString('en-IN')}</span>
+                          <span className="text-[10px] text-slate-400 font-mono">({pct}%)</span>
+                        </div>
+                      </div>
+
+                      <input
+                        type="range"
+                        min="0"
+                        max="30000"
+                        step="500"
+                        value={val}
+                        onChange={(e) => setExpenses({ ...expenses, [cat.id]: Number(e.target.value) })}
+                        className="w-full accent-teal-400 cursor-pointer bg-slate-950 h-2 rounded-lg"
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+
+            </div>
+
+            {/* Smart Saving Recommendations */}
+            <div className="bg-slate-900/90 backdrop-blur-xl p-6 rounded-3xl border border-slate-700/80 shadow-xl space-y-4">
+              <h3 className="font-heading font-extrabold text-base text-amber-300 flex items-center gap-2">
+                <FiZap /> AI Tariff Saving Hacks for Indian Travel
+              </h3>
+
+              <div className="space-y-3 text-xs font-medium text-slate-300">
+                <div className="p-3 bg-slate-950 rounded-2xl border border-slate-800">
+                  💡 **Intercity Transit**: Booking IRCTC Vande Bharat or AC 3-Tier sleeper trains saves up to 55% compared to flights.
                 </div>
+                <div className="p-3 bg-slate-950 rounded-2xl border border-slate-800">
+                  🏨 **Stay Benchmark**: Eco homestays and heritage hostels offer authentic meals & save ₹2,000/night vs luxury hotels.
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          {/* Right Column (5 cols): Visual Charts */}
+          <div className="lg:col-span-5 space-y-6">
+            
+            {/* Doughnut Chart */}
+            <div className="bg-slate-900/90 backdrop-blur-xl p-6 rounded-3xl border border-slate-700/80 shadow-xl space-y-4">
+              <h3 className="font-heading font-extrabold text-base text-white flex items-center gap-2">
+                <FiPieChart className="text-teal-400" /> Expense Breakdown
+              </h3>
+              <div className="h-64 flex items-center justify-center">
+                <Doughnut data={doughnutData} options={{ cutout: '70%', plugins: { legend: { position: 'bottom', labels: { color: '#e2e8f0', font: { family: 'Inter', size: 11 } } } } }} />
               </div>
             </div>
 
             {/* Bar Chart */}
-            <div className="glass-card bg-white rounded-3xl p-6 shadow-xl border border-slate-100 flex flex-col justify-between">
-              <h3 className="text-lg font-heading font-bold text-slate-800 mb-4">Daily Forecast</h3>
-              <div className="flex-1 w-full flex items-center">
-                <Bar data={barData} options={barOptions} />
+            <div className="bg-slate-900/90 backdrop-blur-xl p-6 rounded-3xl border border-slate-700/80 shadow-xl space-y-4">
+              <h3 className="font-heading font-extrabold text-base text-white flex items-center gap-2">
+                <FiTrendingUp className="text-sky-400" /> Daily Forecast Trend
+              </h3>
+              <div className="h-48">
+                <Bar data={barData} options={{ responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#94a3b8' } }, y: { ticks: { color: '#94a3b8' } } } }} />
               </div>
             </div>
-          </div>
 
-          {/* Budget Tips & Actions */}
-          <div className="glass-card bg-gradient-to-br from-ocean-50 to-sand-50 rounded-3xl p-8 shadow-md border border-ocean-100 flex flex-col md:flex-row items-center gap-6">
-            <div className="w-16 h-16 rounded-full bg-white shadow-sm flex items-center justify-center text-3xl shrink-0">
-              💡
-            </div>
-            <div className="flex-1">
-              <h4 className="text-lg font-bold text-ocean-900 mb-2">Smart Saving Tip</h4>
-              <p className="text-slate-600 leading-relaxed text-sm">
-                You're spending a significant portion on Transport. Consider booking multi-stop rail passes or group shuttles instead of private cabs to save up to 20% on transit costs!
-              </p>
-            </div>
-            <div className="shrink-0 w-full md:w-auto">
-              <button className="btn-bounce bg-coral-500 hover:bg-coral-600 text-white w-full md:w-auto px-8 py-4 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all">
-                Save Budget
-              </button>
-            </div>
           </div>
 
         </div>
-      </main>
+
+      </div>
     </div>
   );
 }

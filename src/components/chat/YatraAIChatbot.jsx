@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { FiMessageSquare, FiX, FiSend, FiZap, FiDollarSign, FiShield, FiCompass, FiThumbsUp } from 'react-icons/fi';
+import { FiMessageSquare, FiX, FiSend, FiZap, FiDollarSign, FiShield, FiCompass, FiThumbsUp, FiHelpCircle } from 'react-icons/fi';
+import { destinations } from '../../data/destinations';
 
 export default function YatraAIChatbot() {
   const [isOpen, setIsOpen] = useState(false);
@@ -8,7 +9,7 @@ export default function YatraAIChatbot() {
     {
       id: 1,
       sender: 'bot',
-      text: 'Namaste! 🇮🇳 I am YatraAI, your smart travel & budget saving assistant. Ask me anything about saving costs, local food, packing, or travel safety!',
+      text: 'Namaste! 🇮🇳 I am your YatraAI Smart Travel Assistant. Ask me anything about Indian cities, famous food, budget saving hacks, safety advice, or transit routes!',
       timestamp: 'Just now'
     }
   ]);
@@ -21,10 +22,64 @@ export default function YatraAIChatbot() {
 
   const quickPrompts = [
     '💡 Smart budget saving tips',
-    '🎒 Packing tips for Goa',
-    '🛡️ Is solo travel safe in Jaipur?',
-    '🚌 Cheap transit options'
+    '🍲 Best food in Goa',
+    '🛡️ Is Kashmir safe for travel?',
+    '🚌 Cheap travel options in India',
+    '🏰 Top places in Jaipur'
   ];
+
+  // Intelligent Context-Aware Response Engine
+  const generateAIResponse = (userQuery) => {
+    const q = userQuery.toLowerCase().trim();
+
+    // 1. Search for matching city in dataset
+    const matchedCity = destinations.find(d => 
+      q.includes(d.name.toLowerCase()) || 
+      (d.name.includes('&') && q.includes(d.name.split('&')[0].trim().toLowerCase()))
+    );
+
+    if (matchedCity) {
+      if (q.includes('food') || q.includes('eat') || q.includes('dish') || q.includes('sweet') || q.includes('specialty')) {
+        const foods = matchedCity.foodSpecialties?.map(f => `• **${f.name}**: ${f.desc}`).join('\n') || 'Local Thali & Street food';
+        return `🍲 **Famous Food Specialties in ${matchedCity.name}**:\n${foods}`;
+      }
+
+      if (q.includes('reach') || q.includes('transit') || q.includes('flight') || q.includes('train') || q.includes('bus')) {
+        return `🚌 **How to Reach ${matchedCity.name}**:\n${matchedCity.howToReachDetails || matchedCity.gettingThere}`;
+      }
+
+      if (q.includes('place') || q.includes('visit') || q.includes('attraction') || q.includes('see') || q.includes('spot')) {
+        const spots = matchedCity.travelDestinationsInCity?.map(p => `• **${p.name}**: ${p.desc}`).join('\n') || matchedCity.highlights.join(', ');
+        return `🏛️ **Top Places to Visit in ${matchedCity.name}**:\n${spots}`;
+      }
+
+      if (q.includes('safe') || q.includes('safety') || q.includes('security')) {
+        const tips = matchedCity.safetyTips?.map(t => `• ${t}`).join('\n') || 'General tourist safety guidelines apply.';
+        return `🛡️ **Safety Status for ${matchedCity.name}** (${matchedCity.safetyRating}):\n${tips}`;
+      }
+
+      // General City Info
+      return `📌 **About ${matchedCity.name} (${matchedCity.state})**:\n${matchedCity.description}\n\n• **Best Season**: ${matchedCity.bestSeason}\n• **Avg Daily Budget**: ₹${matchedCity.averageCostPerDay}\n• **Must See**: ${matchedCity.highlights.join(', ')}`;
+    }
+
+    // 2. Budget & Smart Savings
+    if (q.includes('budget') || q.includes('save') || q.includes('saving') || q.includes('cheap') || q.includes('money') || q.includes('cost')) {
+      return `💰 **YatraSathi Smart Budget Hacks**:\n1. **Train vs Flight**: Book Vande Bharat or IRCTC AC 3-Tier sleeper trains to save 40-60% on intercity travel.\n2. **Local Dining**: Eat at popular heritage Thali dhabas instead of tourist cafes (Avg meal: ₹150-250).\n3. **Homestays**: Book eco-homestays or backpacker hostels (₹800-1500/night).\n4. **Travel Off-Peak**: Visit during shoulder months (Feb-April or Sept-Oct) for 30-50% hotel discounts.`;
+    }
+
+    // 3. Packing Advice
+    if (q.includes('pack') || q.includes('packing') || q.includes('clothes') || q.includes('luggage')) {
+      return `🎒 **Smart Packing Essentials for Indian Trips**:\n• **Beach/Coastal**: Light breathable cottons, sunblock SPF 50+, flip-flops, sunglasses.\n• **Himalayas/Mountains**: Layered thermals, fleece jacket, sturdy trekking shoes, lip balm.\n• **General**: Power bank (10,000mAh+), universal adapter, basic first-aid kit, and digital ID copies.`;
+    }
+
+    // 4. Safety & SOS
+    if (q.includes('safe') || q.includes('safety') || q.includes('emergency') || q.includes('sos') || q.includes('help') || q.includes('solo')) {
+      return `🛡️ **Safety & Emergency Advice**:\n• Use YatraSathi **SOS Button** on Safety page to share live GPS coordinates.\n• **National Emergency Numbers**: Police: 100 | Ambulance: 108 | Tourist Helpline: 1363 | Women Helpline: 1091.\n• Share live location pins with family when taking night cabs.`;
+    }
+
+    // 5. Default Fallback Assistance
+    return `✨ I can help you plan your Indian adventure! Try asking:\n• *"What is the best food in Goa?"*\n• *"How to reach Manali?"*\n• *"Is Kashmir safe for solo travel?"*\n• *"Smart budget saving tips"*\n• *"Top places to visit in Jaipur"*`;
+  };
 
   const handleSend = (textToSend) => {
     const query = textToSend || inputMessage;
@@ -40,30 +95,16 @@ export default function YatraAIChatbot() {
     setMessages(prev => [...prev, userMsg]);
     if (!textToSend) setInputMessage('');
 
-    // Generate smart response
     setTimeout(() => {
-      let replyText = "Great question! Here's a smart tip: Plan multi-city travel using sleeper trains or state AC buses to save up to 40% on transit costs. Book accommodation 2 weeks in advance for local homestays!";
-      
-      const q = query.toLowerCase();
-      if (q.includes('budget') || q.includes('save') || q.includes('saving') || q.includes('cost')) {
-        replyText = "💰 **Smart Budget Saving Tips**:\n1. Travel during shoulder seasons (Feb-April, Sept-Oct) for 30-50% lower hotel rates.\n2. Eat at popular local heritage dhabas & thali houses instead of tourist cafes.\n3. Take IRCTC Vande Bharat or overnight sleeper trains instead of last-minute flights.\n4. Use YatraSathi Budget Calculator to track running daily totals!";
-      } else if (q.includes('packing') || q.includes('pack')) {
-        replyText = "🎒 **Smart Packing Checklist**:\n• Light cotton clothes for coastal/heritage cities\n• Thermal innerwear & windcheater for mountains\n• Reusable water bottle & power bank (10,000mAh+)\n• Basic medical kit & offline ID copies.";
-      } else if (q.includes('safe') || q.includes('safety') || q.includes('solo')) {
-        replyText = "🛡️ **Travel Safety Advice**:\n1. Use YatraSathi SOS button to share live location pin.\n2. Keep emergency contacts stored offline.\n3. Stay in verified homestays & hotels with high safety ratings.";
-      } else if (q.includes('transit') || q.includes('bus') || q.includes('train')) {
-        replyText = "🚌 **Transit Advice**:\n• Use local metro networks in Delhi, Mumbai, and Kolkata.\n• Book state transport Volvo buses (e.g. HRTC, KSRTC, MSRTC) for reliable mountain routes.";
-      }
-
+      const aiReply = generateAIResponse(query);
       const botMsg = {
         id: Date.now() + 1,
         sender: 'bot',
-        text: replyText,
+        text: aiReply,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       };
-
       setMessages(prev => [...prev, botMsg]);
-    }, 600);
+    }, 400);
   };
 
   return (
@@ -84,17 +125,17 @@ export default function YatraAIChatbot() {
 
       {/* Expandable Glassmorphism Chat Window */}
       {isOpen && (
-        <div className="bg-white/95 backdrop-blur-2xl rounded-3xl shadow-2xl border border-slate-200 w-[90vw] sm:w-[380px] h-[520px] flex flex-col overflow-hidden animate-slide-up">
+        <div className="bg-slate-900/95 backdrop-blur-2xl rounded-3xl shadow-2xl border border-slate-700/80 w-[90vw] sm:w-[400px] h-[540px] flex flex-col overflow-hidden animate-slide-up text-white">
           
           {/* Header */}
-          <div className="bg-gradient-to-r from-ocean-900 via-ocean-800 to-seafoam-900 p-4 text-white flex items-center justify-between shadow-md">
+          <div className="bg-gradient-to-r from-ocean-950 via-slate-900 to-ocean-900 p-4 text-white flex items-center justify-between border-b border-slate-700/80 shadow-md">
             <div className="flex items-center gap-2.5">
               <div className="w-9 h-9 rounded-2xl bg-amber-400 text-slate-950 font-black flex items-center justify-center text-lg shadow-sm">
                 🤖
               </div>
               <div>
-                <h4 className="font-heading font-extrabold text-sm leading-tight">YatraAI Assistant</h4>
-                <p className="text-[10px] text-seafoam-200 font-bold uppercase tracking-wider">Smart Travel & Budget Tips</p>
+                <h4 className="font-heading font-extrabold text-sm leading-tight text-white">YatraAI Assistant</h4>
+                <p className="text-[10px] text-seafoam-300 font-bold uppercase tracking-wider">Smart Travel & Budget Advice</p>
               </div>
             </div>
 
@@ -107,12 +148,12 @@ export default function YatraAIChatbot() {
           </div>
 
           {/* Quick Prompt Chips */}
-          <div className="p-2.5 bg-slate-50 border-b border-slate-100 flex items-center gap-1.5 overflow-x-auto scrollbar-hide">
+          <div className="p-2.5 bg-slate-950/80 border-b border-slate-800 flex items-center gap-1.5 overflow-x-auto scrollbar-hide">
             {quickPrompts.map((prompt, i) => (
               <button
                 key={i}
                 onClick={() => handleSend(prompt)}
-                className="px-2.5 py-1 rounded-full bg-white border border-slate-200 text-slate-700 text-[11px] font-bold whitespace-nowrap hover:bg-ocean-50 hover:text-ocean-700 transition-colors shadow-2xs shrink-0"
+                className="px-2.5 py-1 rounded-full bg-slate-800 border border-slate-700 text-slate-200 text-[11px] font-bold whitespace-nowrap hover:bg-ocean-600 hover:text-white transition-colors shrink-0"
               >
                 {prompt}
               </button>
@@ -120,17 +161,17 @@ export default function YatraAIChatbot() {
           </div>
 
           {/* Messages Feed */}
-          <div className="flex-1 p-4 overflow-y-auto space-y-3.5 bg-slate-50/50">
+          <div className="flex-1 p-4 overflow-y-auto space-y-3.5 bg-slate-950/40">
             {messages.map((msg) => (
               <div
                 key={msg.id}
                 className={`flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}
               >
                 <div
-                  className={`max-w-[85%] p-3.5 rounded-2xl text-xs leading-relaxed font-medium shadow-xs ${
+                  className={`max-w-[88%] p-3.5 rounded-2xl text-xs leading-relaxed font-medium shadow-md ${
                     msg.sender === 'user'
                       ? 'bg-ocean-600 text-white rounded-br-none'
-                      : 'bg-white text-slate-800 border border-slate-200/80 rounded-bl-none'
+                      : 'bg-slate-800/90 text-slate-100 border border-slate-700/80 rounded-bl-none'
                   }`}
                 >
                   <p className="whitespace-pre-line">{msg.text}</p>
@@ -142,18 +183,18 @@ export default function YatraAIChatbot() {
           </div>
 
           {/* Input Footer */}
-          <div className="p-3 bg-white border-t border-slate-100 flex items-center gap-2">
+          <div className="p-3 bg-slate-900 border-t border-slate-800 flex items-center gap-2">
             <input
               type="text"
               value={inputMessage}
               onChange={(e) => setInputMessage(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-              placeholder="Ask YatraAI for tips or budget saving..."
-              className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-800 outline-none focus:ring-2 focus:ring-ocean-500"
+              placeholder="Ask YatraAI for food, routes, or budget..."
+              className="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-white outline-none focus:ring-2 focus:ring-ocean-500 placeholder-slate-400"
             />
             <button
               onClick={() => handleSend()}
-              className="p-2.5 rounded-xl bg-ocean-600 hover:bg-ocean-700 text-white transition-colors shadow-md"
+              className="p-2.5 rounded-xl bg-ocean-600 hover:bg-ocean-500 text-white transition-colors shadow-md"
             >
               <FiSend size={15} />
             </button>

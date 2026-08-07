@@ -7,7 +7,7 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const { user, login, signup } = useAuth();
 
-  const [activeTab, setActiveTab] = useState('BEACHES');
+  const [activeCategory, setActiveCategory] = useState('BEACHES');
   const [selectedDestination, setSelectedDestination] = useState('Goa Beach Resort');
   const [selectedAccommodation, setSelectedAccommodation] = useState('Luxury Beach Resorts');
   const [guestCount, setGuestCount] = useState('2 Adults, 1 Room');
@@ -24,27 +24,46 @@ export default function LoginPage() {
   const [aboutModalOpen, setAboutModalOpen] = useState(false);
   const [premiumModalOpen, setPremiumModalOpen] = useState(false);
 
-  // 1-Second Auto-Changing City Monument Slideshow State
-  const monumentSlides = [
-    { city: 'Taj Mahal, Agra', image: 'https://images.unsplash.com/photo-1564507592333-c60657eea523?w=1000&q=80', tag: 'UNESCO Wonder of the World' },
-    { city: 'Hawa Mahal, Jaipur', image: 'https://images.unsplash.com/photo-1477587458883-47145ed94245?w=1000&q=80', tag: 'Royal Pink City Architecture' },
-    { city: 'Golden Temple, Amritsar', image: 'https://images.unsplash.com/photo-1514222709107-a180c68d72b4?w=1000&q=80', tag: 'Sacred Sikh Heritage' },
-    { city: 'Gateway of India, Mumbai', image: 'https://images.unsplash.com/photo-1570168007204-dfb528c6958f?w=1000&q=80', tag: 'Arabian Sea Waterfront' },
-    { city: 'Dal Lake, Srinagar Kashmir', image: 'https://images.unsplash.com/photo-1598091383021-15ddea10925d?w=1000&q=80', tag: 'Shikara Houseboats & Snow Peaks' },
-    { city: 'Munnar Tea Estates, Kerala', image: 'https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=1000&q=80', tag: 'Lush Western Ghats Tea Hills' },
-    { city: 'Varanasi Ganges Ghats', image: 'https://images.unsplash.com/photo-1561361513-2d000a50f0dc?w=1000&q=80', tag: 'Spiritual River Aarti & Heritage' },
-    { city: 'Pangong Tso Lake, Ladakh', image: 'https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?w=1000&q=80', tag: 'High-Altitude Himalayan Waters' }
-  ];
+  // Category-Based 1-Second Auto-Changing City Monument Slideshow Datasets
+  const monumentCategorySlides = {
+    BEACHES: [
+      { city: 'Goa Coast & Palm Shores', image: 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=1000&q=80', tag: 'Tropical Sunshine Coast' },
+      { city: 'Gokarna Om Beach', image: 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=1000&q=80', tag: 'Cliffside Arabian Sea Waves' },
+      { city: 'Alleppey Backwaters, Kerala', image: 'https://images.unsplash.com/photo-1593693397690-362cb9666fc2?w=1000&q=80', tag: 'Tranquil Lagoon Houseboat Trail' },
+      { city: 'Pondicherry French Promenade', image: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?w=1000&q=80', tag: 'Franco-Tamil Seaside Boulevard' },
+      { city: 'Kanyakumari Triveni Sangam', image: 'https://images.unsplash.com/photo-1596176530529-78163a4f7af2?w=1000&q=80', tag: 'Confluence of 3 Oceans' }
+    ],
+    PLAINS: [
+      { city: 'Taj Mahal, Agra', image: 'https://images.unsplash.com/photo-1564507592333-c60657eea523?w=1000&q=80', tag: 'UNESCO Wonder of the World' },
+      { city: 'Hawa Mahal, Jaipur', image: 'https://images.unsplash.com/photo-1477587458883-47145ed94245?w=1000&q=80', tag: 'Royal Pink City Architecture' },
+      { city: 'Gateway of India, Mumbai', image: 'https://images.unsplash.com/photo-1570168007204-dfb528c6958f?w=1000&q=80', tag: 'Arabian Sea Waterfront' },
+      { city: 'Victoria Memorial, Kolkata', image: 'https://images.unsplash.com/photo-1558431382-27e303142255?w=1000&q=80', tag: 'City of Joy Marble Palace' },
+      { city: 'City Palace, Udaipur', image: 'https://images.unsplash.com/photo-1615836245337-f5b9b2303f10?w=1000&q=80', tag: 'Venice of the East Lake Fort' }
+    ],
+    MOUNTAINS: [
+      { city: 'Solang Valley, Manali', image: 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=1000&q=80', tag: 'Himalayan Snow & Pine Valleys' },
+      { city: 'Dal Lake, Srinagar Kashmir', image: 'https://images.unsplash.com/photo-1598091383021-15ddea10925d?w=1000&q=80', tag: 'Shikara Houseboats & Snow Peaks' },
+      { city: 'Pangong Tso Lake, Leh-Ladakh', image: 'https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?w=1000&q=80', tag: 'High-Altitude Himalayan Waters' },
+      { city: 'Key Monastery, Spiti Valley', image: 'https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?w=1000&q=80', tag: '1000-Year-Old Cliff Monastery' },
+      { city: 'The Ridge, Shimla', image: 'https://images.unsplash.com/photo-1597074866923-dc0589150358?w=1000&q=80', tag: 'Queen of Hill Stations' }
+    ]
+  };
 
+  const currentCategorySlides = monumentCategorySlides[activeCategory] || monumentCategorySlides.BEACHES;
   const [slideIndex, setSlideIndex] = useState(0);
+
+  // Reset slide index when category changes
+  useEffect(() => {
+    setSlideIndex(0);
+  }, [activeCategory]);
 
   // 1-Second Auto-Changing Timer
   useEffect(() => {
     const timer = setInterval(() => {
-      setSlideIndex((prev) => (prev + 1) % monumentSlides.length);
+      setSlideIndex((prev) => (prev + 1) % currentCategorySlides.length);
     }, 1000);
     return () => clearInterval(timer);
-  }, []);
+  }, [currentCategorySlides]);
 
   const handleAuthSubmit = (e) => {
     e.preventDefault();
@@ -61,7 +80,7 @@ export default function LoginPage() {
     navigate('/home');
   };
 
-  const currentSlide = monumentSlides[slideIndex];
+  const currentSlide = currentCategorySlides[slideIndex] || currentCategorySlides[0];
 
   return (
     <div className="min-h-screen w-full font-sans bg-[#FFF8F0] relative overflow-x-hidden flex flex-col justify-between">
@@ -69,7 +88,7 @@ export default function LoginPage() {
       {/* Split Hero Layout */}
       <div className="flex flex-col lg:flex-row min-h-screen w-full relative">
         
-        {/* LEFT SIDE (60%): Sandy Warm Content */}
+        {/* LEFT SIDE (58%): Sandy Warm Content */}
         <div className="w-full lg:w-[58%] p-6 sm:p-10 lg:p-14 flex flex-col justify-between z-10 space-y-8">
           
           {/* Top Header Bar */}
@@ -96,7 +115,7 @@ export default function LoginPage() {
               <button onClick={() => navigate('/explore')} className="hover:text-ocean-600 transition-colors">Blogs</button>
             </nav>
 
-            {/* Login & Explore Action Buttons (Spaced out & Prominent) */}
+            {/* Login & Explore Action Buttons */}
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setIsModalOpen(true)}
@@ -119,27 +138,27 @@ export default function LoginPage() {
           {/* Main Hero Body */}
           <div className="space-y-6 max-w-xl my-auto">
             
-            {/* Category Pills */}
+            {/* Category Pills (Switches Right-Hand Side Background Slideshow) */}
             <div className="flex items-center gap-4 text-xs font-black tracking-widest text-slate-500 uppercase">
               <button 
-                onClick={() => setActiveTab('MOUNTAINS')}
-                className={`pb-1 border-b-2 transition-colors ${activeTab === 'MOUNTAINS' ? 'border-coral-500 text-coral-600 font-extrabold' : 'border-transparent hover:text-slate-800'}`}
+                onClick={() => setActiveCategory('MOUNTAINS')}
+                className={`pb-1 border-b-2 transition-all ${activeCategory === 'MOUNTAINS' ? 'border-coral-500 text-coral-600 font-extrabold scale-105' : 'border-transparent hover:text-slate-800'}`}
               >
-                MOUNTAINS
+                🏔️ MOUNTAINS
               </button>
               <span>•</span>
               <button 
-                onClick={() => setActiveTab('PLAINS')}
-                className={`pb-1 border-b-2 transition-colors ${activeTab === 'PLAINS' ? 'border-coral-500 text-coral-600 font-extrabold' : 'border-transparent hover:text-slate-800'}`}
+                onClick={() => setActiveCategory('PLAINS')}
+                className={`pb-1 border-b-2 transition-all ${activeCategory === 'PLAINS' ? 'border-coral-500 text-coral-600 font-extrabold scale-105' : 'border-transparent hover:text-slate-800'}`}
               >
-                PLAINS
+                🏛️ PLAINS & HERITAGE
               </button>
               <span>•</span>
               <button 
-                onClick={() => setActiveTab('BEACHES')}
-                className={`pb-1 border-b-2 transition-colors ${activeTab === 'BEACHES' ? 'border-coral-500 text-coral-600 font-extrabold' : 'border-transparent hover:text-slate-800'}`}
+                onClick={() => setActiveCategory('BEACHES')}
+                className={`pb-1 border-b-2 transition-all ${activeCategory === 'BEACHES' ? 'border-coral-500 text-coral-600 font-extrabold scale-105' : 'border-transparent hover:text-slate-800'}`}
               >
-                BEACHES
+                🏖️ BEACHES
               </button>
             </div>
 
@@ -149,12 +168,12 @@ export default function LoginPage() {
             </h1>
 
             <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-              Plan budget-friendly trips, access offline itineraries, track expenses, and stay safe across 28 states & 8 UTs of India.
+              Plan budget-friendly trips, access offline itineraries, track expenses, and stay safe across 20 active all-India destinations.
             </p>
 
             {/* Most Popular Preview Cards */}
             <div className="space-y-3 pt-2">
-              <span className="text-xs font-black text-slate-400 uppercase tracking-wider block">MOST POPULAR DESTINATIONS</span>
+              <span className="text-xs font-black text-slate-400 uppercase tracking-wider block">FEATURED DESTINATIONS</span>
               <div className="grid grid-cols-3 gap-3">
                 
                 <div onClick={() => navigate('/destination/d1')} className="glass-card p-3 rounded-2xl cursor-pointer hover:-translate-y-1 transition-all border border-white/60">
@@ -170,8 +189,8 @@ export default function LoginPage() {
                 </div>
 
                 <div onClick={() => navigate('/destination/d4')} className="glass-card p-3 rounded-2xl cursor-pointer hover:-translate-y-1 transition-all border border-white/60">
-                  <div className="h-14 rounded-xl bg-gradient-to-tr from-emerald-400 to-teal-600 mb-2 flex items-center justify-center text-white font-bold text-xs">🌿 Kerala</div>
-                  <h4 className="font-heading font-bold text-slate-800 text-xs">Munnar Hills</h4>
+                  <div className="h-14 rounded-xl bg-gradient-to-tr from-emerald-400 to-teal-600 mb-2 flex items-center justify-center text-white font-bold text-xs">🌿 Munnar</div>
+                  <h4 className="font-heading font-bold text-slate-800 text-xs">Munnar Tea Hills</h4>
                   <p className="text-[10px] text-slate-500">150K+ Visited</p>
                 </div>
 
@@ -180,11 +199,11 @@ export default function LoginPage() {
 
           </div>
 
-          {/* Bottom Interactive Search Bar (Enhanced Accommodations & Options) */}
+          {/* Bottom Interactive Search Bar */}
           <div className="bg-white/90 backdrop-blur-xl border border-white/80 rounded-3xl p-4 sm:p-6 shadow-2xl space-y-4 my-4">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               
-              {/* Select Destination / Accommodation */}
+              {/* Accommodation Type */}
               <div className="space-y-1">
                 <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider">Accommodation Type</label>
                 <select 
@@ -249,10 +268,10 @@ export default function LoginPage() {
 
         </div>
 
-        {/* RIGHT SIDE (42%): 1-SECOND AUTO-CHANGING CITY MONUMENT SLIDESHOW */}
+        {/* RIGHT SIDE (42%): DYNAMIC CATEGORY-BASED 1-SECOND AUTO-CHANGING SLIDESHOW */}
         <div className="w-full lg:w-[42%] min-h-[450px] lg:min-h-screen relative overflow-hidden bg-slate-950 flex flex-col justify-end p-8">
           
-          {/* Slideshow Image with 1-Second Transition */}
+          {/* Slideshow Image with Smooth Crossfade */}
           <div className="absolute inset-0 z-0">
             <img 
               src={currentSlide.image} 
@@ -263,15 +282,15 @@ export default function LoginPage() {
             <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-black/20"></div>
           </div>
 
-          {/* 1-Second Auto Changing Monument Badge */}
-          <div className="relative z-10 max-w-md space-y-3 bg-slate-950/80 backdrop-blur-md p-6 rounded-3xl border border-white/20 shadow-2xl">
+          {/* 1-Second Category-Synced Landmark Tag */}
+          <div className="relative z-10 max-w-md space-y-3 bg-slate-950/85 backdrop-blur-md p-6 rounded-3xl border border-white/20 shadow-2xl">
             
             <div className="flex items-center justify-between">
               <span className="px-3 py-1 bg-amber-400 text-slate-950 text-[10px] font-black rounded-full uppercase tracking-wider">
-                ⚡ Live 1-Sec Landmark Tour
+                ⚡ 1-Sec Tour • {activeCategory}
               </span>
               <span className="text-xs text-slate-300 font-bold">
-                {slideIndex + 1} / {monumentSlides.length}
+                {slideIndex + 1} / {currentCategorySlides.length}
               </span>
             </div>
 
@@ -286,7 +305,7 @@ export default function LoginPage() {
 
             {/* Slide Progress Dots */}
             <div className="flex gap-1.5 pt-2">
-              {monumentSlides.map((_, idx) => (
+              {currentCategorySlides.map((_, idx) => (
                 <div 
                   key={idx}
                   className={`h-1.5 rounded-full transition-all duration-300 ${
@@ -409,17 +428,8 @@ export default function LoginPage() {
             </div>
 
             <p className="text-slate-600 text-sm leading-relaxed font-medium">
-              YatraSathi is an open-source, smart travel companion designed specifically for domestic Indian tourists, budget travelers, students, and solo adventurers. It unifies multi-city trip planning, offline Web Speech API audio guides, running budget calculators, and emergency SOS safety check-ins.
+              YatraSathi is an open-source, smart travel companion designed specifically for domestic Indian tourists, budget travelers, students, and solo adventurers across 20 top destinations in India.
             </p>
-
-            <div className="grid grid-cols-2 gap-3 pt-2">
-              <div className="bg-slate-50 p-3 rounded-2xl border border-slate-100 text-xs font-bold text-slate-800">
-                🇮🇳 28 States & 8 UTs
-              </div>
-              <div className="bg-slate-50 p-3 rounded-2xl border border-slate-100 text-xs font-bold text-slate-800">
-                📶 100% Offline Access
-              </div>
-            </div>
           </div>
         </div>
       )}
@@ -442,21 +452,6 @@ export default function LoginPage() {
               <div>
                 <h3 className="text-2xl font-heading font-extrabold text-slate-900">YatraSathi Premium Gold</h3>
                 <p className="text-xs text-amber-700 font-bold uppercase tracking-wider">Unlock Ultimate Travel Privileges</p>
-              </div>
-            </div>
-
-            <div className="space-y-3">
-              <div className="flex items-center gap-3 bg-amber-50/60 p-3 rounded-2xl border border-amber-200 text-xs font-bold text-slate-800">
-                <FiCheck className="text-amber-600 text-base shrink-0" />
-                <span>Unlimited Offline Map Downloads for Remote Himalayan Trails</span>
-              </div>
-              <div className="flex items-center gap-3 bg-amber-50/60 p-3 rounded-2xl border border-amber-200 text-xs font-bold text-slate-800">
-                <FiCheck className="text-amber-600 text-base shrink-0" />
-                <span>Priority Emergency SOS Response & Live Location Broadcast</span>
-              </div>
-              <div className="flex items-center gap-3 bg-amber-50/60 p-3 rounded-2xl border border-amber-200 text-xs font-bold text-slate-800">
-                <FiCheck className="text-amber-600 text-base shrink-0" />
-                <span>AI Route Optimizer with Transport Tariff Comparison</span>
               </div>
             </div>
 

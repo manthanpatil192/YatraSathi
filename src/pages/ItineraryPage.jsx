@@ -1,485 +1,265 @@
 import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
-import { FiPlus, FiTrash2, FiClock, FiMapPin, FiCoffee, FiTruck, FiHome, FiSave, FiCheckCircle, FiRefreshCw, FiBookOpen, FiInfo, FiX, FiVolume2 } from 'react-icons/fi';
-import { apiService } from '../services/api';
+import { useSearchParams, useNavigate } from 'react-router-dom';
+import { FiPlus, FiTrash2, FiClock, FiMapPin, FiSave, FiCheck, FiCompass, FiInfo, FiLayers } from 'react-icons/fi';
 import { destinations } from '../data/destinations';
-import { speak, stopSpeaking } from '../utils/speechUtils';
-
-const initialDays = [
-  {
-    id: 'day-1',
-    title: 'Day 1: Old Goa Heritage & Coastal Culture',
-    culturalTip: 'Old Goa churches feature 16th-century Portuguese Baroque & Manueline architecture.',
-    stops: [
-      { 
-        id: 'stop-1', 
-        destId: 'd1',
-        name: 'Basilica of Bom Jesus, Old Goa', 
-        type: 'visit', 
-        time: '09:30 AM', 
-        duration: '2 hrs', 
-        notes: 'UNESCO World Heritage site housing the preserved mortal remains of St. Francis Xavier.',
-        culturalInfo: 'Built between 1594 and 1605, this basilica is a masterpiece of Indo-Portuguese Baroque architecture. The floor is made of marble, and the carved gilded altars depict scenes from the life of St. Francis Xavier. Dress respectfully covering shoulders and knees.'
-      },
-      { 
-        id: 'stop-2', 
-        destId: 'd1',
-        name: 'Traditional Goan Catholic Lunch at Fontainhas', 
-        type: 'food', 
-        time: '01:00 PM', 
-        duration: '1.5 hrs', 
-        notes: 'Try Fish Curry Rice, Pork Vindaloo, and Bebinca dessert.',
-        culturalInfo: 'Fontainhas is Goa\'s historic Latin Quarter established in the late 1800s. The colorful yellow, blue, and mint green Portuguese heritage homes are painted annually after the monsoon season according to traditional Portuguese law.'
-      },
-      { 
-        id: 'stop-3', 
-        destId: 'd1',
-        name: 'Mandovi River Cultural Sunset Cruise', 
-        type: 'visit', 
-        time: '05:30 PM', 
-        duration: '2 hrs', 
-        notes: 'Features live Dekhnni & Fugdi traditional Goan folk dances on board.',
-        culturalInfo: 'Fugdi is an ancient Goan folk dance performed by women during religious festivals like Shigmo and Ganesh Chaturthi, celebrating harvest and community unity.'
-      }
-    ]
-  },
-  {
-    id: 'day-2',
-    title: 'Day 2: Jaipur Royal Forts & Rajput Dynasty',
-    culturalTip: 'Amer Fort combines Hindu and Mughal architectural elements built with red sandstone and marble.',
-    stops: [
-      { 
-        id: 'stop-4', 
-        destId: 'd3',
-        name: 'Amer Fort & Sheesh Mahal', 
-        type: 'visit', 
-        time: '09:00 AM', 
-        duration: '3 hrs', 
-        notes: 'Admire the Hall of Mirrors (Sheesh Mahal) inlaid with thousands of convex glass mirrors.',
-        culturalInfo: 'Constructed by Raja Man Singh I in 1592 overlooking Maota Lake. The Sheesh Mahal was engineered so a single candlelight reflected across thousands of tiny mirrors could illuminate the entire royal chamber.'
-      },
-      { 
-        id: 'stop-5', 
-        destId: 'd3',
-        name: 'Hawa Mahal & Local Craft Bazaar', 
-        type: 'visit', 
-        time: '02:00 PM', 
-        duration: '2 hrs', 
-        notes: 'Shop for authentic Jaipuri Block Print fabrics and Meenakari enamel jewelry.',
-        culturalInfo: 'Built in 1799 by Maharaja Sawai Pratap Singh. The 953 honeycomb windows (Jharokhas) were designed so royal purdah women could observe street processions without being seen from the outside.'
-      }
-    ]
-  }
-];
+import { apiService } from '../services/api';
 
 export default function ItineraryPage() {
   const [searchParams] = useSearchParams();
-  const addDestId = searchParams.get('add');
-  const [tripName, setTripName] = useState('Golden Triangle & Coastal India Tour');
-  const [days, setDays] = useState(initialDays);
-  const [saving, setSaving] = useState(false);
-  const [saveStatus, setSaveStatus] = useState('');
-  const [selectedCulturalStop, setSelectedCulturalStop] = useState(null);
+  const navigate = useNavigate();
+  const initialAddId = searchParams.get('add');
 
-  useEffect(() => {
-    if (addDestId) {
-      const targetDest = destinations.find(d => String(d.id) === String(addDestId));
-      if (targetDest) {
-        setDays(prevDays => {
-          const updated = [...prevDays];
-          if (updated.length > 0) {
-            updated[0].stops.push({
-              id: `stop-${Date.now()}`,
-              destId: targetDest.id,
-              name: `Explore ${targetDest.name}`,
-              type: 'visit',
-              time: '03:00 PM',
-              duration: '2.5 hrs',
-              notes: targetDest.description,
-              culturalInfo: targetDest.culturalInfo || targetDest.audioGuideText
-            });
-          }
-          return updated;
-        });
-        setSaveStatus(`Added ${targetDest.name} with cultural notes!`);
-        setTimeout(() => setSaveStatus(''), 4000);
-      }
+  const [tripName, setTripName] = useState('My India Adventure');
+  const [selectedDestId, setSelectedDestId] = useState(initialAddId || 'd1');
+  const [days, setDays] = useState([
+    {
+      id: 'day-1',
+      title: 'Day 1: Arrival, Heritage Landmarks & Sunset Walk',
+      stops: [
+        { id: 's1', name: 'Hotel Check-in & Rest', time: '10:00 AM', duration: '2 hrs', type: 'stay' },
+        { id: 's2', name: 'Historic Heritage Exploration Walk', time: '02:00 PM', duration: '3 hrs', type: 'visit' },
+        { id: 's3', name: 'Sunset Promenade & Local Dinner', time: '06:30 PM', duration: '2 hrs', type: 'food' }
+      ]
+    },
+    {
+      id: 'day-2',
+      title: 'Day 2: Top Attractions & Local Food Tasting Tour',
+      stops: [
+        { id: 's4', name: 'Famous Cultural Landmark Visit', time: '09:00 AM', duration: '3 hrs', type: 'visit' },
+        { id: 's5', name: 'Iconic Regional Food & Street Feast', time: '01:00 PM', duration: '2 hrs', type: 'food' }
+      ]
     }
-  }, [addDestId]);
+  ]);
 
-  const getIcon = (type) => {
-    switch(type) {
-      case 'food': return <FiCoffee className="text-amber-500 text-base shrink-0" />;
-      case 'transport': return <FiTruck className="text-slate-500 text-base shrink-0" />;
-      case 'stay': return <FiHome className="text-seafoam-500 text-base shrink-0" />;
-      case 'visit': default: return <FiMapPin className="text-ocean-500 text-base shrink-0" />;
-    }
-  };
+  const [savedSuccess, setSavedSuccess] = useState(false);
+  const selectedDest = destinations.find(d => String(d.id) === String(selectedDestId)) || destinations[0];
 
-  const onDragEnd = (result) => {
-    const { source, destination } = result;
-    if (!destination) return;
+  // Google Travel-Style Smart Non-Repeating Suggestions Engine
+  const generateGoogleStyleSuggestions = (destName, dayIndex) => {
+    const suggestionsByDay = [
+      // Day 1 Suggestions
+      [
+        { name: `${destName} Airport/Station Pickup & Check-in`, time: '09:00 AM', duration: '2 hrs', type: 'transport' },
+        { name: `${destName} Main Heritage Square Walk`, time: '02:00 PM', duration: '2.5 hrs', type: 'visit' },
+        { name: `Traditional ${destName} Evening Sunset Viewpoint`, time: '05:30 PM', duration: '1.5 hrs', type: 'visit' },
+        { name: `Authentic ${destName} Thali & Regional Dinner`, time: '07:30 PM', duration: '2 hrs', type: 'food' }
+      ],
+      // Day 2 Suggestions
+      [
+        { name: `Morning Guided Tour of ${destName} Forts & Temples`, time: '08:30 AM', duration: '3.5 hrs', type: 'visit' },
+        { name: `Iconic Street Food & Spice Market Crawl`, time: '01:00 PM', duration: '2 hrs', type: 'food' },
+        { name: `${destName} Museum & Cultural Art Gallery`, time: '03:30 PM', duration: '2 hrs', type: 'visit' },
+        { name: `Live Folk Music & Cultural Dance Performance`, time: '07:00 PM', duration: '2 hrs', type: 'visit' }
+      ],
+      // Day 3 Suggestions
+      [
+        { name: `Early Sunrise Viewpoint & Nature Trek`, time: '06:00 AM', duration: '2.5 hrs', type: 'visit' },
+        { name: `Adventure & Water Sports Session`, time: '10:30 AM', duration: '3 hrs', type: 'visit' },
+        { name: `Scenic River/Lake Boat Cruise`, time: '04:00 PM', duration: '2 hrs', type: 'visit' },
+        { name: `Night Market Souvenir Shopping`, time: '07:30 PM', duration: '2 hrs', type: 'visit' }
+      ],
+      // Day 4+ Suggestions
+      [
+        { name: `Offbeat Hidden Gem & Secret Village Tour`, time: '09:30 AM', duration: '3 hrs', type: 'visit' },
+        { name: `Organic Farm Visit & Local Cooking Workshop`, time: '01:30 PM', duration: '2.5 hrs', type: 'food' },
+        { name: `Souvenir Shopping & Handicrafts Center`, time: '05:00 PM', duration: '2 hrs', type: 'visit' },
+        { name: `Pack & Departure Transfer`, time: '08:00 PM', duration: '2 hrs', type: 'transport' }
+      ]
+    ];
 
-    if (source.droppableId === destination.droppableId) {
-      const dayIndex = days.findIndex(d => d.id === source.droppableId);
-      const newStops = Array.from(days[dayIndex].stops);
-      const [removed] = newStops.splice(source.index, 1);
-      newStops.splice(destination.index, 0, removed);
-
-      const newDays = [...days];
-      newDays[dayIndex].stops = newStops;
-      setDays(newDays);
-    } else {
-      const sourceDayIdx = days.findIndex(d => d.id === source.droppableId);
-      const destDayIdx = days.findIndex(d => d.id === destination.droppableId);
-      
-      const sourceStops = Array.from(days[sourceDayIdx].stops);
-      const destStops = Array.from(days[destDayIdx].stops);
-      
-      const [removed] = sourceStops.splice(source.index, 1);
-      destStops.splice(destination.index, 0, removed);
-
-      const newDays = [...days];
-      newDays[sourceDayIdx].stops = sourceStops;
-      newDays[destDayIdx].stops = destStops;
-      setDays(newDays);
-    }
-  };
-
-  const handleSaveTrip = async () => {
-    setSaving(true);
-    setSaveStatus('');
-    try {
-      const tripObj = {
-        id: Date.now(),
-        name: tripName,
-        days: days,
-        savedAt: new Date().toISOString()
-      };
-      const res = await apiService.saveItinerary(tripObj);
-      setSaveStatus(res.message || 'Itinerary saved to backend & IndexedDB!');
-    } catch (e) {
-      setSaveStatus('Saved locally to IndexedDB');
-    } finally {
-      setSaving(false);
-      setTimeout(() => setSaveStatus(''), 4000);
-    }
+    const poolIndex = Math.min(dayIndex, suggestionsByDay.length - 1);
+    return suggestionsByDay[poolIndex];
   };
 
   const addDay = () => {
-    const nextNum = days.length + 1;
-    setDays([...days, { 
-      id: `day-${Date.now()}`, 
-      title: `Day ${nextNum}: Local Heritage & Sightseeing`, 
-      culturalTip: 'Respect local customs, remove footwear before entering holy places.',
-      stops: [] 
-    }]);
+    const nextDayNum = days.length + 1;
+    const suggestions = generateGoogleStyleSuggestions(selectedDest.name, nextDayNum - 1);
+
+    const newDay = {
+      id: `day-${Date.now()}`,
+      title: `Day ${nextDayNum}: Google Smart Plan for ${selectedDest.name}`,
+      stops: suggestions
+    };
+
+    setDays([...days, newDay]);
   };
 
-  const deleteDay = (dayId) => {
-    if (days.length === 1) return;
-    setDays(days.filter(d => d.id !== dayId));
-  };
+  const addStopToDay = (dayId) => {
+    const existingStops = days.find(d => d.id === dayId)?.stops || [];
+    const stopNum = existingStops.length + 1;
 
-  const addStop = (dayId) => {
-    const newDays = [...days];
-    const dayIdx = newDays.findIndex(d => d.id === dayId);
-    newDays[dayIdx].stops.push({
-      id: `stop-${Date.now()}`,
-      name: 'Historical Monument Sightseeing',
-      type: 'visit',
-      time: '04:00 PM',
+    // Pick unique stop name from destination activities or attractions
+    let newStopName = `${selectedDest.name} Attraction #${stopNum}`;
+    if (selectedDest.travelDestinationsInCity && selectedDest.travelDestinationsInCity[stopNum - 1]) {
+      newStopName = selectedDest.travelDestinationsInCity[stopNum - 1].name;
+    } else if (selectedDest.activities && selectedDest.activities[stopNum - 1]) {
+      newStopName = selectedDest.activities[stopNum - 1].name;
+    }
+
+    // Ensure non-repeating name
+    const alreadyExists = existingStops.some(s => s.name === newStopName);
+    if (alreadyExists) {
+      newStopName = `Explore ${selectedDest.name} Scenic Spot #${Date.now().toString().slice(-3)}`;
+    }
+
+    const newStop = {
+      id: `s-${Date.now()}`,
+      name: newStopName,
+      time: '03:00 PM',
       duration: '2 hrs',
-      notes: 'Guided walk exploring ancient architecture.',
-      culturalInfo: 'India’s monuments represent architectural styles ranging from Dravidian stone carving to Mughal marble inlay and Rajput fortress design.'
-    });
-    setDays(newDays);
+      type: 'visit'
+    };
+
+    setDays(days.map(d => d.id === dayId ? { ...d, stops: [...d.stops, newStop] } : d));
   };
 
   const deleteStop = (dayId, stopId) => {
-    const newDays = [...days];
-    const dayIdx = newDays.findIndex(d => d.id === dayId);
-    newDays[dayIdx].stops = newDays[dayIdx].stops.filter(s => s.id !== stopId);
-    setDays(newDays);
+    setDays(days.map(d => d.id === dayId ? { ...d, stops: d.stops.filter(s => s.id !== stopId) } : d));
   };
 
-  const totalStopsCount = days.reduce((acc, d) => acc + d.stops.length, 0);
+  const deleteDay = (dayId) => {
+    if (days.length <= 1) return;
+    setDays(days.filter(d => d.id !== dayId));
+  };
+
+  const handleSaveItinerary = async () => {
+    const itineraryData = {
+      name: tripName,
+      destinationId: selectedDest.id,
+      destinationName: selectedDest.name,
+      days: days,
+      createdAt: new Date().toISOString()
+    };
+
+    await apiService.saveItinerary(itineraryData);
+    setSavedSuccess(true);
+    setTimeout(() => setSavedSuccess(false), 3000);
+  };
 
   return (
-    <div className="min-h-screen bg-slate-50 pt-20 pb-24 px-4 sm:px-6 lg:px-8 animate-fade-in">
-      <div className="max-w-7xl mx-auto space-y-8">
+    <div className="min-h-screen pt-24 pb-32 text-white relative z-10 animate-fade-in">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         
-        {/* Top Banner & Control Bar */}
-        <div className="bg-white rounded-3xl p-6 md:p-8 shadow-xl border border-slate-100 flex flex-col md:flex-row justify-between md:items-center gap-6">
-          
-          <div className="flex flex-col flex-1">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-50 text-amber-800 border border-amber-200 text-xs font-bold uppercase tracking-wider mb-2 w-fit">
-              <span>🏛️ Cultural & Historical Itinerary Planner</span>
+        {/* Header Bar */}
+        <div className="bg-slate-900/85 backdrop-blur-2xl rounded-3xl p-6 sm:p-8 border border-slate-700/80 shadow-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+          <div className="space-y-2 flex-1">
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-amber-400/20 text-amber-300 border border-amber-400/30 rounded-full text-xs font-black uppercase tracking-wider">
+              <span>📅 Day-by-Day AI Trip Builder</span>
             </div>
+            
             <input 
-              type="text" 
+              type="text"
               value={tripName}
               onChange={(e) => setTripName(e.target.value)}
-              className="text-2xl sm:text-3xl font-heading font-extrabold text-slate-800 bg-transparent border-b-2 border-slate-200 hover:border-ocean-300 focus:border-ocean-500 focus:outline-none transition-colors pb-1 w-full max-w-xl"
-              placeholder="Enter Trip Name..."
+              className="text-2xl sm:text-3xl font-heading font-extrabold bg-transparent text-white border-b border-dashed border-slate-600 focus:border-amber-400 outline-none w-full pb-1"
             />
-            <div className="flex items-center gap-4 text-xs font-semibold text-slate-500 mt-2">
-              <span>📅 {days.length} Days</span>
-              <span>•</span>
-              <span>📍 {totalStopsCount} Stops</span>
-              <span>•</span>
-              <span className="text-seafoam-600 font-bold">✨ Drag & Drop Reorderable</span>
-            </div>
+
+            <p className="text-xs text-slate-300">
+              Customize non-repeating daily schedules inspired by Google Travel itineraries.
+            </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3 shrink-0">
-            <button 
-              onClick={() => setDays(initialDays)}
-              className="px-5 py-3 rounded-2xl font-bold text-xs bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors flex items-center gap-1.5"
+          <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
+            <select
+              value={selectedDestId}
+              onChange={(e) => setSelectedDestId(e.target.value)}
+              className="w-full sm:w-auto bg-slate-950 border border-slate-700 text-amber-300 rounded-2xl px-4 py-3 text-xs font-extrabold outline-none cursor-pointer"
             >
-              <FiRefreshCw /> Reset Sample
-            </button>
+              {destinations.map(d => (
+                <option key={d.id} value={d.id}>📍 {d.name} ({d.state})</option>
+              ))}
+            </select>
 
-            <button 
-              onClick={handleSaveTrip}
-              disabled={saving}
-              className="px-6 py-3 rounded-2xl font-heading font-bold text-sm bg-gradient-to-r from-coral-500 to-sunset-500 text-white shadow-lg shadow-coral-200 btn-bounce flex items-center gap-2"
+            <button
+              onClick={handleSaveItinerary}
+              className="w-full sm:w-auto btn-bounce px-6 py-3 rounded-2xl bg-gradient-to-r from-coral-500 to-sunset-500 text-white font-heading font-extrabold text-xs shadow-lg shadow-coral-500/20 flex items-center justify-center gap-2"
             >
-              <FiSave />
-              <span>{saving ? 'Saving...' : 'Save Itinerary'}</span>
+              {savedSuccess ? <FiCheck /> : <FiSave />}
+              <span>{savedSuccess ? 'Saved to Offline DB!' : 'Save Itinerary'}</span>
             </button>
           </div>
-
         </div>
 
-        {/* Status Toast */}
-        {saveStatus && (
-          <div className="bg-seafoam-500 text-white px-6 py-3 rounded-2xl shadow-lg font-bold text-sm flex items-center gap-2 animate-slide-up">
-            <FiCheckCircle className="text-lg" />
-            <span>{saveStatus}</span>
+        {/* Days Columns Grid */}
+        <div className="space-y-6">
+          <div className="flex justify-between items-center">
+            <h2 className="text-xl font-heading font-extrabold text-white flex items-center gap-2">
+              <FiLayers className="text-amber-400" />
+              <span>Day-Wise Travel Schedule ({days.length} Days)</span>
+            </h2>
+
+            <button
+              onClick={addDay}
+              className="px-4 py-2.5 rounded-2xl bg-teal-500 hover:bg-teal-400 text-slate-950 font-extrabold text-xs shadow-md flex items-center gap-1.5 transition-colors"
+            >
+              <FiPlus /> Add Next Day (Google AI Plan)
+            </button>
           </div>
-        )}
 
-        {/* Drag Drop Context Layout */}
-        <DragDropContext onDragEnd={onDragEnd}>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
-            
-            {days.map((day, dayIndex) => (
-              <div key={day.id} className="bg-white rounded-3xl shadow-md border border-slate-100 overflow-hidden flex flex-col max-h-[82vh]">
-                
-                {/* Day Card Header */}
-                <div className="bg-gradient-to-r from-ocean-900 via-ocean-800 to-seafoam-900 p-4 text-white flex justify-between items-center sticky top-0 z-10">
-                  <div className="flex items-center gap-2 flex-1 min-w-0">
-                    <span className="bg-amber-400 text-slate-950 px-2.5 py-0.5 rounded-full text-xs font-black shrink-0">
-                      Day {dayIndex + 1}
-                    </span>
-                    <input
-                      type="text"
-                      value={day.title}
-                      onChange={(e) => {
-                        const updated = [...days];
-                        updated[dayIndex].title = e.target.value;
-                        setDays(updated);
-                      }}
-                      className="font-heading font-bold text-sm bg-transparent border-b border-transparent hover:border-white/40 focus:border-white focus:outline-none text-white truncate w-full"
-                    />
-                  </div>
-
-                  <button 
-                    onClick={() => deleteDay(day.id)} 
-                    className="text-white/70 hover:text-white transition-colors p-1 shrink-0 ml-2"
-                    title="Delete Day"
-                  >
-                    <FiTrash2 size={16} />
-                  </button>
-                </div>
-
-                {/* Cultural Heritage Banner for the Day */}
-                {day.culturalTip && (
-                  <div className="bg-amber-50 p-3 border-b border-amber-100 text-amber-900 text-xs font-semibold flex items-start gap-2">
-                    <span className="text-base shrink-0">📜</span>
-                    <span className="leading-snug">{day.culturalTip}</span>
-                  </div>
-                )}
-
-                {/* Droppable Stops Column */}
-                <Droppable droppableId={day.id}>
-                  {(provided, snapshot) => (
-                    <div 
-                      {...provided.droppableProps}
-                      ref={provided.innerRef}
-                      className={`p-4 flex-1 overflow-y-auto space-y-3 min-h-[160px] transition-colors ${
-                        snapshot.isDraggingOver ? 'bg-ocean-50/40' : ''
-                      }`}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {days.map((day, idx) => (
+              <div 
+                key={day.id}
+                className="bg-slate-900/90 backdrop-blur-xl rounded-3xl p-6 border border-slate-700/80 shadow-2xl flex flex-col justify-between space-y-4"
+              >
+                <div className="flex justify-between items-start border-b border-slate-800 pb-3">
+                  <h3 className="font-heading font-extrabold text-base text-amber-300 leading-snug">
+                    {day.title}
+                  </h3>
+                  
+                  {days.length > 1 && (
+                    <button
+                      onClick={() => deleteDay(day.id)}
+                      className="text-slate-400 hover:text-red-400 transition-colors p-1"
+                      title="Delete Day"
                     >
-                      {day.stops.map((stop, index) => (
-                        <Draggable key={stop.id} draggableId={stop.id} index={index}>
-                          {(provided, snapshot) => (
-                            <div
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                              className={`bg-white border p-4 rounded-2xl shadow-sm flex flex-col gap-2 transition-all ${
-                                snapshot.isDragging ? 'shadow-2xl border-ocean-400 ring-2 ring-ocean-300 scale-105 z-50' : 'border-slate-100 hover:border-ocean-200'
-                              }`}
-                            >
-                              <div className="flex items-start justify-between gap-2">
-                                <div className="flex items-start gap-2.5 min-w-0 flex-1">
-                                  <div className="mt-0.5 p-2 bg-slate-50 rounded-xl shrink-0 border border-slate-100">
-                                    {getIcon(stop.type)}
-                                  </div>
-
-                                  <div className="flex-1 min-w-0">
-                                    <h4 className="font-heading font-extrabold text-slate-800 text-sm leading-tight truncate">
-                                      {stop.name}
-                                    </h4>
-                                    <div className="flex items-center gap-2 text-[11px] font-semibold text-slate-500 mt-1">
-                                      <span className="flex items-center gap-1"><FiClock className="text-ocean-500" /> {stop.time}</span>
-                                      <span>•</span>
-                                      <span>{stop.duration}</span>
-                                    </div>
-                                  </div>
-                                </div>
-
-                                <button 
-                                  onClick={() => deleteStop(day.id, stop.id)} 
-                                  className="text-slate-300 hover:text-red-500 p-1 shrink-0 transition-colors"
-                                >
-                                  <FiTrash2 size={14} />
-                                </button>
-                              </div>
-
-                              {/* Stop Notes */}
-                              {stop.notes && (
-                                <p className="text-xs text-slate-600 bg-slate-50 p-2.5 rounded-xl border border-slate-100 leading-relaxed">
-                                  {stop.notes}
-                                </p>
-                              )}
-
-                              {/* Cultural Info Button Trigger */}
-                              <button
-                                onClick={() => setSelectedCulturalStop(stop)}
-                                className="mt-1 py-1.5 px-3 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 font-extrabold text-[11px] flex items-center justify-between border border-amber-200/80 transition-colors"
-                              >
-                                <span className="flex items-center gap-1.5">
-                                  <span>📜</span> Cultural & Historic Info
-                                </span>
-                                <span className="text-[10px] text-amber-700 underline">Read →</span>
-                              </button>
-
-                            </div>
-                          )}
-                        </Draggable>
-                      ))}
-                      {provided.placeholder}
-                    </div>
+                      <FiTrash2 size={16} />
+                    </button>
                   )}
-                </Droppable>
-
-                {/* Card Footer: Add Stop */}
-                <div className="p-3 border-t border-slate-100 bg-slate-50">
-                  <button 
-                    onClick={() => addStop(day.id)}
-                    className="w-full py-2.5 border-2 border-dashed border-slate-300 rounded-2xl text-slate-600 font-bold text-xs hover:border-ocean-400 hover:text-ocean-600 hover:bg-white transition-all flex items-center justify-center gap-1.5"
-                  >
-                    <FiPlus /> Add Stop
-                  </button>
                 </div>
+
+                {/* Stops List */}
+                <div className="space-y-3 flex-1">
+                  {day.stops.map((stop) => (
+                    <div 
+                      key={stop.id}
+                      className="bg-slate-950 p-3.5 rounded-2xl border border-slate-800/90 flex items-start justify-between gap-3 group hover:border-slate-700 transition-colors"
+                    >
+                      <div className="space-y-1 flex-1">
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs font-extrabold text-white">{stop.name}</span>
+                        </div>
+                        <div className="flex items-center gap-3 text-[11px] font-bold text-slate-400">
+                          <span className="flex items-center gap-1 text-teal-400"><FiClock /> {stop.time}</span>
+                          <span>({stop.duration})</span>
+                        </div>
+                      </div>
+
+                      <button
+                        onClick={() => deleteStop(day.id, stop.id)}
+                        className="text-slate-500 hover:text-red-400 transition-colors p-1 opacity-60 group-hover:opacity-100"
+                      >
+                        <FiTrash2 size={14} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Add Unique Stop Button */}
+                <button
+                  onClick={() => addStopToDay(day.id)}
+                  className="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold text-xs flex items-center justify-center gap-1 transition-colors mt-2"
+                >
+                  <FiPlus /> Add Attraction Stop
+                </button>
 
               </div>
             ))}
-
-            {/* Add New Day Column Button */}
-            <button 
-              onClick={addDay}
-              className="h-44 border-2 border-dashed border-slate-300 rounded-3xl flex flex-col items-center justify-center text-slate-500 hover:border-ocean-400 hover:text-ocean-600 hover:bg-white transition-all font-heading font-bold text-sm p-6 text-center"
-            >
-              <div className="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center mb-2 shadow-inner">
-                <FiPlus size={24} />
-              </div>
-              <span>Add Day {days.length + 1}</span>
-            </button>
-
           </div>
-        </DragDropContext>
+
+        </div>
 
       </div>
-
-      {/* Cultural & Historic Info Drawer / Modal */}
-      {selectedCulturalStop && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md animate-fade-in">
-          <div className="bg-white rounded-3xl max-w-lg w-full shadow-2xl border border-slate-100 overflow-hidden space-y-6">
-            
-            {/* Modal Header */}
-            <div className="bg-gradient-to-r from-amber-600 via-orange-600 to-amber-700 p-6 text-white flex justify-between items-start">
-              <div className="space-y-1">
-                <span className="bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider">
-                  📜 Historical & Cultural Heritage
-                </span>
-                <h3 className="text-2xl font-heading font-extrabold text-white leading-tight">
-                  {selectedCulturalStop.name}
-                </h3>
-              </div>
-
-              <button 
-                onClick={() => { setSelectedCulturalStop(null); stopSpeaking(); }}
-                className="p-2 rounded-full bg-black/20 hover:bg-black/40 text-white transition-colors"
-              >
-                <FiX size={20} />
-              </button>
-            </div>
-
-            {/* Modal Body Content */}
-            <div className="p-6 space-y-5 max-h-[60vh] overflow-y-auto">
-              
-              <div className="bg-amber-50/80 p-4 rounded-2xl border border-amber-200 space-y-2">
-                <span className="text-xs font-extrabold text-amber-900 uppercase tracking-wider block">
-                  Cultural Significance & History
-                </span>
-                <p className="text-slate-800 text-sm leading-relaxed font-semibold">
-                  {selectedCulturalStop.culturalInfo || 'Rich heritage site representing regional Indian art, architecture, and centuries of tradition.'}
-                </p>
-              </div>
-
-              {selectedCulturalStop.notes && (
-                <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200">
-                  <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1">
-                    Visitor Tips & Etiquette
-                  </span>
-                  <p className="text-slate-700 text-xs font-medium leading-relaxed">
-                    {selectedCulturalStop.notes}
-                  </p>
-                </div>
-              )}
-
-              {/* Audio Narration Trigger */}
-              <div className="pt-2">
-                <button
-                  onClick={() => speak(selectedCulturalStop.culturalInfo || selectedCulturalStop.notes)}
-                  className="w-full py-3.5 rounded-2xl bg-ocean-500 hover:bg-ocean-600 text-white font-heading font-bold text-sm shadow-md flex items-center justify-center gap-2 btn-bounce"
-                >
-                  <FiVolume2 size={18} />
-                  <span>Listen to Audio Guide Narration</span>
-                </button>
-              </div>
-
-            </div>
-
-            {/* Modal Footer */}
-            <div className="p-4 bg-slate-50 border-t border-slate-100 text-center">
-              <button
-                onClick={() => { setSelectedCulturalStop(null); stopSpeaking(); }}
-                className="px-8 py-2.5 rounded-xl bg-slate-800 text-white font-bold text-xs hover:bg-slate-900"
-              >
-                Close Heritage Info
-              </button>
-            </div>
-
-          </div>
-        </div>
-      )}
-
     </div>
   );
 }

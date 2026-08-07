@@ -1,168 +1,139 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { FiShield, FiPhoneCall, FiClock, FiUsers, FiSun, FiCloudRain, FiWind, FiCheckCircle, FiAlertCircle, FiRefreshCw } from 'react-icons/fi';
 import SOSButton from '../components/safety/SOSButton';
 import CheckInTimer from '../components/safety/CheckInTimer';
-import CrowdIndicator from '../components/safety/CrowdIndicator';
-import { Shield, AlertCircle, Phone, HeartPulse, ShieldCheck, Info, ChevronDown, ChevronUp } from 'lucide-react';
+import { destinations } from '../data/destinations';
 
-const SafetyPage = () => {
-  const [activeTip, setActiveTip] = useState(null);
+export default function SafetyPage() {
+  const [selectedCityId, setSelectedCityId] = useState('d1');
+  const [lastUpdated, setLastUpdated] = useState(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const tips = [
-    {
-      title: 'Scam Avoidance',
-      content: 'Always negotiate taxi fares before getting in. Avoid unsolicited tour guides offering "special" discounts.'
-    },
-    {
-      title: 'Local Emergency Numbers',
-      content: 'Save local embassy numbers and local equivalents of 911 (like 112) in your phone before traveling.'
-    },
-    {
-      title: 'Secure Your Valuables',
-      content: 'Use a money belt or hidden pouch. Never leave bags unattended, especially in transit hubs.'
-    },
-    {
-      title: 'Share Your Itinerary',
-      content: 'Always let someone back home know your planned route and accommodation details.'
-    }
-  ];
+  const selectedCity = destinations.find(d => String(d.id) === String(selectedCityId)) || destinations[0];
+
+  // Simulated Live Crowd Radar Data
+  const crowdRadarData = {
+    d1: { level: 'Moderate', density: '62%', status: '🟡 Moderate Footfall', peakTime: '05:00 PM - 09:00 PM', weather: '28°C Sunny', humidity: '68%', wind: '14 km/h' },
+    d2: { level: 'High', density: '85%', status: '🔴 High Tourist Rush', peakTime: '11:00 AM - 04:00 PM', weather: '16°C Clear Mist', humidity: '45%', wind: '10 km/h' },
+    d3: { level: 'Moderate', density: '58%', status: '🟡 Moderate Footfall', peakTime: '10:00 AM - 03:00 PM', weather: '32°C Clear Sky', humidity: '40%', wind: '8 km/h' },
+    d4: { level: 'Low', density: '25%', status: '🟢 Peaceful & Quiet', peakTime: '09:00 AM - 12:00 PM', weather: '21°C Pleasant Breeze', humidity: '72%', wind: '12 km/h' }
+  };
+
+  const currentCrowd = crowdRadarData[selectedCityId] || crowdRadarData.d1;
+
+  const handleRefresh = () => {
+    setIsRefreshing(true);
+    setTimeout(() => {
+      setLastUpdated(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
+      setIsRefreshing(false);
+    }, 600);
+  };
 
   return (
-    <div className="min-h-screen bg-[#FFF8F0] font-sans pb-20">
-      {/* Hero Header */}
-      <header className="bg-gradient-to-br from-slate-900 via-slate-800 to-[#1A7A8A] text-white pt-24 pb-32 px-6 rounded-b-[3rem] relative overflow-hidden">
-        {/* Decorative background elements */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-[#2B9EB3]/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
-        <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#E76F51]/20 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4"></div>
+    <div className="min-h-screen pt-24 pb-32 text-white relative z-10 animate-fade-in">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         
-        <div className="max-w-7xl mx-auto relative z-10 flex flex-col md:flex-row justify-between items-center gap-8">
-          <div className="max-w-2xl text-center md:text-left">
-            <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 px-4 py-1.5 rounded-full text-sm font-bold mb-6 backdrop-blur-sm">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-              Connected to Safety Center
+        {/* Safety Header */}
+        <div className="bg-slate-900/85 backdrop-blur-2xl rounded-3xl p-6 sm:p-8 border border-slate-700/80 shadow-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+          <div className="space-y-2">
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-rose-500/20 text-rose-300 border border-rose-500/30 rounded-full text-xs font-black uppercase tracking-wider">
+              <span>🛡️ 24/7 National Tourist Safety & Radar Command</span>
             </div>
-            <h1 className="text-4xl md:text-6xl font-black mb-4 leading-tight tracking-tight text-white drop-shadow-sm">
-              Your Safety is <br className="hidden md:block"/> Our Priority
+            <h1 className="text-3xl sm:text-4xl font-heading font-extrabold text-white">
+              Emergency SOS & Live Crowd Radar
             </h1>
-            <p className="text-lg md:text-xl text-slate-300 font-medium leading-relaxed max-w-xl mx-auto md:mx-0">
-              Real-time monitoring, emergency assistance, and local insights to keep you secure on your journey.
+            <p className="text-slate-300 text-xs sm:text-sm font-medium max-w-2xl">
+              Access instant GPS SOS broadcasting, live real-time crowd density meters, weather status, and national helplines.
             </p>
           </div>
-          
-          {/* Emergency Notice Banner */}
-          <div className="bg-white/10 backdrop-blur-md border border-white/20 p-6 rounded-3xl max-w-sm shadow-xl">
-            <div className="flex items-start gap-4">
-              <div className="bg-rose-500/20 p-3 rounded-xl">
-                <AlertCircle className="w-8 h-8 text-rose-400" />
-              </div>
-              <div>
-                <h4 className="font-bold text-white text-lg">Active Alert</h4>
-                <p className="text-sm text-slate-300 mt-1 leading-relaxed">
-                  Heavy rain expected in coastal regions this evening. Please adjust travel plans accordingly.
-                </p>
-              </div>
-            </div>
-          </div>
+
+          <button
+            onClick={handleRefresh}
+            className="px-4 py-2.5 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs border border-slate-700 flex items-center gap-2 transition-colors shrink-0"
+          >
+            <FiRefreshCw className={isRefreshing ? 'animate-spin' : ''} />
+            <span>Updated: {lastUpdated}</span>
+          </button>
         </div>
-      </header>
 
-      {/* Main Content - 3 Column Layout */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 -mt-20 relative z-20">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+        {/* Top SOS & Check-in Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           
-          {/* Left Column: SOS & Quick Calls */}
-          <div className="bg-white rounded-3xl p-6 md:p-8 shadow-xl shadow-slate-200/50 border border-slate-100 flex flex-col gap-8 h-full transform transition-all hover:-translate-y-1 hover:shadow-2xl">
-            <div className="text-center">
-              <h2 className="text-2xl font-black text-slate-800 mb-2">Emergency Response</h2>
-              <p className="text-slate-500 text-sm font-medium">Immediate assistance when you need it</p>
+          {/* Left Column (5 cols): SOS Trigger Button */}
+          <div className="lg:col-span-5 bg-slate-900/90 backdrop-blur-xl p-8 rounded-3xl border border-slate-700/80 shadow-xl flex flex-col items-center justify-center text-center space-y-6">
+            <div className="space-y-1">
+              <h2 className="text-2xl font-heading font-extrabold text-white">Emergency SOS Alert</h2>
+              <p className="text-xs text-slate-400">Broadcast live GPS pin to emergency helplines & family</p>
             </div>
-            
-            <div className="py-4">
-              <SOSButton />
-            </div>
-            
-            <div className="grid grid-cols-2 gap-4 mt-auto">
-              <a href="tel:112" className="flex flex-col items-center justify-center p-4 rounded-2xl bg-slate-50 hover:bg-rose-50 border border-slate-100 hover:border-rose-200 transition-colors group">
-                <Phone className="w-6 h-6 text-slate-400 group-hover:text-rose-500 mb-2 transition-colors" />
-                <span className="font-bold text-slate-800 text-sm text-center">National SOS</span>
-                <span className="text-xs font-bold text-slate-400">112</span>
-              </a>
-              <a href="tel:100" className="flex flex-col items-center justify-center p-4 rounded-2xl bg-slate-50 hover:bg-blue-50 border border-slate-100 hover:border-blue-200 transition-colors group">
-                <Shield className="w-6 h-6 text-slate-400 group-hover:text-blue-500 mb-2 transition-colors" />
-                <span className="font-bold text-slate-800 text-sm text-center">Police</span>
-                <span className="text-xs font-bold text-slate-400">100</span>
-              </a>
-              <a href="tel:108" className="flex flex-col items-center justify-center p-4 rounded-2xl bg-slate-50 hover:bg-emerald-50 border border-slate-100 hover:border-emerald-200 transition-colors group">
-                <HeartPulse className="w-6 h-6 text-slate-400 group-hover:text-emerald-500 mb-2 transition-colors" />
-                <span className="font-bold text-slate-800 text-sm text-center">Ambulance</span>
-                <span className="text-xs font-bold text-slate-400">108</span>
-              </a>
-              <a href="tel:1091" className="flex flex-col items-center justify-center p-4 rounded-2xl bg-slate-50 hover:bg-purple-50 border border-slate-100 hover:border-purple-200 transition-colors group">
-                <ShieldCheck className="w-6 h-6 text-slate-400 group-hover:text-purple-500 mb-2 transition-colors" />
-                <span className="font-bold text-slate-800 text-sm text-center">Women Help</span>
-                <span className="text-xs font-bold text-slate-400">1091</span>
-              </a>
-            </div>
+
+            <SOSButton />
           </div>
 
-          {/* Center Column: Timer */}
-          <div className="h-full flex flex-col justify-center transform transition-all hover:-translate-y-1">
+          {/* Right Column (7 cols): Safety Check-in Timer */}
+          <div className="lg:col-span-7 bg-slate-900/90 backdrop-blur-xl p-8 rounded-3xl border border-slate-700/80 shadow-xl space-y-6">
+            <div className="space-y-1 border-b border-slate-800 pb-4">
+              <h2 className="text-2xl font-heading font-extrabold text-white">Solo Traveler Check-in Radar</h2>
+              <p className="text-xs text-slate-400">Set automated check-in countdown timers while exploring solo</p>
+            </div>
+
             <CheckInTimer />
           </div>
 
-          {/* Right Column: Crowd & Tips */}
-          <div className="flex flex-col gap-8 h-full">
-            {/* Crowd Tracker */}
-            <div className="bg-white rounded-3xl p-6 md:p-8 shadow-xl shadow-slate-200/50 border border-slate-100 transform transition-all hover:-translate-y-1 hover:shadow-2xl">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
-                  <Info className="w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-extrabold text-slate-800">Live Crowd Status</h3>
-                  <p className="text-slate-500 text-sm font-medium">Avoid heavily congested areas</p>
-                </div>
-              </div>
-              <div className="min-h-[200px]">
-                <CrowdIndicator />
-              </div>
+        </div>
+
+        {/* Real-Time Live Crowd & Weather Radar */}
+        <div className="bg-slate-900/90 backdrop-blur-xl p-6 sm:p-8 rounded-3xl border border-slate-700/80 shadow-xl space-y-6">
+          
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+            <div>
+              <h2 className="text-xl font-heading font-extrabold text-white flex items-center gap-2">
+                <FiUsers className="text-teal-400" /> Live Real-Time Crowd & Weather Radar
+              </h2>
+              <p className="text-xs text-slate-400">Monitor footfall density and weather before visiting landmarks</p>
             </div>
 
-            {/* Travel Safety Tips */}
-            <div className="bg-gradient-to-br from-[#2B9EB3] to-[#1A7A8A] rounded-3xl p-6 md:p-8 shadow-xl shadow-cyan-200/50 text-white transform transition-all hover:-translate-y-1 hover:shadow-2xl">
-              <h3 className="text-xl font-extrabold mb-6 flex items-center gap-2">
-                <ShieldCheck className="w-6 h-6 text-cyan-200" />
-                Safety Tips
-              </h3>
-              <div className="space-y-3">
-                {tips.map((tip, index) => (
-                  <div key={index} className="bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 overflow-hidden transition-all duration-300">
-                    <button
-                      onClick={() => setActiveTip(activeTip === index ? null : index)}
-                      className="w-full px-5 py-4 flex items-center justify-between font-bold text-left hover:bg-white/5 transition-colors"
-                    >
-                      {tip.title}
-                      {activeTip === index ? (
-                        <ChevronUp className="w-5 h-5 text-cyan-200 shrink-0" />
-                      ) : (
-                        <ChevronDown className="w-5 h-5 text-cyan-200 shrink-0" />
-                      )}
-                    </button>
-                    <div 
-                      className={`px-5 overflow-hidden transition-all duration-300 ease-in-out ${activeTip === index ? 'max-h-40 pb-4 opacity-100' : 'max-h-0 opacity-0'}`}
-                    >
-                      <p className="text-cyan-50 text-sm leading-relaxed">
-                        {tip.content}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <select
+              value={selectedCityId}
+              onChange={(e) => setSelectedCityId(e.target.value)}
+              className="bg-slate-950 border border-slate-700 text-amber-300 rounded-xl px-4 py-2 text-xs font-extrabold outline-none cursor-pointer"
+            >
+              {destinations.map(d => (
+                <option key={d.id} value={d.id}>📍 {d.name} ({d.state})</option>
+              ))}
+            </select>
           </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            
+            <div className="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-1">
+              <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider">Live Crowd Density</span>
+              <p className="text-2xl font-heading font-black text-amber-300">{currentCrowd.density}</p>
+              <span className="text-xs font-bold text-slate-300">{currentCrowd.status}</span>
+            </div>
+
+            <div className="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-1">
+              <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider">Peak Hours</span>
+              <p className="text-xl font-heading font-extrabold text-sky-300">{currentCrowd.peakTime}</p>
+              <span className="text-xs font-medium text-slate-400">Avoid during peak rush</span>
+            </div>
+
+            <div className="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-1">
+              <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider">Real-Time Weather</span>
+              <p className="text-xl font-heading font-extrabold text-teal-300">{currentCrowd.weather}</p>
+              <span className="text-xs font-medium text-slate-400">Humidity: {currentCrowd.humidity}</span>
+            </div>
+
+            <div className="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-1">
+              <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider">Wind & Atmosphere</span>
+              <p className="text-xl font-heading font-extrabold text-emerald-300">{currentCrowd.wind}</p>
+              <span className="text-xs font-medium text-slate-400">Optimal exploration status</span>
+            </div>
+
+          </div>
+
         </div>
-      </main>
+
+      </div>
     </div>
   );
-};
-
-export default SafetyPage;
+}

@@ -5,6 +5,7 @@ import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import OfflineIndicator from './components/OfflineIndicator';
 import YatraAIChatbot from './components/chat/YatraAIChatbot';
+import AuroraBackground from './components/background/AuroraBackground';
 
 // Lazy load pages
 const LoginPage = lazy(() => import('./pages/LoginPage'));
@@ -19,9 +20,9 @@ const PackingPage = lazy(() => import('./pages/PackingPage'));
 const EcoDiscoveryPage = lazy(() => import('./pages/EcoDiscoveryPage'));
 
 const LoadingFallback = () => (
-  <div className="flex flex-col items-center justify-center min-h-screen bg-slate-50">
-    <div className="w-16 h-16 border-4 border-ocean-200 border-t-coral-500 rounded-full animate-spin"></div>
-    <p className="mt-4 text-ocean-700 font-heading text-xl animate-pulse">Loading adventure...</p>
+  <div className="flex flex-col items-center justify-center min-h-screen bg-slate-950 text-white">
+    <div className="w-16 h-16 border-4 border-ocean-400 border-t-amber-400 rounded-full animate-spin"></div>
+    <p className="mt-4 text-amber-300 font-heading text-xl animate-pulse">Loading adventure...</p>
   </div>
 );
 
@@ -30,16 +31,10 @@ const AppContent = () => {
   const isLoginPage = location.pathname === '/';
 
   return (
-    <div className={`flex flex-col min-h-screen relative overflow-x-hidden ${!isLoginPage ? 'glass-beachy-bg' : ''}`}>
+    <div className={`flex flex-col min-h-screen relative overflow-x-hidden ${!isLoginPage ? 'bg-slate-950 text-slate-100' : ''}`}>
       
-      {/* Decorative Beachy Sea Mountain Ambient Glow Blobs for App Pages */}
-      {!isLoginPage && (
-        <>
-          <div className="fixed top-20 left-0 w-96 h-96 bg-sky-200/40 rounded-full blur-3xl pointer-events-none -translate-x-1/2"></div>
-          <div className="fixed bottom-20 right-0 w-[30rem] h-[30rem] bg-teal-200/30 rounded-full blur-3xl pointer-events-none translate-x-1/3"></div>
-          <div className="fixed top-1/2 left-1/3 w-80 h-80 bg-amber-100/40 rounded-full blur-3xl pointer-events-none"></div>
-        </>
-      )}
+      {/* 3D Northern Lights (Aurora Borealis) Canvas Background for all app pages */}
+      {!isLoginPage && <AuroraBackground />}
 
       {!isLoginPage && <Navbar />}
 

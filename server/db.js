@@ -28,7 +28,6 @@ try {
 export const dbQuery = (sql, params = []) => {
   return new Promise((resolve, reject) => {
     if (!isSqliteConnected || !db) {
-      // In-memory fallback
       return resolve(destinations);
     }
     db.all(sql, params, (err, rows) => {
@@ -112,37 +111,6 @@ export function initDatabase() {
           travelDestinationsInCity TEXT,
           hiddenGems TEXT,
           safetyTips TEXT
-        )
-      `);
-
-      db.run(`
-        CREATE TABLE IF NOT EXISTS itineraries (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          user_id INTEGER,
-          name TEXT NOT NULL,
-          data TEXT NOT NULL,
-          created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-        )
-      `);
-
-      db.run(`
-        CREATE TABLE IF NOT EXISTS budgets (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          user_id INTEGER,
-          trip_name TEXT,
-          total INTEGER,
-          data TEXT NOT NULL,
-          created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-        )
-      `);
-
-      db.run(`
-        CREATE TABLE IF NOT EXISTS sos_logs (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          user_id INTEGER,
-          lat REAL,
-          lng REAL,
-          timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
         )
       `);
 
