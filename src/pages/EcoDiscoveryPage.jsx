@@ -1,5 +1,5 @@
-import React, { useState, useMemo, useRef, useEffect } from 'react';
-import { FiFeather, FiAward, FiVideo, FiUploadCloud, FiGift, FiStar, FiCheck, FiHeart, FiShare2, FiHome, FiVolume2, FiVolumeX, FiPlay, FiPause, FiZap, FiInstagram } from 'react-icons/fi';
+import React, { useState, useMemo } from 'react';
+import { FiUploadCloud, FiGift, FiCheck, FiZap, FiInstagram } from 'react-icons/fi';
 import { destinations } from '../data/destinations';
 import EcoBadge from '../components/EcoBadge';
 
@@ -64,36 +64,16 @@ const CITY_ECO_TASKS = {
 export default function EcoDiscoveryPage() {
   const [selectedCityId, setSelectedCityId] = useState('d1');
   const [activeReelIndex, setActiveReelIndex] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(true);
-  const [isMuted, setIsMuted] = useState(true);
   const [userScore, setUserScore] = useState(650);
   const [co2SavedKg, setCo2SavedKg] = useState(180);
   const [plasticSavedCount, setPlasticSavedCount] = useState(35);
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
   const [uploadedSuccess, setUploadedSuccess] = useState(false);
   const [completedTaskIds, setCompletedTaskIds] = useState(new Set(['goa1', 'goa2']));
-  
-  const videoRef = useRef(null);
-
-  // Play / Pause video click handler
-  const handleVideoClick = () => {
-    if (videoRef.current) {
-      if (isPlaying) {
-        videoRef.current.pause();
-        setIsPlaying(false);
-      } else {
-        videoRef.current.play().then(() => {
-          setIsPlaying(true);
-        }).catch(err => {
-          console.log("Play failed:", err);
-        });
-      }
-    }
-  };
 
 
 
-  // Working Native Instagram Reels & Immersive Video Player
+  // Working Instagram Reels Embed Player
   const ecoReels = [
     {
       id: 1,
@@ -101,9 +81,8 @@ export default function EcoDiscoveryPage() {
       author: '@goayachtstory',
       likes: '58.4K',
       embedUrl: 'https://www.instagram.com/reel/DT7A-RVka02/embed/',
-      videoFallback: 'https://vjs.zencdn.net/v/oceans.mp4',
-      poster: 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=600&q=80',
-      tag: '⛵ Yacht Vibe',
+      instagramUrl: 'https://www.instagram.com/reel/DT7A-RVka02/',
+      tag: '⛵ Goa Yacht Story',
       desc: 'Experiencing luxury sailing and sunset views in South Goa.'
     },
     {
@@ -112,8 +91,7 @@ export default function EcoDiscoveryPage() {
       author: '@travel_india',
       likes: '32.1K',
       embedUrl: 'https://www.instagram.com/reel/DXZT0PhE17M/embed/',
-      videoFallback: 'https://media.w3.org/2010/05/sintel/trailer_hd.mp4',
-      poster: 'https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=600&q=80',
+      instagramUrl: 'https://www.instagram.com/reel/DXZT0PhE17M/',
       tag: '🗺️ Scenic Route',
       desc: 'Breathtaking driving passes and scenic viewpoints across India.'
     },
@@ -123,8 +101,7 @@ export default function EcoDiscoveryPage() {
       author: '@heritage_explorer',
       likes: '29.7K',
       embedUrl: 'https://www.instagram.com/reel/DWBtZmrEYfj/embed/',
-      videoFallback: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-      poster: 'https://images.unsplash.com/photo-1598091383021-15ddea10925d?auto=format&fit=crop&w=600&q=80',
+      instagramUrl: 'https://www.instagram.com/reel/DWBtZmrEYfj/',
       tag: '🏰 Historic India',
       desc: 'Discovering ancient architectural wonders and sacred temples.'
     }
@@ -259,80 +236,31 @@ export default function EcoDiscoveryPage() {
               </button>
             </div>
 
-            {/* IMMERSIVE SMARTPHONE PLAYER CONTAINER */}
-            <div className="w-full flex justify-center py-2">
-              <div className="relative rounded-[32px] overflow-hidden w-full max-w-[328px] h-[580px] border border-slate-800 shadow-2xl bg-black flex items-center justify-center">
-                
-                {/* Immersive Native Player (Centered, no borders, no bars, perfect 9:16 fit) */}
-                <div className="relative w-full h-full">
-                  <video 
-                    ref={videoRef}
-                    key={ecoReels[activeReelIndex].id}
-                    src={ecoReels[activeReelIndex].videoFallback} 
-                    poster={ecoReels[activeReelIndex].poster}
-                    preload="auto"
-                    autoPlay
-                    loop
-                    muted={isMuted}
-                    playsInline
-                    onClick={handleVideoClick}
-                    onPlay={() => setIsPlaying(true)}
-                    onPause={() => setIsPlaying(false)}
-                    className="w-full h-full object-cover cursor-pointer"
-                  />
-                  
-                  {/* Play Overlay Button */}
-                  {!isPlaying && (
-                    <div 
-                      onClick={handleVideoClick}
-                      className="absolute inset-0 flex items-center justify-center bg-black/45 cursor-pointer z-10"
-                    >
-                      <div className="w-16 h-16 rounded-full bg-white/25 hover:bg-white/45 text-white flex items-center justify-center border border-white/50 backdrop-blur-md transition-all">
-                        <FiPlay size={28} className="ml-1 text-white fill-white" />
-                      </div>
-                    </div>
-                  )}
-
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent pointer-events-none"></div>
-
-                  {/* Media Control Overlays */}
-                  <div className="absolute top-4 right-4 flex items-center gap-2 z-10">
-                    <button
-                      onClick={() => {
-                        if (videoRef.current) {
-                          videoRef.current.muted = !isMuted;
-                          setIsMuted(!isMuted);
-                        }
-                      }}
-                      className="p-2.5 bg-slate-950/80 hover:bg-slate-900 text-amber-300 rounded-full border border-slate-700 backdrop-blur"
-                    >
-                      {isMuted ? <FiVolumeX size={15} /> : <FiVolume2 size={15} />}
-                    </button>
-
-                    <button
-                      onClick={handleVideoClick}
-                      className="p-2.5 bg-slate-950/80 hover:bg-slate-900 text-white rounded-full border border-slate-700 backdrop-blur"
-                    >
-                      {isPlaying ? <FiPause size={15} /> : <FiPlay size={15} />}
-                    </button>
-                  </div>
-
-                  {/* Video Meta Info */}
-                  <div className="absolute top-4 left-4 bg-slate-950/85 backdrop-blur px-3.5 py-1 rounded-full text-[10px] font-black text-emerald-300 border border-emerald-400/30">
-                    {ecoReels[activeReelIndex].tag}
-                  </div>
-
-                  <div className="absolute bottom-4 left-4 right-4 space-y-1.5 z-10">
-                    <div className="flex items-center justify-between text-xs text-white">
-                      <span className="font-extrabold">{ecoReels[activeReelIndex].title}</span>
-                      <span className="text-rose-400 font-bold flex items-center gap-1">❤️ {ecoReels[activeReelIndex].likes}</span>
-                    </div>
-                    <p className="text-[11px] text-slate-300 leading-normal">{ecoReels[activeReelIndex].desc}</p>
-                    <span className="text-[10px] text-amber-300 font-bold block">{ecoReels[activeReelIndex].author}</span>
-                  </div>
-                </div>
-
+            {/* OFFICIAL INSTAGRAM REELS EMBED PLAYER */}
+            <div className="w-full flex flex-col items-center py-2 space-y-3">
+              <div className="relative rounded-3xl overflow-hidden w-full max-w-[340px] h-[520px] sm:h-[550px] border border-slate-800 shadow-2xl bg-slate-950 flex items-center justify-center">
+                <iframe 
+                  key={ecoReels[activeReelIndex].id}
+                  src={ecoReels[activeReelIndex].embedUrl}
+                  className="w-full h-full border-0 rounded-2xl bg-white"
+                  allowtransparency="true"
+                  allow="encrypted-media"
+                  scrolling="no"
+                  frameBorder="0"
+                  title={ecoReels[activeReelIndex].title}
+                ></iframe>
               </div>
+
+              {/* Direct Link Button */}
+              <a
+                href={ecoReels[activeReelIndex].instagramUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-950 hover:bg-slate-800 text-rose-300 border border-slate-800 text-xs font-bold transition-all shadow-md"
+              >
+                <FiInstagram className="text-rose-400" />
+                <span>Open {ecoReels[activeReelIndex].author} Reel on Instagram ↗</span>
+              </a>
             </div>
 
             {/* Reel Selector Buttons */}
