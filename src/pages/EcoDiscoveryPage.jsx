@@ -97,14 +97,14 @@ export default function EcoDiscoveryPage() {
   const ecoReels = [
     {
       id: 1,
-      title: 'Goa Travel & Secret Spots',
-      author: '@goa_stories',
-      likes: '45.2K',
-      embedUrl: 'https://www.instagram.com/reel/DFhrG2rJoVm/embed/',
+      title: 'Goa Yacht & Sunset Cruise',
+      author: '@goayachtstory',
+      likes: '58.4K',
+      embedUrl: 'https://www.instagram.com/reel/DT7A-RVka02/embed/',
       videoFallback: 'https://vjs.zencdn.net/v/oceans.mp4',
       poster: 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=600&q=80',
-      tag: '🏖️ Goa Stories',
-      desc: 'Beautiful hidden lagoons, waterfalls, and tropical beaches of Goa.'
+      tag: '⛵ Yacht Vibe',
+      desc: 'Experiencing luxury sailing and sunset views in South Goa.'
     },
     {
       id: 2,
