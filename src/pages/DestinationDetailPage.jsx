@@ -123,12 +123,12 @@ export default function DestinationDetailPage() {
         </div>
 
         {/* Audio Guide Component */}
-        <div className="bg-slate-900/90 backdrop-blur-2xl rounded-3xl p-6 sm:p-8 border border-slate-700/80 shadow-2xl">
+        <div className="bg-slate-900/90 backdrop-blur-2xl rounded-3xl p-6 sm:p-8 border border-slate-700/80 shadow-2xl my-6">
           <AudioGuide text={destination.audioGuideText} title={`${destination.name} 1.5-Min Audio Narration`} />
         </div>
 
         {/* High-Contrast Tab Navigation & Content Expansion */}
-        <div className="bg-slate-900/90 backdrop-blur-2xl rounded-3xl p-6 sm:p-8 border border-slate-700/80 shadow-2xl space-y-6">
+        <div className="bg-slate-900/90 backdrop-blur-2xl rounded-3xl p-6 sm:p-8 border border-slate-700/80 shadow-2xl space-y-6 my-6 relative z-10">
           
           <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide border-b border-slate-800 pb-4">
             {[

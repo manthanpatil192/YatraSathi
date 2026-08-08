@@ -76,36 +76,36 @@ const AudioGuide = ({
   };
 
   return (
-    <div className="relative bg-white/90 backdrop-blur-xl rounded-3xl border border-slate-100 p-6 shadow-xl max-w-md w-full overflow-hidden space-y-5">
+    <div className="relative bg-slate-950/95 backdrop-blur-xl rounded-3xl border border-slate-800 p-6 sm:p-8 shadow-2xl w-full overflow-hidden space-y-5">
       
       {/* Header Info */}
-      <div className="flex justify-between items-start gap-3">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-slate-900 pb-3">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-ocean-500 to-seafoam-500 text-white flex items-center justify-center shadow-md shrink-0">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400 to-teal-400 text-slate-950 flex items-center justify-center shadow-lg shrink-0 font-black">
             <FiVolume2 size={24} />
           </div>
           <div>
-            <h4 className="font-heading font-extrabold text-slate-800 text-base leading-tight line-clamp-1">
+            <h4 className="font-heading font-extrabold text-white text-lg leading-tight">
               {title}
             </h4>
-            <p className="text-xs text-slate-500 font-semibold mt-0.5">{location}</p>
+            <p className="text-xs text-amber-300 font-semibold mt-0.5">{location}</p>
           </div>
         </div>
         
-        <div className={`px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider shrink-0 ${
+        <div className={`px-3.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider shrink-0 border ${
           isPlaying && !isPaused
-            ? 'bg-seafoam-100 text-seafoam-800 border border-seafoam-300 animate-pulse' 
+            ? 'bg-emerald-400/20 text-emerald-300 border-emerald-400/40 animate-pulse' 
             : isPaused 
-              ? 'bg-amber-100 text-amber-800 border border-amber-300'
-              : 'bg-slate-100 text-slate-600 border border-slate-200'
+              ? 'bg-amber-400/20 text-amber-300 border-amber-400/40'
+              : 'bg-slate-900 text-slate-400 border-slate-800'
         }`}>
-          {isPlaying && !isPaused ? 'Playing Audio' : isPaused ? 'Paused' : 'Ready'}
+          {isPlaying && !isPaused ? '🔊 Playing Audio Narration' : isPaused ? '⏸️ Paused' : 'Ready to Play'}
         </div>
       </div>
 
       {/* Text Excerpt Preview */}
-      <div className="bg-slate-50 p-3.5 rounded-2xl border border-slate-100">
-        <p className="text-xs text-slate-700 italic leading-relaxed line-clamp-3">
+      <div className="bg-slate-900 p-4 rounded-2xl border border-slate-800/80">
+        <p className="text-xs text-slate-200 italic leading-relaxed">
           "{text}"
         </p>
       </div>
@@ -116,7 +116,7 @@ const AudioGuide = ({
           <div 
             key={i} 
             className={`w-full rounded-t-sm transition-all duration-300 ${
-              isPlaying && !isPaused ? 'bg-ocean-500' : 'bg-slate-200'
+              isPlaying && !isPaused ? 'bg-gradient-to-t from-teal-400 to-amber-300' : 'bg-slate-800'
             }`}
             style={{
               height: isPlaying && !isPaused
@@ -128,21 +128,21 @@ const AudioGuide = ({
       </div>
 
       {/* Controls Bar */}
-      <div className="flex items-center justify-between pt-2 border-t border-slate-100">
+      <div className="flex items-center justify-between pt-3 border-t border-slate-900">
         
         <button 
           onClick={cycleSpeed} 
-          className="text-xs font-extrabold text-slate-700 hover:text-ocean-600 bg-slate-100 px-3 py-1.5 rounded-xl transition-colors border border-slate-200"
+          className="text-xs font-extrabold text-amber-300 hover:text-white bg-slate-900 px-3.5 py-2 rounded-xl transition-colors border border-slate-800"
           title="Playback speed"
         >
-          {speed}x Speed
+          ⚡ {speed}x Speed
         </button>
         
         <div className="flex items-center gap-3">
           {isPlaying && (
             <button 
               onClick={handleStop}
-              className="p-3 rounded-2xl bg-slate-100 hover:bg-red-50 text-slate-600 hover:text-red-600 transition-colors"
+              className="p-3 rounded-2xl bg-slate-900 hover:bg-rose-950 text-slate-300 hover:text-rose-400 transition-colors border border-slate-800"
               title="Stop audio"
             >
               <FiSquare size={16} />
@@ -151,17 +151,17 @@ const AudioGuide = ({
 
           <button 
             onClick={handlePlayPause}
-            className="btn-bounce px-6 py-3 rounded-2xl bg-gradient-to-r from-coral-500 to-sunset-500 text-white font-heading font-extrabold text-sm shadow-lg shadow-coral-200 flex items-center gap-2"
+            className="btn-bounce px-6 py-3 rounded-2xl bg-gradient-to-r from-coral-500 to-sunset-500 text-white font-heading font-extrabold text-xs shadow-xl flex items-center gap-2"
           >
             {isPlaying && !isPaused ? (
               <>
-                <FiPause size={18} />
-                <span>Pause</span>
+                <FiPause size={16} />
+                <span>Pause Audio</span>
               </>
             ) : (
               <>
-                <FiPlay size={18} />
-                <span>{isPaused ? 'Resume' : 'Play Audio Guide'}</span>
+                <FiPlay size={16} />
+                <span>{isPaused ? 'Resume Narration' : 'Play Web Audio Guide'}</span>
               </>
             )}
           </button>
