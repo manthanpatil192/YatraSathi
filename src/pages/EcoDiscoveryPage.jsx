@@ -75,30 +75,30 @@ export default function EcoDiscoveryPage() {
   const ecoReels = [
     {
       id: 1,
-      title: 'Goa Coastal Vibe & Sunset',
-      author: '@goadiaries',
-      likes: '24.8K',
-      embedUrl: 'https://www.instagram.com/reel/C57VnKxS_P2/embed/',
-      tag: '🏖️ Coastal Vibe',
-      desc: 'Exploring quiet sunset cliffs and hidden beach trails of South Goa.'
+      title: 'Goa Travel & Secret Spots',
+      author: '@goa_stories',
+      likes: '45.2K',
+      embedUrl: 'https://www.instagram.com/reel/DFhrG2rJoVm/embed/',
+      tag: '🏖️ Goa Stories',
+      desc: 'Beautiful hidden lagoons, waterfalls, and tropical beaches of Goa.'
     },
     {
       id: 2,
-      title: 'Himachal & Manali Peaks',
-      author: '@himalayan_wanderer',
-      likes: '18.4K',
-      embedUrl: 'https://www.instagram.com/reel/C7tB62VpP9K/embed/',
-      tag: '🏔️ Mountain Escape',
-      desc: 'Snow covered pass viewpoints and fresh pine valley streams.'
+      title: 'Indian Travel Explorer',
+      author: '@travel_india',
+      likes: '32.1K',
+      embedUrl: 'https://www.instagram.com/reel/DXZT0PhE17M/embed/',
+      tag: '🗺️ Scenic Route',
+      desc: 'Breathtaking driving passes and scenic viewpoints across India.'
     },
     {
       id: 3,
-      title: 'Spiti Valley Cold Desert Adventure',
-      author: '@spiti_diaries',
-      likes: '31.2K',
-      embedUrl: 'https://www.instagram.com/reel/C-nSw_KSLmI/embed/',
-      tag: '🏜️ High Altitude Desert',
-      desc: 'Key Monastery perched majestically on the cliffs of Spiti.'
+      title: 'Heritage & Offbeat Discovery',
+      author: '@heritage_explorer',
+      likes: '29.7K',
+      embedUrl: 'https://www.instagram.com/reel/DWBtZmrEYfj/embed/',
+      tag: '🏰 Historic India',
+      desc: 'Discovering ancient architectural wonders and sacred temples.'
     }
   ];
 
