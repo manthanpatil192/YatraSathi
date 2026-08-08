@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { FiFeather, FiAward, FiVideo, FiUploadCloud, FiGift, FiStar, FiCheck, FiHeart, FiShare2, FiHome, FiVolume2, FiVolumeX, FiPlay, FiPause, FiZap, FiInstagram } from 'react-icons/fi';
 import { destinations } from '../data/destinations';
 import EcoBadge from '../components/EcoBadge';
@@ -72,6 +72,39 @@ export default function EcoDiscoveryPage() {
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
   const [uploadedSuccess, setUploadedSuccess] = useState(false);
   const [completedTaskIds, setCompletedTaskIds] = useState(new Set(['goa1', 'goa2']));
+  
+  const videoRef = useRef(null);
+
+  // Play / Pause video click handler
+  const handleVideoClick = () => {
+    if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.pause();
+        setIsPlaying(false);
+      } else {
+        videoRef.current.play().then(() => {
+          setIsPlaying(true);
+        }).catch(err => {
+          console.log("Play failed:", err);
+        });
+      }
+    }
+  };
+
+  // Autoplay or Load video on activeReelIndex change
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.load();
+      videoRef.current.play()
+        .then(() => {
+          setIsPlaying(true);
+        })
+        .catch(err => {
+          console.log("Autoplay blocked by browser policy:", err);
+          setIsPlaying(false); // Show play overlay button if blocked
+        });
+    }
+  }, [activeReelIndex]);
 
   // Working Native Instagram Reels & Immersive Video Player
   const ecoReels = [
@@ -243,27 +276,47 @@ export default function EcoDiscoveryPage() {
                 {/* Immersive Native Player (Centered, no borders, no bars, perfect 9:16 fit) */}
                 <div className="relative w-full h-full">
                   <video 
+                    ref={videoRef}
                     key={ecoReels[activeReelIndex].id}
                     src={ecoReels[activeReelIndex].videoFallback} 
-                    autoPlay={isPlaying}
+                    autoPlay
                     loop
                     muted={isMuted}
                     playsInline
-                    className="w-full h-full object-cover"
+                    onClick={handleVideoClick}
+                    className="w-full h-full object-cover cursor-pointer"
                   />
+                  
+                  {/* Play Overlay Button */}
+                  {!isPlaying && (
+                    <div 
+                      onClick={handleVideoClick}
+                      className="absolute inset-0 flex items-center justify-center bg-black/45 cursor-pointer z-10"
+                    >
+                      <div className="w-16 h-16 rounded-full bg-white/25 hover:bg-white/45 text-white flex items-center justify-center border border-white/50 backdrop-blur-md transition-all">
+                        <FiPlay size={28} className="ml-1 text-white fill-white" />
+                      </div>
+                    </div>
+                  )}
+
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent pointer-events-none"></div>
 
                   {/* Media Control Overlays */}
                   <div className="absolute top-4 right-4 flex items-center gap-2 z-10">
                     <button
-                      onClick={() => setIsMuted(!isMuted)}
+                      onClick={() => {
+                        if (videoRef.current) {
+                          videoRef.current.muted = !isMuted;
+                          setIsMuted(!isMuted);
+                        }
+                      }}
                       className="p-2.5 bg-slate-950/80 hover:bg-slate-900 text-amber-300 rounded-full border border-slate-700 backdrop-blur"
                     >
                       {isMuted ? <FiVolumeX size={15} /> : <FiVolume2 size={15} />}
                     </button>
 
                     <button
-                      onClick={() => setIsPlaying(!isPlaying)}
+                      onClick={handleVideoClick}
                       className="p-2.5 bg-slate-950/80 hover:bg-slate-900 text-white rounded-full border border-slate-700 backdrop-blur"
                     >
                       {isPlaying ? <FiPause size={15} /> : <FiPlay size={15} />}
