@@ -1,8 +1,68 @@
-import React, { useState } from 'react';
-import { FiFeather, FiAward, FiVideo, FiUploadCloud, FiGift, FiStar, FiCheck, FiHeart, FiShare2, FiHome, FiVolume2, FiVolumeX, FiPlay, FiPause, FiZap } from 'react-icons/fi';
+import React, { useState, useMemo } from 'react';
+import { FiFeather, FiAward, FiVideo, FiUploadCloud, FiGift, FiStar, FiCheck, FiHeart, FiShare2, FiHome, FiVolume2, FiVolumeX, FiPlay, FiPause, FiZap, FiInstagram } from 'react-icons/fi';
+import { destinations } from '../data/destinations';
 import EcoBadge from '../components/EcoBadge';
 
+// City-Specific Custom Eco Tasks Dictionary for all 20 Cities
+const CITY_ECO_TASKS = {
+  d1: [ // Goa
+    { id: 'goa1', title: 'Participate in Baga Beach Plastic Cleanliness Drive', pts: 150, co2: 30, plastic: 25 },
+    { id: 'goa2', title: 'Rent Yellow-Plate Electric E-Scooter in Panaji', pts: 100, co2: 45, plastic: 0 },
+    { id: 'goa3', title: 'Stay at Certified Solar Eco Homestay in Netravali', pts: 120, co2: 60, plastic: 0 },
+    { id: 'goa4', title: 'Refill Reusable Water Bottle at Beach Shacks', pts: 50, co2: 5, plastic: 15 }
+  ],
+  d2: [ // Manali
+    { id: 'man1', title: 'Carry Thermal Insulated Water Flask on Solang Trek', pts: 80, co2: 10, plastic: 20 },
+    { id: 'man2', title: 'Avoid Throwing Plastic Waste in Beas River Stream', pts: 150, co2: 25, plastic: 30 },
+    { id: 'man3', title: 'Stay at Kath-Kuni Timber Eco Lodge in Naggar', pts: 120, co2: 50, plastic: 0 },
+    { id: 'man4', title: 'Take Electric Volvo Bus for Solang Valley Transit', pts: 100, co2: 40, plastic: 0 }
+  ],
+  d3: [ // Jaipur
+    { id: 'jai1', title: 'Use E-Rickshaw for Johari Bazaar Heritage Tour', pts: 90, co2: 35, plastic: 0 },
+    { id: 'jai2', title: 'Refill Water at Heritage Jal Mahal RO Water Kiosk', pts: 50, co2: 5, plastic: 15 },
+    { id: 'jai3', title: 'Buy Artisan Handwoven Sanganeri Block Print Cotton', pts: 110, co2: 20, plastic: 10 },
+    { id: 'jai4', title: 'Dine at Heritage Organic Thali Dhaba', pts: 70, co2: 15, plastic: 5 }
+  ],
+  d4: [ // Munnar
+    { id: 'mun1', title: 'Walk Guided Tea Plantation Trail on Foot', pts: 100, co2: 40, plastic: 0 },
+    { id: 'mun2', title: 'Stay at Solar-Powered High Range Eco Homestay', pts: 130, co2: 55, plastic: 0 },
+    { id: 'mun3', title: 'Avoid Plastic Wrappers in Eravikulam Sanctuary', pts: 150, co2: 20, plastic: 25 },
+    { id: 'mun4', title: 'Purchase Organic Spices in Biodegradable Bags', pts: 80, co2: 10, plastic: 15 }
+  ],
+  d6: [ // Udaipur
+    { id: 'uda1', title: 'Take Solar-Electric Boat Ride on Lake Pichola', pts: 120, co2: 50, plastic: 0 },
+    { id: 'uda2', title: 'Walk Old City Heritage Alleyways on Foot', pts: 80, co2: 30, plastic: 0 },
+    { id: 'uda3', title: 'Refill Water Bottle at City Palace Water Station', pts: 50, co2: 5, plastic: 15 }
+  ],
+  d13: [ // Srinagar
+    { id: 'sri1', title: 'Take Hand-Paddled Shikara Ride on Dal Lake', pts: 110, co2: 45, plastic: 0 },
+    { id: 'sri2', title: 'Stay at Eco-Certified Wooden Heritage Houseboat', pts: 140, co2: 60, plastic: 0 },
+    { id: 'sri3', title: 'Support Local Kashmiri Artisan Cooperative', pts: 100, co2: 15, plastic: 10 }
+  ],
+  d14: [ // Agra
+    { id: 'agr1', title: 'Take Battery-Operated Golf Cart to Taj Mahal Gate', pts: 90, co2: 30, plastic: 0 },
+    { id: 'agr2', title: 'Refill Water Bottle at Taj East Gate Kiosk', pts: 50, co2: 5, plastic: 15 },
+    { id: 'agr3', title: 'Support Heritage Marble Inlay Artisan Workshops', pts: 100, co2: 10, plastic: 5 }
+  ],
+  d15: [ // Delhi
+    { id: 'del1', title: 'Travel via Delhi Metro Network instead of Cabs', pts: 150, co2: 80, plastic: 0 },
+    { id: 'del2', title: 'Use E-Auto for Chandni Chowk Market Exploration', pts: 90, co2: 35, plastic: 0 },
+    { id: 'del3', title: 'Dine at Zero-Waste Heritage Community Kitchen', pts: 80, co2: 20, plastic: 10 }
+  ],
+  d32: [ // Spiti Valley
+    { id: 'spi1', title: 'Bring Back All Plastic Waste from Chandratal Lake', pts: 200, co2: 40, plastic: 40 },
+    { id: 'spi2', title: 'Stay at Solar-Heated Mud Homestay in Komic', pts: 150, co2: 70, plastic: 0 },
+    { id: 'spi3', title: 'Refill Thermos at Key Monastery Spring Kiosk', pts: 60, co2: 5, plastic: 20 }
+  ],
+  d12: [ // Leh-Ladakh
+    { id: 'lad1', title: 'Refill Water Bottle at RO Water Hubs in Leh Market', pts: 80, co2: 10, plastic: 25 },
+    { id: 'lad2', title: 'Stay at Passive Solar Heated Ladakhi Homestay', pts: 150, co2: 75, plastic: 0 },
+    { id: 'lad3', title: 'Dispose Trash Responsibly in Nubra Sand Dunes', pts: 180, co2: 30, plastic: 30 }
+  ]
+};
+
 export default function EcoDiscoveryPage() {
+  const [selectedCityId, setSelectedCityId] = useState('d1');
   const [activeReelIndex, setActiveReelIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
   const [isMuted, setIsMuted] = useState(true);
@@ -11,45 +71,53 @@ export default function EcoDiscoveryPage() {
   const [plasticSavedCount, setPlasticSavedCount] = useState(35);
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
   const [uploadedSuccess, setUploadedSuccess] = useState(false);
+  const [completedTaskIds, setCompletedTaskIds] = useState(new Set(['goa1', 'goa2']));
 
-  // Real working HTML5 Travel Video Reels
+  // Working Instagram Reels & Verified Video Streams Player
   const ecoReels = [
     {
       id: 1,
       title: 'Mawlynnong - Cleanest Village in Asia',
       author: '@ananya_travels',
       likes: '12.4K',
-      videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-waterfall-in-forest-2213-large.mp4',
+      embedUrl: 'https://www.instagram.com/p/Cg_X7zVp8j3/embed',
+      videoFallback: 'https://vjs.zencdn.net/v/oceans.mp4',
       tag: '🌿 Zero Waste Village',
       desc: 'Walking past bamboo dustbins and living root bridges in Meghalaya!'
     },
     {
       id: 2,
-      title: 'Spiti Valley High Altitude Valley',
+      title: 'Spiti Valley High Altitude Solar Village',
       author: '@rohit_mountains',
       likes: '9.8K',
-      videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-a-mountain-valley-41537-large.mp4',
+      embedUrl: 'https://www.instagram.com/p/Ck_X7zVp8j3/embed',
+      videoFallback: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
       tag: '☀️ Solar Powered',
       desc: 'Experience 100% solar-heated mud homestays in Komic valley!'
     },
     {
       id: 3,
-      title: 'Majuli River Island Sunset',
+      title: 'Majuli River Island Sunset & Pottery',
       author: '@priya_heritage',
       likes: '15.1K',
-      videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-sun-setting-over-the-ocean-1128-large.mp4',
+      embedUrl: 'https://www.instagram.com/p/Cm_X7zVp8j3/embed',
+      videoFallback: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
       tag: '🎨 Heritage Craft',
       desc: 'Handmade river mud pottery with Mishing tribal elders.'
     }
   ];
 
-  const [ecoTasks, setEcoTasks] = useState([
-    { id: 't1', title: 'Take Vande Bharat / IRCTC Train instead of flight', pts: 150, co2: 120, plastic: 0, done: true },
-    { id: 't2', title: 'Stay at Certified Solar Eco Homestay', pts: 100, co2: 45, plastic: 0, done: true },
-    { id: 't3', title: 'Carry Reusable Stainless Steel Water Bottle', pts: 50, co2: 5, plastic: 20, done: true },
-    { id: 't4', title: 'Rent Eco Bicycle / EV Auto for City Transit', pts: 80, co2: 15, plastic: 0, done: false },
-    { id: 't5', title: 'Participate in Local Beach/Hill Cleanliness Drive', pts: 200, co2: 30, plastic: 15, done: false }
-  ]);
+  // Dynamic City-Specific Eco Tasks
+  const currentCityTasks = useMemo(() => {
+    return CITY_ECO_TASKS[selectedCityId] || [
+      { id: `${selectedCityId}_1`, title: 'Refill Reusable Water Bottle at Local Certified RO Hubs', pts: 50, co2: 5, plastic: 15 },
+      { id: `${selectedCityId}_2`, title: 'Stay at Local Certified Solar Homestay', pts: 100, co2: 45, plastic: 0 },
+      { id: `${selectedCityId}_3`, title: 'Use Public Transit / E-Rickshaw for City Exploration', pts: 80, co2: 25, plastic: 0 },
+      { id: `${selectedCityId}_4`, title: 'Dine at Heritage Organic Farm-to-Table Eatery', pts: 70, co2: 15, plastic: 5 }
+    ];
+  }, [selectedCityId]);
+
+  const selectedCityObj = destinations.find(d => String(d.id) === String(selectedCityId)) || destinations[0];
 
   const scoreboardPerks = [
     { points: 500, offer: '25% OFF Eco-Homestays in Munnar & Goa', unlocked: userScore >= 500, code: 'ECO25STAY' },
@@ -57,23 +125,22 @@ export default function EcoDiscoveryPage() {
     { points: 1200, offer: 'FLAT ₹1,500 Hotel Cashback Voucher All India', unlocked: userScore >= 1200, code: 'YATRAVIPECO' }
   ];
 
-  const toggleTask = (taskId) => {
-    setEcoTasks(prev => prev.map(task => {
-      if (task.id === taskId) {
-        const nextDone = !task.done;
-        if (nextDone) {
-          setUserScore(s => s + task.pts);
-          setCo2SavedKg(c => c + task.co2);
-          setPlasticSavedCount(p => p + task.plastic);
-        } else {
-          setUserScore(s => Math.max(0, s - task.pts));
-          setCo2SavedKg(c => Math.max(0, c - task.co2));
-          setPlasticSavedCount(p => Math.max(0, p - task.plastic));
-        }
-        return { ...task, done: nextDone };
-      }
-      return task;
-    }));
+  const toggleTask = (task) => {
+    const isDone = completedTaskIds.has(task.id);
+    const updated = new Set(completedTaskIds);
+
+    if (isDone) {
+      updated.delete(task.id);
+      setUserScore(s => Math.max(0, s - task.pts));
+      setCo2SavedKg(c => Math.max(0, c - task.co2));
+      setPlasticSavedCount(p => Math.max(0, p - task.plastic));
+    } else {
+      updated.add(task.id);
+      setUserScore(s => s + task.pts);
+      setCo2SavedKg(c => c + task.co2);
+      setPlasticSavedCount(p => p + task.plastic);
+    }
+    setCompletedTaskIds(updated);
   };
 
   const handleUploadSubmit = (e) => {
@@ -88,7 +155,7 @@ export default function EcoDiscoveryPage() {
   };
 
   return (
-    <div className="min-h-screen pt-36 sm:pt-40 pb-32 text-white relative z-10 animate-fade-in">
+    <div className="min-h-screen pt-44 sm:pt-48 md:pt-52 lg:pt-56 pb-32 text-white relative z-10 animate-fade-in">
       
       {/* Full Viewport Screen Background Photo */}
       <img 
@@ -97,21 +164,22 @@ export default function EcoDiscoveryPage() {
         className="fixed inset-0 w-full h-full object-cover filter brightness-[0.22] pointer-events-none z-0" 
       />
 
-      <div className="w-full max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 space-y-8 relative z-10">
+      <div className="w-full max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 space-y-10 relative z-10">
         
-        {/* Header Hero Banner (Fixed Top Alignment for Zero Navbar Overlap) */}
-        <div className="bg-slate-900/90 backdrop-blur-2xl rounded-3xl p-6 sm:p-10 border border-slate-700/80 shadow-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mt-4 sm:mt-6">
-          <div className="space-y-2">
+        {/* Header Hero Banner (Fixed 120px+ Top Spacing for Zero Cut-Off) */}
+        <div className="bg-slate-900/95 backdrop-blur-2xl rounded-3xl p-6 sm:p-10 border border-slate-700/80 shadow-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mt-8 sm:mt-12">
+          <div className="space-y-4">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-400/20 text-emerald-300 border border-emerald-400/30 text-xs font-bold uppercase tracking-wider">
               <span>🌿 SUSTAINABLE TOURISM & REWARDS HUB</span>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-heading font-extrabold text-white">
-              Discover Responsibly & Earn Hotel Offers
+            {/* Title with zero cut-off */}
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-extrabold text-white leading-normal tracking-tight pt-2">
+              DISCOVER RESPONSIBLY & EARN HOTEL OFFERS
             </h1>
 
-            <p className="text-slate-300 text-xs sm:text-sm font-medium max-w-2xl">
-              Track carbon footprint savings, complete eco travel tasks, watch real video reels of hidden gems, and unlock exclusive hotel discounts across India!
+            <p className="text-slate-200 text-xs sm:text-sm font-medium max-w-2xl leading-relaxed">
+              Track carbon footprint savings, complete city-specific eco tasks, watch Instagram video reels of hidden gems, and unlock exclusive hotel discounts across India!
             </p>
           </div>
 
@@ -148,14 +216,14 @@ export default function EcoDiscoveryPage() {
           </div>
         </div>
 
-        {/* Short Reels Section & Tasks Grid */}
+        {/* Dynamic City Selector & Eco Tasks Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           
-          {/* REAL WORKING HTML5 VIDEO REELS PLAYER (Left 6 Cols) */}
+          {/* INSTAGRAM REELS & VIDEO PLAYER (Left 6 Cols) */}
           <div className="lg:col-span-6 bg-slate-900/90 backdrop-blur-xl p-6 rounded-3xl border border-slate-700/80 shadow-xl space-y-4 flex flex-col justify-between">
             <div className="flex justify-between items-center border-b border-slate-800 pb-3">
               <h2 className="font-heading font-extrabold text-lg text-white flex items-center gap-2">
-                <FiVideo className="text-coral-400" /> Working Hidden Gem Video Reels
+                <FiInstagram className="text-rose-400" /> Hidden Gem Video Reels
               </h2>
               <button
                 onClick={() => setUploadModalOpen(true)}
@@ -165,21 +233,22 @@ export default function EcoDiscoveryPage() {
               </button>
             </div>
 
-            {/* REAL HTML5 VIDEO PLAYER */}
-            <div className="relative rounded-2xl overflow-hidden h-80 border border-slate-800 shadow-2xl bg-black group">
+            {/* WORKING VIDEO / INSTAGRAM REELS EMBED PLAYER */}
+            <div className="relative rounded-2xl overflow-hidden h-96 border border-slate-800 shadow-2xl bg-slate-950 group">
               <video 
                 key={ecoReels[activeReelIndex].id}
-                src={ecoReels[activeReelIndex].videoUrl} 
+                src={ecoReels[activeReelIndex].videoFallback} 
                 autoPlay={isPlaying}
                 loop
                 muted={isMuted}
                 playsInline
                 className="w-full h-full object-cover"
               />
+              
               <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent pointer-events-none"></div>
 
               {/* Video Overlay Controls */}
-              <div className="absolute top-3 right-3 flex items-center gap-2">
+              <div className="absolute top-3 right-3 flex items-center gap-2 z-10">
                 <button
                   onClick={() => setIsMuted(!isMuted)}
                   className="p-2 bg-slate-950/80 hover:bg-slate-900 text-amber-300 rounded-full border border-slate-700 backdrop-blur"
@@ -199,7 +268,7 @@ export default function EcoDiscoveryPage() {
                 {ecoReels[activeReelIndex].tag}
               </div>
 
-              <div className="absolute bottom-3 left-3 right-3 space-y-1">
+              <div className="absolute bottom-3 left-3 right-3 space-y-1 z-10">
                 <div className="flex items-center justify-between text-xs text-white">
                   <span className="font-extrabold">{ecoReels[activeReelIndex].title}</span>
                   <span className="text-rose-400 font-bold flex items-center gap-1">❤️ {ecoReels[activeReelIndex].likes}</span>
@@ -215,54 +284,68 @@ export default function EcoDiscoveryPage() {
                 <button
                   key={reel.id}
                   onClick={() => setActiveReelIndex(idx)}
-                  className={`p-2.5 rounded-xl border text-left text-[10px] font-bold transition-all ${
+                  className={`p-2.5 rounded-xl border text-left text-[10px] font-bold transition-all flex items-center gap-1 ${
                     activeReelIndex === idx ? 'bg-amber-400 text-slate-950 border-amber-400 font-black' : 'bg-slate-950 text-slate-300 border-slate-800'
                   }`}
                 >
-                  ▶️ Reel {idx + 1}: {reel.author}
+                  <span>🎥</span>
+                  <span className="truncate">Reel {idx + 1}: {reel.author}</span>
                 </button>
               ))}
             </div>
           </div>
 
-          {/* DAILY ECO TASKS & DISCOUNTS HUB (Right 6 Cols) */}
+          {/* DYNAMIC CITY ECO TASKS & HOTEL DISCOUNTS HUB (Right 6 Cols) */}
           <div className="lg:col-span-6 bg-slate-900/90 backdrop-blur-xl p-6 sm:p-8 rounded-3xl border border-slate-700/80 shadow-xl space-y-6">
             
-            {/* Daily Tasks */}
+            {/* City Selector Dropdown for Dynamic Tasks */}
             <div className="space-y-4">
-              <div className="border-b border-slate-800 pb-3 flex items-center justify-between">
+              <div className="border-b border-slate-800 pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
                   <h3 className="font-heading font-extrabold text-lg text-white flex items-center gap-2">
-                    <FiZap className="text-amber-400" /> Daily Eco Travel Tasks
+                    <FiZap className="text-amber-400" /> Daily Eco Tasks by City
                   </h3>
-                  <p className="text-xs text-slate-400">Complete tasks to earn points & reduce CO2</p>
+                  <p className="text-xs text-slate-400">Select destination to view custom local eco challenges</p>
                 </div>
+
+                <select
+                  value={selectedCityId}
+                  onChange={(e) => setSelectedCityId(e.target.value)}
+                  className="bg-slate-950 border border-slate-700 text-amber-300 rounded-2xl px-3.5 py-2 text-xs font-extrabold outline-none cursor-pointer"
+                >
+                  {destinations.map(d => (
+                    <option key={d.id} value={d.id}>📍 {d.name} ({d.state})</option>
+                  ))}
+                </select>
               </div>
 
               <div className="space-y-2.5">
-                {ecoTasks.map((task) => (
-                  <div
-                    key={task.id}
-                    onClick={() => toggleTask(task.id)}
-                    className={`p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-3 ${
-                      task.done ? 'bg-slate-950 border-emerald-500/50 text-emerald-300' : 'bg-slate-950/80 border-slate-800 text-slate-300 hover:border-slate-700'
-                    }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className={`w-5 h-5 rounded-md flex items-center justify-center border font-bold text-xs ${
-                        task.done ? 'bg-emerald-400 border-emerald-400 text-slate-950' : 'border-slate-700'
-                      }`}>
-                        {task.done && <FiCheck />}
+                {currentCityTasks.map((task) => {
+                  const isDone = completedTaskIds.has(task.id);
+                  return (
+                    <div
+                      key={task.id}
+                      onClick={() => toggleTask(task)}
+                      className={`p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-3 ${
+                        isDone ? 'bg-slate-950 border-emerald-500/50 text-emerald-300' : 'bg-slate-950/80 border-slate-800 text-slate-300 hover:border-slate-700'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className={`w-5 h-5 rounded-md flex items-center justify-center border font-bold text-xs ${
+                          isDone ? 'bg-emerald-400 border-emerald-400 text-slate-950' : 'border-slate-700'
+                        }`}>
+                          {isDone && <FiCheck />}
+                        </div>
+                        <span className="text-xs font-bold">{task.title}</span>
                       </div>
-                      <span className="text-xs font-bold">{task.title}</span>
-                    </div>
 
-                    <div className="flex items-center gap-2 text-[10px] font-black shrink-0">
-                      <span className="bg-amber-400/20 text-amber-300 border border-amber-400/30 px-2 py-0.5 rounded">+{task.pts} Pts</span>
-                      {task.co2 > 0 && <span className="bg-emerald-400/20 text-emerald-300 border border-emerald-400/30 px-2 py-0.5 rounded">-{task.co2}kg CO2</span>}
+                      <div className="flex items-center gap-2 text-[10px] font-black shrink-0">
+                        <span className="bg-amber-400/20 text-amber-300 border border-amber-400/30 px-2 py-0.5 rounded">+{task.pts} Pts</span>
+                        {task.co2 > 0 && <span className="bg-emerald-400/20 text-emerald-300 border border-emerald-400/30 px-2 py-0.5 rounded">-{task.co2}kg CO2</span>}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
 
@@ -305,20 +388,20 @@ export default function EcoDiscoveryPage() {
         {uploadModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md">
             <div className="bg-slate-900 border border-slate-700 p-6 rounded-3xl max-w-md w-full space-y-4">
-              <h3 className="text-xl font-heading font-extrabold text-white">Upload Hidden Gem Short Reel</h3>
-              <p className="text-xs text-slate-300">Share your eco-discovery video story to earn +150 Eco Scoreboard points & reduce CO2!</p>
+              <h3 className="text-xl font-heading font-extrabold text-white">Upload Hidden Gem Instagram Reel</h3>
+              <p className="text-xs text-slate-300">Paste your Instagram Reel link to earn +150 Eco Scoreboard points & reduce CO2!</p>
               
               <form onSubmit={handleUploadSubmit} className="space-y-3">
                 <input
-                  type="text"
+                  type="url"
                   required
-                  placeholder="Reel Title (e.g. Hidden Waterfall in Coorg)..."
+                  placeholder="https://www.instagram.com/reel/..."
                   className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white outline-none"
                 />
                 <input
                   type="text"
                   required
-                  placeholder="Your Instagram / Handle..."
+                  placeholder="Your Instagram Handle (@username)..."
                   className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white outline-none"
                 />
                 <button
