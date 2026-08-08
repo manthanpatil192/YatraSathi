@@ -4,6 +4,8 @@ import { FiStar, FiMapPin, FiClock, FiDollarSign, FiShield, FiVolume2, FiVolumeX
 import { apiService } from '../services/api';
 import AudioGuide from '../components/AudioGuide';
 
+import { destinations as fallbackDestinations } from '../data/destinations';
+
 export default function DestinationDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -14,25 +16,23 @@ export default function DestinationDetailPage() {
   useEffect(() => {
     let isMounted = true;
     setLoading(true);
+    // Instant local sync
+    const local = fallbackDestinations.find(d => String(d.id) === String(id));
+    setDestination(local);
+    setLoading(false);
+
+    // Optional API sync
     apiService.getDestinationById(id).then(data => {
-      if (isMounted) {
+      if (isMounted && data) {
         setDestination(data);
-        setLoading(false);
       }
     });
     return () => { isMounted = false; };
   }, [id]);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen pt-44 sm:pt-48 pb-32 flex flex-col items-center justify-center text-white">
-        <div className="w-12 h-12 border-4 border-slate-700 border-t-amber-400 rounded-full animate-spin mb-4"></div>
-        <p className="font-extrabold text-amber-300 animate-pulse">Loading destination details...</p>
-      </div>
-    );
-  }
+  const targetDestination = destination || fallbackDestinations.find(d => String(d.id) === String(id));
 
-  if (!destination) {
+  if (!targetDestination) {
     return (
       <div className="min-h-screen pt-44 sm:pt-48 pb-32 flex flex-col items-center justify-center text-white text-center px-4">
         <h2 className="text-2xl font-heading font-extrabold mb-4">Destination Not Found</h2>
@@ -43,8 +43,9 @@ export default function DestinationDetailPage() {
     );
   }
 
-  const cost = destination.averageCostPerDay || 2500;
-  const photoUrl = destination.photo || destination.image || 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=1200&q=80';
+  const destinationData = targetDestination;
+  const cost = destinationData.averageCostPerDay || 2500;
+  const photoUrl = destinationData.photo || destinationData.image || 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=1200&q=80';
   return (
     <div className="min-h-screen pb-32 text-white relative z-10 animate-fade-in">
       
@@ -53,7 +54,7 @@ export default function DestinationDetailPage() {
       {/* Full Viewport Background Photo */}
       <img 
         src={photoUrl} 
-        alt={destination.name} 
+        alt={destinationData.name} 
         className="fixed inset-0 w-full h-full object-cover filter brightness-[0.22] pointer-events-none z-0" 
       />
 
@@ -65,26 +66,26 @@ export default function DestinationDetailPage() {
             <div className="space-y-3">
               <div className="flex items-center gap-2">
                 <span className="px-3 py-1 bg-amber-400 text-slate-950 text-xs font-black rounded-full uppercase tracking-wider">
-                  {destination.category}
+                  {destinationData.category}
                 </span>
                 <span className="text-amber-300 font-extrabold text-sm flex items-center gap-1 bg-slate-950 px-3 py-1 rounded-full border border-slate-800">
-                  ⭐ {destination.rating} Rating
+                  ⭐ {destinationData.rating} Rating
                 </span>
               </div>
 
               {/* Title with generous leading and zero cut-off */}
               <h1 className="text-4xl sm:text-5xl md:text-6xl font-heading font-black text-white leading-normal tracking-tight">
-                {destination.name}
+                {destinationData.name}
               </h1>
 
               <p className="text-slate-300 text-xs sm:text-sm font-bold flex items-center gap-1.5">
                 <FiMapPin className="text-coral-400" />
-                <span>{destination.state}, India</span>
+                <span>{destinationData.state}, India</span>
               </p>
             </div>
 
             <button
-              onClick={() => navigate(`/itinerary?add=${destination.id}`)}
+              onClick={() => navigate(`/itinerary?add=${destinationData.id}`)}
               className="btn-bounce px-8 py-4 rounded-2xl bg-gradient-to-r from-coral-500 to-sunset-500 text-white font-heading font-extrabold text-sm shadow-xl flex items-center gap-2 shrink-0"
             >
               <span>+ Add to Itinerary Plan</span>
@@ -103,19 +104,19 @@ export default function DestinationDetailPage() {
 
             <div className="p-4 bg-slate-950 rounded-2xl border border-slate-800 space-y-1">
               <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider block">SAFETY STATUS</span>
-              <span className="text-xl sm:text-2xl font-heading font-black text-emerald-400 block">{destination.safetyRating || 'Very Safe'}</span>
+              <span className="text-xl sm:text-2xl font-heading font-black text-emerald-400 block">{destinationData.safetyRating || 'Very Safe'}</span>
               <span className="text-[10px] text-slate-400 font-medium">Verified status</span>
             </div>
 
             <div className="p-4 bg-slate-950 rounded-2xl border border-slate-800 space-y-1">
               <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider block">BEST SEASON</span>
-              <span className="text-xl sm:text-2xl font-heading font-black text-sky-300 block">{destination.bestSeason || 'Oct-Mar'}</span>
+              <span className="text-xl sm:text-2xl font-heading font-black text-sky-300 block">{destinationData.bestSeason || 'Oct-Mar'}</span>
               <span className="text-[10px] text-slate-400 font-medium">Optimal climate</span>
             </div>
 
             <div className="p-4 bg-slate-950 rounded-2xl border border-slate-800 space-y-1">
               <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider block">ANNUAL VISITORS</span>
-              <span className="text-xl sm:text-2xl font-heading font-black text-teal-300 block">{destination.visitors || '300K+'}</span>
+              <span className="text-xl sm:text-2xl font-heading font-black text-teal-300 block">{destinationData.visitors || '300K+'}</span>
               <span className="text-[10px] text-slate-400 font-medium">Domestic footfall</span>
             </div>
 
@@ -124,7 +125,7 @@ export default function DestinationDetailPage() {
 
         {/* Audio Guide Component */}
         <div className="bg-slate-900/90 backdrop-blur-2xl rounded-3xl p-6 sm:p-8 border border-slate-700/80 shadow-2xl my-6">
-          <AudioGuide text={destination.audioGuideText} title={`${destination.name} 1.5-Min Audio Narration`} />
+          <AudioGuide text={destinationData.audioGuideText} title={`${destinationData.name} 1.5-Min Audio Narration`} />
         </div>
 
         {/* High-Contrast Tab Navigation & Content Expansion */}
@@ -155,12 +156,12 @@ export default function DestinationDetailPage() {
           {/* Tab 1: Overview */}
           {activeTab === 'overview' && (
             <div className="space-y-6 text-slate-200 text-sm leading-relaxed">
-              <p className="text-base leading-relaxed font-medium bg-slate-950/80 p-5 rounded-2xl border border-slate-800">{destination.description}</p>
+              <p className="text-base leading-relaxed font-medium bg-slate-950/80 p-5 rounded-2xl border border-slate-800">{destinationData.description}</p>
 
               <div className="space-y-3">
                 <h3 className="font-heading font-extrabold text-lg text-amber-300">Iconic Attractions & Key Highlights</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {(destination.travelDestinationsInCity || destination.highlights || []).map((place, idx) => (
+                  {(destinationData.travelDestinationsInCity || destinationData.highlights || []).map((place, idx) => (
                     <div key={idx} className="p-4 bg-slate-950 rounded-2xl border border-slate-800 space-y-1">
                       <h4 className="font-extrabold text-amber-300 text-sm flex items-center gap-1.5">
                         <span>📍</span> {typeof place === 'string' ? place : place.name}
@@ -178,7 +179,7 @@ export default function DestinationDetailPage() {
             <div className="space-y-4 text-slate-200 text-sm leading-relaxed">
               <h3 className="font-heading font-extrabold text-xl text-amber-300">Historical Origin & Heritage Legacy</h3>
               <div className="p-6 bg-slate-950 rounded-2xl border border-slate-800 leading-relaxed font-medium space-y-3">
-                <p className="whitespace-pre-line text-sm text-slate-200 leading-relaxed">{destination.fullHistory || destination.description}</p>
+                <p className="whitespace-pre-line text-sm text-slate-200 leading-relaxed">{destinationData.fullHistory || destinationData.description}</p>
               </div>
             </div>
           )}
@@ -189,14 +190,14 @@ export default function DestinationDetailPage() {
               <div className="space-y-2">
                 <h3 className="font-heading font-extrabold text-xl text-amber-300">Cultural Identity & Local Traditions</h3>
                 <p className="text-sm text-slate-200 leading-relaxed font-medium bg-slate-950 p-5 rounded-2xl border border-slate-800">
-                  {destination.culturalInfo || `${destination.name} represents rich regional traditions, iconic folk music, local festivals, and heritage craftsmanship.`}
+                  {destinationData.culturalInfo || `${destinationData.name} represents rich regional traditions, iconic folk music, local festivals, and heritage craftsmanship.`}
                 </p>
               </div>
 
               <div className="space-y-3">
                 <h3 className="font-heading font-extrabold text-lg text-white">Famous Regional Culinary Specialties</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {(destination.foodSpecialties || []).map((food, idx) => (
+                  {(destinationData.foodSpecialties || []).map((food, idx) => (
                     <div key={idx} className="p-4 bg-slate-950 rounded-2xl border border-slate-800 space-y-1">
                       <h4 className="font-extrabold text-teal-300 text-sm flex items-center gap-1.5">
                         <span>🍲</span> {typeof food === 'string' ? food : food.name}
@@ -214,7 +215,7 @@ export default function DestinationDetailPage() {
             <div className="space-y-4 text-slate-200 text-sm leading-relaxed">
               <h3 className="font-heading font-extrabold text-xl text-amber-300">Transportation & Step-by-Step Transit Guide</h3>
               <div className="p-6 bg-slate-950 rounded-2xl border border-slate-800 font-mono text-xs whitespace-pre-line leading-relaxed text-slate-200 shadow-inner">
-                {destination.howToReachDetails || destination.gettingThere || `Fly into nearest airport or take direct passenger trains to ${destination.name}. Local cabs, auto-rickshaws, and public transit connect all major attractions.`}
+                {destinationData.howToReachDetails || destinationData.gettingThere || `Fly into nearest airport or take direct passenger trains to ${destinationData.name}. Local cabs, auto-rickshaws, and public transit connect all major attractions.`}
               </div>
             </div>
           )}
@@ -225,7 +226,7 @@ export default function DestinationDetailPage() {
               <div className="space-y-3">
                 <h3 className="font-heading font-extrabold text-lg text-amber-300">Hidden Secret Offbeat Spots</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {(destination.hiddenGems || ['Local Secret Viewpoint', 'Artisan Village Walk', 'Sunset Heritage Sanctuary']).map((gem, idx) => (
+                  {(destinationData.hiddenGems || ['Local Secret Viewpoint', 'Artisan Village Walk', 'Sunset Heritage Sanctuary']).map((gem, idx) => (
                     <div key={idx} className="p-4 bg-slate-950 border border-slate-800 rounded-2xl text-xs text-amber-200 space-y-1">
                       <div className="font-extrabold flex items-center gap-2">
                         <span>💎</span> <span>{typeof gem === 'string' ? gem : gem.name || gem.title}</span>
@@ -239,7 +240,7 @@ export default function DestinationDetailPage() {
               <div className="space-y-3">
                 <h3 className="font-heading font-extrabold text-lg text-white">Tourist Safety Rules & Advisory</h3>
                 <div className="space-y-2.5">
-                  {(destination.safetyTips || [
+                  {(destinationData.safetyTips || [
                     'Keep emergency contacts saved: Tourist Helpline (1363) & Police (100).',
                     'Use registered taxis and auto-rickshaws with metered fares.',
                     'Keep digital copies of IDs and travel vouchers.'
