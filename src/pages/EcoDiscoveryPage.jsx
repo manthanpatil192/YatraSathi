@@ -64,33 +64,12 @@ const CITY_ECO_TASKS = {
 export default function EcoDiscoveryPage() {
   const [selectedCityId, setSelectedCityId] = useState('d1');
   const [activeReelIndex, setActiveReelIndex] = useState(0);
-  const [playerMode, setPlayerMode] = useState('instagram'); // Default to 'instagram' so user immediately sees the Insta Reel on web
-  const [isPlaying, setIsPlaying] = useState(true);
-  const [isMuted, setIsMuted] = useState(true);
   const [userScore, setUserScore] = useState(650);
   const [co2SavedKg, setCo2SavedKg] = useState(180);
   const [plasticSavedCount, setPlasticSavedCount] = useState(35);
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
   const [uploadedSuccess, setUploadedSuccess] = useState(false);
   const [completedTaskIds, setCompletedTaskIds] = useState(new Set(['goa1', 'goa2']));
-  
-  const videoRef = useRef(null);
-
-  // Play / Pause video click handler for in-site video playback
-  const handleVideoClick = () => {
-    if (videoRef.current) {
-      if (isPlaying) {
-        videoRef.current.pause();
-        setIsPlaying(false);
-      } else {
-        videoRef.current.play().then(() => {
-          setIsPlaying(true);
-        }).catch(err => {
-          console.log("Play failed:", err);
-        });
-      }
-    }
-  };
 
   // Prior Dual-Mode Video Reels Dataset
   const ecoReels = [
@@ -244,121 +223,34 @@ export default function EcoDiscoveryPage() {
         {/* Dynamic City Selector & Eco Tasks Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           
-          {/* IMMERSIVE VIDEO REELS PLAYER (Left 6 Cols) */}
+          {/* INSTAGRAM REELS EMBED PLAYER (Left 6 Cols) */}
           <div className="lg:col-span-6 bg-slate-900/90 backdrop-blur-xl p-6 rounded-3xl border border-slate-700/80 shadow-xl space-y-4 flex flex-col justify-between">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
+            <div className="flex justify-between items-center border-b border-slate-800 pb-3">
               <h2 className="font-heading font-extrabold text-lg text-white flex items-center gap-2">
                 <FiInstagram className="text-rose-400" /> Travel Video Reels
               </h2>
               
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => setPlayerMode('native')}
-                  className={`px-3 py-1.5 rounded-xl text-[10px] font-black uppercase transition-all ${
-                    playerMode === 'native' ? 'bg-teal-400 text-slate-950 shadow-md font-black' : 'bg-slate-950 text-slate-400 border border-slate-800'
-                  }`}
-                >
-                  🎥 Native Full View
-                </button>
-                <button
-                  onClick={() => setPlayerMode('instagram')}
-                  className={`px-3 py-1.5 rounded-xl text-[10px] font-black uppercase transition-all ${
-                    playerMode === 'instagram' ? 'bg-amber-400 text-slate-950 shadow-md font-black' : 'bg-slate-950 text-slate-400 border border-slate-800'
-                  }`}
-                >
-                  📸 Instagram Post
-                </button>
-              </div>
+              <button
+                onClick={() => setUploadModalOpen(true)}
+                className="px-3 py-1.5 bg-amber-400 hover:bg-amber-300 text-slate-950 rounded-xl font-bold text-xs flex items-center gap-1 shadow-md transition-colors"
+              >
+                <FiUploadCloud /> Upload Reel (+150 Pts)
+              </button>
             </div>
 
-            {/* DUAL MODE PLAYER CONTAINER */}
+            {/* INSTAGRAM POST EMBED IN 9:16 SMARTPHONE RATIO FRAME */}
             <div className="w-full flex justify-center py-2">
-              <div className="relative rounded-[32px] overflow-hidden w-full max-w-[328px] h-[580px] border border-slate-800 shadow-2xl bg-black flex items-center justify-center">
-                
-                {playerMode === 'native' ? (
-                  // Immersive Native Player (Centered, 9:16 fit, in-site playback)
-                  <div className="relative w-full h-full">
-                    <video 
-                      ref={videoRef}
-                      key={ecoReels[activeReelIndex].id}
-                      src={ecoReels[activeReelIndex].videoFallback} 
-                      poster={ecoReels[activeReelIndex].poster}
-                      preload="auto"
-                      autoPlay
-                      loop
-                      muted={isMuted}
-                      playsInline
-                      onClick={handleVideoClick}
-                      onPlay={() => setIsPlaying(true)}
-                      onPause={() => setIsPlaying(false)}
-                      className="w-full h-full object-cover cursor-pointer"
-                    />
-                    
-                    {!isPlaying && (
-                      <div 
-                        onClick={handleVideoClick}
-                        className="absolute inset-0 flex flex-col items-center justify-center bg-black/40 cursor-pointer z-10 space-y-2 backdrop-blur-[2px]"
-                      >
-                        <div className="w-16 h-16 rounded-full bg-white/30 hover:bg-white/50 text-white flex items-center justify-center border border-white/60 backdrop-blur-md shadow-2xl transition-all scale-105">
-                          <FiPlay size={28} className="ml-1 text-white fill-white" />
-                        </div>
-                        <span className="text-[11px] font-extrabold text-white bg-slate-950/80 px-3 py-1 rounded-full border border-slate-700">
-                          Tap to Play Clip
-                        </span>
-                      </div>
-                    )}
-
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent pointer-events-none"></div>
-
-                    {/* Media Controls */}
-                    <div className="absolute top-4 right-4 flex items-center gap-2 z-10">
-                      <button
-                        onClick={() => {
-                          if (videoRef.current) {
-                            videoRef.current.muted = !isMuted;
-                            setIsMuted(!isMuted);
-                          }
-                        }}
-                        className="p-2.5 bg-slate-950/80 hover:bg-slate-900 text-amber-300 rounded-full border border-slate-700 backdrop-blur shadow-md"
-                      >
-                        {isMuted ? <FiVolumeX size={15} /> : <FiVolume2 size={15} />}
-                      </button>
-
-                      <button
-                        onClick={handleVideoClick}
-                        className="p-2.5 bg-slate-950/80 hover:bg-slate-900 text-white rounded-full border border-slate-700 backdrop-blur shadow-md"
-                      >
-                        {isPlaying ? <FiPause size={15} /> : <FiPlay size={15} />}
-                      </button>
-                    </div>
-
-                    <div className="absolute top-4 left-4 bg-slate-950/85 backdrop-blur px-3.5 py-1 rounded-full text-[10px] font-black text-emerald-300 border border-emerald-400/30 shadow-md">
-                      {ecoReels[activeReelIndex].tag}
-                    </div>
-
-                    <div className="absolute bottom-4 left-4 right-4 space-y-1.5 z-10">
-                      <div className="flex items-center justify-between text-xs text-white">
-                        <span className="font-extrabold text-amber-300">{ecoReels[activeReelIndex].title}</span>
-                        <span className="text-rose-400 font-bold flex items-center gap-1">❤️ {ecoReels[activeReelIndex].likes}</span>
-                      </div>
-                      <p className="text-[11px] text-slate-300 leading-snug">{ecoReels[activeReelIndex].desc}</p>
-                      <span className="text-[10px] text-slate-400 font-bold block">{ecoReels[activeReelIndex].author}</span>
-                    </div>
-                  </div>
-                ) : (
-                  // Official Instagram Post Embed Card
-                  <iframe 
-                    key={ecoReels[activeReelIndex].id}
-                    src={ecoReels[activeReelIndex].embedUrl}
-                    className="w-full h-full border-0 rounded-2xl bg-white"
-                    allowtransparency="true"
-                    allow="encrypted-media"
-                    scrolling="no"
-                    frameBorder="0"
-                    title={ecoReels[activeReelIndex].title}
-                  ></iframe>
-                )}
-
+              <div className="relative rounded-[32px] overflow-hidden w-full max-w-[340px] h-[580px] border border-slate-800 shadow-2xl bg-black flex items-center justify-center">
+                <iframe 
+                  key={ecoReels[activeReelIndex].id}
+                  src={ecoReels[activeReelIndex].embedUrl}
+                  className="w-full h-full border-0 rounded-2xl bg-white"
+                  allowtransparency="true"
+                  allow="encrypted-media"
+                  scrolling="no"
+                  frameBorder="0"
+                  title={ecoReels[activeReelIndex].title}
+                ></iframe>
               </div>
             </div>
 

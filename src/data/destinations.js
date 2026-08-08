@@ -1166,7 +1166,7 @@ export const destinations = [
     region: 'North',
     description: 'A cold high-altitude desert mountain valley known for ancient Tibetan monasteries, turquoise rivers, and stark barren Himalayan peaks.',
     image: '/images/destinations/spiti.svg',
-    photo: 'https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?auto=format&fit=crop&w=1200&q=80',
+    photo: 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=1200&q=80',
     category: 'Mountains',
     rating: 4.9,
     visitors: '40K+',

@@ -8,7 +8,7 @@ export default function ExplorePage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [sortBy, setSortBy] = useState('rating');
-  const [viewMode, setViewMode] = useState('grid'); // 'grid' | 'map'
+  const [mapModalOpen, setMapModalOpen] = useState(false);
   const [selectedMapDest, setSelectedMapDest] = useState(destinations[0]);
 
   const filteredDestinations = useMemo(() => {
@@ -54,31 +54,18 @@ export default function ExplorePage() {
                 EXPLORE THE BEAUTY OF INDIA
               </h1>
               <p className="text-slate-300 text-xs sm:text-sm font-medium max-w-2xl leading-relaxed">
-                Browse 20 iconic destinations with real-time budget, safety ratings, 1.5-minute web audio guides, and interactive map pins.
+                Browse 20 iconic destinations with real-time budget, safety ratings, 1.5-minute web audio guides, and travel highlights.
               </p>
             </div>
 
-            {/* View Mode Toggle Buttons */}
-            <div className="flex items-center gap-2 shrink-0 bg-slate-950 p-1.5 rounded-2xl border border-slate-800">
-              <button
-                onClick={() => setViewMode('grid')}
-                className={`px-4 py-2.5 rounded-xl text-xs font-heading font-extrabold flex items-center gap-2 transition-all ${
-                  viewMode === 'grid' ? 'bg-amber-400 text-slate-950 shadow-md font-black' : 'text-slate-400 hover:text-white'
-                }`}
-              >
-                <FiGrid />
-                <span>Grid View</span>
-              </button>
-              <button
-                onClick={() => setViewMode('map')}
-                className={`px-4 py-2.5 rounded-xl text-xs font-heading font-extrabold flex items-center gap-2 transition-all ${
-                  viewMode === 'map' ? 'bg-teal-400 text-slate-950 shadow-md font-black' : 'text-slate-400 hover:text-white'
-                }`}
-              >
-                <FiMap />
-                <span>Interactive Map View</span>
-              </button>
-            </div>
+            {/* Small Map Icon Button for viewing India's Map Modal */}
+            <button
+              onClick={() => setMapModalOpen(true)}
+              className="px-4 py-2.5 rounded-2xl bg-teal-400/20 hover:bg-teal-400/30 text-teal-300 border border-teal-400/40 font-heading font-black text-xs flex items-center gap-2 transition-all shadow-lg shrink-0"
+            >
+              <FiMap className="text-teal-300" />
+              <span>View India Map 🗺️</span>
+            </button>
           </div>
 
           {/* Category Quick Badges */}
@@ -145,118 +132,6 @@ export default function ExplorePage() {
           </div>
         </div>
 
-        {/* INTERACTIVE ALL-INDIA MAP VIEW */}
-        {viewMode === 'map' && (
-          <div className="bg-slate-900/90 backdrop-blur-2xl rounded-3xl p-6 sm:p-8 border border-slate-700/80 shadow-2xl space-y-6">
-            <div className="flex justify-between items-center border-b border-slate-800 pb-4">
-              <div>
-                <h3 className="text-xl font-heading font-extrabold text-white flex items-center gap-2">
-                  <FiMap className="text-teal-400" /> Interactive All-India Destination Pin Map
-                </h3>
-                <p className="text-xs text-slate-400">Click any city pin marker to preview destination stats and audio guide</p>
-              </div>
-
-              <span className="px-3.5 py-1 bg-teal-400/20 text-teal-300 font-mono text-xs font-bold rounded-full border border-teal-400/30">
-                {filteredDestinations.length} Cities Plotted
-              </span>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-              
-              {/* Interactive Stylized Pin Grid Map (Left 7 Cols) */}
-              <div className="lg:col-span-7 bg-slate-950 p-6 rounded-3xl border border-slate-800 shadow-inner relative min-h-[480px] flex flex-col justify-between space-y-6">
-                <div className="flex items-center justify-between text-xs font-bold text-slate-400 border-b border-slate-900 pb-3">
-                  <span>📍 Click Pin to Select City</span>
-                  <span>Coordinates Grid (8°N - 35°N)</span>
-                </div>
-
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                  {filteredDestinations.map((dest) => {
-                    const isSelected = selectedMapDest?.id === dest.id;
-                    return (
-                      <button
-                        key={dest.id}
-                        onClick={() => setSelectedMapDest(dest)}
-                        className={`p-3.5 rounded-2xl border text-left transition-all flex flex-col justify-between gap-2 ${
-                          isSelected
-                            ? 'bg-gradient-to-br from-amber-400/20 to-teal-400/20 border-amber-400 shadow-lg scale-105'
-                            : 'bg-slate-900/80 border-slate-800 hover:border-slate-700 text-slate-300'
-                        }`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <span className="text-base">📍</span>
-                          <span className="text-[10px] font-black text-amber-300 bg-slate-950 px-2 py-0.5 rounded-md border border-slate-800">
-                            ⭐ {dest.rating}
-                          </span>
-                        </div>
-
-                        <div>
-                          <h4 className="font-heading font-extrabold text-xs text-white truncate">{dest.name}</h4>
-                          <span className="text-[10px] font-medium text-slate-400 block">{dest.state}</span>
-                        </div>
-
-                        <div className="flex items-center justify-between text-[10px] font-bold border-t border-slate-800/80 pt-1.5">
-                          <span className="text-teal-300">₹{dest.averageCostPerDay}/day</span>
-                          <span className="text-emerald-400">{dest.safetyRating}</span>
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Selected Destination Preview Card (Right 5 Cols) */}
-              <div className="lg:col-span-5 bg-slate-950 p-6 rounded-3xl border border-slate-800 shadow-2xl space-y-5">
-                {selectedMapDest && (
-                  <>
-                    <div className="h-48 relative rounded-2xl overflow-hidden bg-slate-900">
-                      <img
-                        src={selectedMapDest.photo || selectedMapDest.image}
-                        alt={selectedMapDest.name}
-                        className="w-full h-full object-cover"
-                      />
-                      <div className="absolute top-3 right-3 bg-slate-950/85 backdrop-blur px-3 py-1 rounded-full text-xs font-black text-amber-300 border border-amber-400/30">
-                        ⭐ {selectedMapDest.rating} Rating
-                      </div>
-                      <div className="absolute bottom-3 left-3 bg-slate-950/85 backdrop-blur px-3 py-1 rounded-full text-[10px] font-black text-teal-300 uppercase border border-teal-400/30">
-                        {selectedMapDest.category}
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <h3 className="text-2xl font-heading font-black text-white">{selectedMapDest.name}</h3>
-                      <p className="text-xs font-bold text-coral-400 flex items-center gap-1">
-                        <FiMapPin /> {selectedMapDest.state}, India
-                      </p>
-                      <p className="text-xs text-slate-300 leading-relaxed font-medium">{selectedMapDest.description}</p>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-3 pt-2">
-                      <div className="p-3 bg-slate-900 rounded-xl border border-slate-800 space-y-0.5">
-                        <span className="text-[10px] font-black text-slate-400 block">AVG DAILY COST</span>
-                        <span className="text-base font-black text-amber-300 block">₹{selectedMapDest.averageCostPerDay}/day</span>
-                      </div>
-                      <div className="p-3 bg-slate-900 rounded-xl border border-slate-800 space-y-0.5">
-                        <span className="text-[10px] font-black text-slate-400 block">SAFETY RATING</span>
-                        <span className="text-base font-black text-emerald-400 block">{selectedMapDest.safetyRating}</span>
-                      </div>
-                    </div>
-
-                    <button
-                      onClick={() => navigate(`/destination/${selectedMapDest.id}`)}
-                      className="btn-bounce w-full py-3.5 rounded-2xl bg-gradient-to-r from-amber-400 to-teal-400 text-slate-950 font-heading font-black text-xs uppercase tracking-wider shadow-lg flex items-center justify-center gap-2"
-                    >
-                      <span>View Full Destination Guide & Audio Narration</span>
-                      <FiCompass />
-                    </button>
-                  </>
-                )}
-              </div>
-
-            </div>
-          </div>
-        )}
-
         {/* Destination Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredDestinations.map(dest => (
@@ -312,6 +187,92 @@ export default function ExplorePage() {
         </div>
 
       </div>
+
+      {/* INDIA MAP MODAL OVERLAY */}
+      {mapModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-md animate-fade-in">
+          <div className="bg-slate-900 border border-slate-700 p-6 sm:p-8 rounded-3xl max-w-5xl w-full space-y-6 max-h-[90vh] overflow-y-auto shadow-2xl relative">
+            <div className="flex justify-between items-center border-b border-slate-800 pb-4">
+              <div>
+                <h3 className="text-2xl font-heading font-black text-white flex items-center gap-2">
+                  <FiMap className="text-teal-400" /> All-India Destination Pin Map
+                </h3>
+                <p className="text-xs text-slate-300 font-medium">Click any city pin marker to view destination guide</p>
+              </div>
+
+              <button
+                onClick={() => setMapModalOpen(false)}
+                className="px-4 py-2 bg-slate-950 hover:bg-slate-800 text-slate-300 rounded-xl border border-slate-700 text-xs font-bold"
+              >
+                ✕ Close Map
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+              
+              {/* City Pins Grid */}
+              <div className="lg:col-span-7 bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-4">
+                <span className="text-xs font-extrabold text-amber-300 block border-b border-slate-900 pb-2">📍 Select Destination Pin:</span>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 max-h-[380px] overflow-y-auto pr-1">
+                  {filteredDestinations.map((dest) => (
+                    <button
+                      key={dest.id}
+                      onClick={() => setSelectedMapDest(dest)}
+                      className={`p-3 rounded-xl border text-left text-xs transition-all ${
+                        selectedMapDest?.id === dest.id
+                          ? 'bg-amber-400 text-slate-950 border-amber-400 font-black scale-105'
+                          : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span>📍 {dest.name}</span>
+                        <span className="text-[10px]">⭐{dest.rating}</span>
+                      </div>
+                      <span className="text-[10px] opacity-75 block mt-0.5">{dest.state}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Selected Destination Preview */}
+              <div className="lg:col-span-5 bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-4">
+                {selectedMapDest && (
+                  <>
+                    <div className="h-40 relative rounded-xl overflow-hidden bg-slate-900">
+                      <img
+                        src={selectedMapDest.photo || selectedMapDest.image}
+                        alt={selectedMapDest.name}
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute top-2.5 right-2.5 bg-slate-950/85 backdrop-blur px-2.5 py-0.5 rounded-full text-xs font-black text-amber-300">
+                        ⭐ {selectedMapDest.rating}
+                      </div>
+                    </div>
+
+                    <div className="space-y-1">
+                      <h4 className="text-xl font-heading font-black text-white">{selectedMapDest.name}</h4>
+                      <p className="text-xs text-coral-400 font-bold">📍 {selectedMapDest.state}, India</p>
+                      <p className="text-xs text-slate-300 line-clamp-3">{selectedMapDest.description}</p>
+                    </div>
+
+                    <button
+                      onClick={() => {
+                        setMapModalOpen(false);
+                        navigate(`/destination/${selectedMapDest.id}`);
+                      }}
+                      className="btn-bounce w-full py-3 rounded-xl bg-gradient-to-r from-amber-400 to-teal-400 text-slate-950 font-heading font-black text-xs uppercase"
+                    >
+                      View Destination Guide →
+                    </button>
+                  </>
+                )}
+              </div>
+
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }

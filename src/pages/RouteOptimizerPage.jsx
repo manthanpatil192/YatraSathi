@@ -29,8 +29,11 @@ export default function RouteOptimizerPage() {
   };
 
   return (
-    <div className="min-h-screen pt-40 sm:pt-44 md:pt-48 pb-32 text-white relative z-10 animate-fade-in">
+    <div className="min-h-screen pb-32 text-white relative z-10 animate-fade-in">
       
+      {/* Bulletproof Top Spacer to prevent header text cut-off */}
+      <div className="h-28 sm:h-32 md:h-36"></div>
+
       {/* Full Viewport Screen Background Photo */}
       <img 
         src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&q=80" 
@@ -41,7 +44,7 @@ export default function RouteOptimizerPage() {
       <div className="w-full max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 space-y-8 relative z-10">
         
         {/* Header Hero Banner (Spacious Top Clearance to prevent text cut-off) */}
-        <div className="bg-slate-900/90 backdrop-blur-2xl rounded-3xl p-6 sm:p-10 border border-slate-700/80 shadow-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mt-4 sm:mt-6">
+        <div className="bg-slate-900/90 backdrop-blur-2xl rounded-3xl p-6 sm:p-10 border border-slate-700/80 shadow-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mt-2">
           <div className="space-y-3">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30 text-xs font-bold uppercase tracking-wider">
               <FiZap />
@@ -53,7 +56,7 @@ export default function RouteOptimizerPage() {
             </h1>
 
             <p className="text-slate-300 text-xs sm:text-sm font-medium max-w-2xl leading-relaxed">
-              Calculate optimal travel sequences, integer total distances, transport costs, and speed benchmarks across Indian cities.
+              Calculate optimal travel sequences, integer total distances, transport costs, and visual route maps across Indian cities.
             </p>
           </div>
 
@@ -160,6 +163,51 @@ export default function RouteOptimizerPage() {
             </div>
           </div>
 
+        </div>
+
+        {/* INDIA ROUTE MAP VISUALIZER */}
+        <div className="bg-slate-900/90 backdrop-blur-2xl rounded-3xl p-6 sm:p-8 border border-slate-700/80 shadow-2xl space-y-6">
+          <div className="flex justify-between items-center border-b border-slate-800 pb-4">
+            <div>
+              <h3 className="text-xl font-heading font-extrabold text-white flex items-center gap-2">
+                <span>🗺️</span> Interactive India Route Map
+              </h3>
+              <p className="text-xs text-slate-300">Visual connecting map for your optimized travel path across India</p>
+            </div>
+
+            <span className="px-3.5 py-1 bg-amber-400/20 text-amber-300 font-mono text-xs font-bold rounded-full border border-amber-400/30">
+              {selectedDests.length} Waypoints Connected
+            </span>
+          </div>
+
+          <div className="bg-slate-950 p-6 rounded-2xl border border-slate-800 space-y-6">
+            <div className="flex items-center justify-between text-xs font-bold text-slate-400 border-b border-slate-900 pb-3">
+              <span>🗺️ Active Route Map Canvas</span>
+              <span>{transportMode.toUpperCase()} TRANSIT LINE</span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {selectedDests.map((d, idx) => (
+                <div key={d.id} className="p-4 bg-slate-900 rounded-2xl border border-slate-800 relative space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="px-2.5 py-0.5 bg-teal-400 text-slate-950 rounded-md font-black text-[10px]">
+                      STOP #{idx + 1}
+                    </span>
+                    <span className="text-[10px] text-amber-300 font-extrabold">⭐ {d.rating}</span>
+                  </div>
+
+                  <h4 className="font-heading font-black text-sm text-white">{d.name}</h4>
+                  <p className="text-xs text-slate-400">📍 {d.state}, India</p>
+
+                  {idx < selectedDests.length - 1 && (
+                    <div className="pt-2 border-t border-slate-800/80 text-[10px] text-teal-300 font-bold flex items-center gap-1">
+                      <span>➔ Transit to {selectedDests[idx + 1].name}</span>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
       </div>
