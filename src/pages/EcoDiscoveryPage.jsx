@@ -232,17 +232,19 @@ export default function EcoDiscoveryPage() {
             </div>
 
             {/* WORKING OFFICIAL INSTAGRAM REELS EMBED */}
-            <div className="relative rounded-2xl overflow-hidden h-96 border border-slate-800 shadow-2xl bg-slate-950 flex items-center justify-center">
-              <iframe 
-                key={ecoReels[activeReelIndex].id}
-                src={ecoReels[activeReelIndex].embedUrl}
-                className="w-full h-full border-0"
-                allowtransparency="true"
-                allow="encrypted-media"
-                scrolling="no"
-                frameBorder="0"
-                title={ecoReels[activeReelIndex].title}
-              ></iframe>
+            <div className="w-full flex justify-center py-2">
+              <div className="relative rounded-3xl overflow-hidden w-full max-w-[340px] h-[580px] border border-slate-800 shadow-2xl bg-slate-950">
+                <iframe 
+                  key={ecoReels[activeReelIndex].id}
+                  src={ecoReels[activeReelIndex].embedUrl}
+                  className="w-full h-full border-0"
+                  allowtransparency="true"
+                  allow="encrypted-media"
+                  scrolling="no"
+                  frameBorder="0"
+                  title={ecoReels[activeReelIndex].title}
+                ></iframe>
+              </div>
             </div>
 
             {/* Reel Selector Buttons */}
