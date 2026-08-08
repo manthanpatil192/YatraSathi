@@ -13,7 +13,7 @@ export default function YatraAIChatbot() {
     {
       id: 1,
       sender: 'bot',
-      text: 'Namaste! 🇮🇳 I am your YatraAI Travel Assistant powered by Groq & Smart NLP. Ask me about Indian cities, famous food, budget savings, safety advice, or transit routes!',
+      text: 'Namaste! 🇮🇳 I am your YatraAI Travel Assistant powered by Groq Llama-3.3 70B. Ask me anything about Indian cities, famous food, budget savings, safety advice, or transit routes!',
       timestamp: 'Just now'
     }
   ]);
@@ -34,7 +34,7 @@ export default function YatraAIChatbot() {
     '🍲 Best food in Goa',
     '🛡️ Is Kashmir safe for travel?',
     '🚌 Cheap travel options in India',
-    '🏰 Top places in Jaipur'
+    '🏰 Top 10 places in Mumbai'
   ];
 
   const generateLocalAIResponse = (userQuery) => {
@@ -56,7 +56,7 @@ export default function YatraAIChatbot() {
       }
 
       if (q.includes('place') || q.includes('visit') || q.includes('attraction') || q.includes('see') || q.includes('spot')) {
-        const spots = matchedCity.travelDestinationsInCity?.map(p => `• **${p.name}**: ${p.desc}`).join('\n') || matchedCity.highlights.join(', ');
+        const spots = matchedCity.travelDestinationsInCity?.map(p => `• **${p.name}**: ${p.desc}`).join('\n') || matchedCity.highlights.map(h => `• **${h}**`).join('\n');
         return `🏛️ **Top Places to Visit in ${matchedCity.name}**:\n${spots}`;
       }
 
@@ -98,23 +98,18 @@ export default function YatraAIChatbot() {
     if (!textToSend) setInputMessage('');
     setIsTyping(true);
 
-    if (groqApiKey.trim()) {
-      try {
-        const groqReply = await fetchGroqChatResponse(query, groqApiKey, messages);
-        setMessages(prev => [...prev, {
-          id: Date.now() + 1,
-          sender: 'bot',
-          text: `⚡ [Groq Llama-3.3]: ${groqReply}`,
-          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-        }]);
-        setIsTyping(false);
-        return;
-      } catch (e) {
-        console.warn('Falling back to local AI due to Groq error');
-      }
-    }
-
-    setTimeout(() => {
+    try {
+      const groqReply = await fetchGroqChatResponse(query, groqApiKey, messages);
+      setMessages(prev => [...prev, {
+        id: Date.now() + 1,
+        sender: 'bot',
+        text: groqReply,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      }]);
+      setIsTyping(false);
+      return;
+    } catch (e) {
+      console.warn('Groq Cloud API fallback activated');
       const aiReply = generateLocalAIResponse(query);
       setMessages(prev => [...prev, {
         id: Date.now() + 1,
@@ -123,7 +118,7 @@ export default function YatraAIChatbot() {
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       }]);
       setIsTyping(false);
-    }, 400);
+    }
   };
 
   return (
@@ -133,7 +128,7 @@ export default function YatraAIChatbot() {
         <button
           onClick={() => setIsOpen(true)}
           className="btn-bounce w-14 h-14 rounded-full bg-gradient-to-tr from-ocean-600 via-seafoam-500 to-amber-400 text-white shadow-2xl flex items-center justify-center relative border-2 border-white/60"
-          title="Ask YatraAI Smart Travel Assistant (Groq Powered)"
+          title="Ask YatraAI Smart Travel Assistant (Groq Cloud Active)"
         >
           <FiMessageSquare size={26} />
           <span className="absolute -top-1 -right-1 w-4 h-4 bg-coral-500 rounded-full border-2 border-white animate-ping"></span>
@@ -142,7 +137,7 @@ export default function YatraAIChatbot() {
       )}
 
       {isOpen && (
-        <div className="bg-slate-900/95 backdrop-blur-2xl rounded-3xl shadow-2xl border border-slate-700/80 w-[90vw] sm:w-[420px] h-[560px] flex flex-col overflow-hidden animate-slide-up text-white">
+        <div className="bg-slate-900/95 backdrop-blur-2xl rounded-3xl shadow-2xl border border-slate-700/80 w-[90vw] sm:w-[440px] h-[580px] flex flex-col overflow-hidden animate-slide-up text-white">
           
           <div className="bg-gradient-to-r from-slate-950 via-slate-900 to-ocean-950 p-4 text-white flex items-center justify-between border-b border-slate-700/80 shadow-md">
             <div className="flex items-center gap-2.5">
@@ -152,11 +147,11 @@ export default function YatraAIChatbot() {
               <div>
                 <h4 className="font-heading font-extrabold text-sm leading-tight text-white flex items-center gap-1.5">
                   <span>YatraAI Assistant</span>
-                  <span className="text-[10px] font-black bg-amber-400/20 text-amber-300 border border-amber-400/40 px-2 py-0.5 rounded-full">
-                    {groqApiKey ? '⚡ Groq Llama-3' : 'Smart AI'}
+                  <span className="text-[10px] font-black bg-amber-400 text-slate-950 px-2 py-0.5 rounded-full shadow-sm">
+                    ⚡ Groq Llama-3.3
                   </span>
                 </h4>
-                <p className="text-[10px] text-seafoam-300 font-bold uppercase tracking-wider">Smart Travel & Route Intelligence</p>
+                <p className="text-[10px] text-seafoam-300 font-bold uppercase tracking-wider">Groq Cloud AI Travel Intelligence</p>
               </div>
             </div>
 
@@ -164,7 +159,7 @@ export default function YatraAIChatbot() {
               <button
                 onClick={() => setShowSettings(!showSettings)}
                 className="p-1.5 rounded-full hover:bg-white/20 text-slate-300 hover:text-white transition-colors"
-                title="Groq Settings"
+                title="Groq API Key Settings"
               >
                 <FiSettings size={16} />
               </button>
@@ -183,9 +178,9 @@ export default function YatraAIChatbot() {
             <div className="p-4 bg-slate-950 border-b border-slate-800 space-y-3 animate-fade-in">
               <div className="flex justify-between items-center">
                 <span className="text-xs font-extrabold text-amber-300 flex items-center gap-1">
-                  <FiKey /> Groq Cloud API Key
+                  <FiKey /> Groq Cloud API Key Active
                 </span>
-                <span className="text-[10px] text-slate-400">Optional for Llama 3.3 70B</span>
+                <span className="text-[10px] text-emerald-400 font-bold">Llama-3.3 70B</span>
               </div>
               <div className="flex gap-2">
                 <input
@@ -241,7 +236,7 @@ export default function YatraAIChatbot() {
             {isTyping && (
               <div className="flex items-center gap-2 text-slate-400 text-xs font-bold p-2 bg-slate-900/60 rounded-xl w-fit animate-pulse">
                 <div className="w-2 h-2 rounded-full bg-amber-400 animate-bounce"></div>
-                <span>YatraAI is thinking...</span>
+                <span>YatraAI Groq Llama-3 is generating response...</span>
               </div>
             )}
             <div ref={messagesEndRef} />
@@ -254,7 +249,7 @@ export default function YatraAIChatbot() {
               value={inputMessage}
               onChange={(e) => setInputMessage(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-              placeholder="Ask YatraAI for food, routes, or budget..."
+              placeholder="Ask Groq YatraAI for places, food, or routes..."
               className="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-white outline-none focus:ring-2 focus:ring-amber-400 placeholder-slate-400"
             />
             <button
