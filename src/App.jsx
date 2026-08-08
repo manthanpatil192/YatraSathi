@@ -5,6 +5,7 @@ import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import OfflineIndicator from './components/OfflineIndicator';
 import YatraAIChatbot from './components/chat/YatraAIChatbot';
+import RoyalWelcomeModal from './components/RoyalWelcomeModal';
 
 // Lazy load pages
 const LoginPage = lazy(() => import('./pages/LoginPage'));
@@ -54,6 +55,7 @@ const AppContent = () => {
       {!isLoginPage && <Footer />}
       <OfflineIndicator />
       <YatraAIChatbot />
+      <RoyalWelcomeModal />
     </div>
   );
 };

@@ -87,38 +87,38 @@ export default function BudgetPage() {
 
   return (
     <div className="min-h-screen pt-28 pb-32 text-white relative z-10 animate-fade-in">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+      
+      {/* Pic 3 Fix: Full Viewport Screen Background Photo */}
+      <img 
+        src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1600&q=80" 
+        alt="Full Screen Lake Background" 
+        className="fixed inset-0 w-full h-full object-cover filter brightness-[0.22] pointer-events-none z-0" 
+      />
+
+      {/* Pic 3 Fix: Full Viewport Screen Width Container */}
+      <div className="w-full max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 space-y-8 relative z-10">
         
-        {/* Full-Bleed Travel Photography Hero Banner */}
-        <div className="relative rounded-3xl overflow-hidden min-h-[240px] border border-slate-700/80 shadow-2xl p-6 sm:p-10 flex flex-col justify-end">
-          <img 
-            src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1600&q=80" 
-            alt="Valley Lake Background" 
-            className="absolute inset-0 w-full h-full object-cover object-center filter brightness-[0.35] transform scale-105 pointer-events-none"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent"></div>
-
-          <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-            <div className="space-y-2">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-400/20 text-emerald-300 border border-emerald-400/30 text-xs font-bold uppercase tracking-wider backdrop-blur-md">
-                <span>🏆 AI FINANCIAL ENGINE</span>
-              </div>
-              <h1 className="text-3xl sm:text-4xl font-heading font-extrabold text-white leading-tight">
-                Trip Budget & Group Cost Planner
-              </h1>
-              <p className="text-slate-200 text-xs sm:text-sm font-medium max-w-2xl">
-                Calculate running trip expenses, split costs for group travelers, and optimize savings with AI tariff benchmarks.
-              </p>
+        {/* Header Card */}
+        <div className="bg-slate-900/90 backdrop-blur-2xl rounded-3xl p-6 sm:p-10 border border-slate-700/80 shadow-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+          <div className="space-y-2">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-400/20 text-emerald-300 border border-emerald-400/30 text-xs font-bold uppercase tracking-wider">
+              <span>🏆 AI FINANCIAL ENGINE</span>
             </div>
-
-            <button
-              onClick={handleSaveBudget}
-              className="btn-bounce px-6 py-3.5 rounded-2xl bg-gradient-to-r from-coral-500 to-sunset-500 text-white font-heading font-extrabold text-xs shadow-lg flex items-center gap-2 shrink-0"
-            >
-              {savedSuccess ? <FiCheck /> : <FiSave />}
-              <span>{savedSuccess ? 'Saved to DB!' : 'Save Budget Plan'}</span>
-            </button>
+            <h1 className="text-3xl sm:text-4xl font-heading font-extrabold text-white leading-tight">
+              Trip Budget & Group Cost Planner
+            </h1>
+            <p className="text-slate-200 text-xs sm:text-sm font-medium max-w-2xl">
+              Calculate running trip expenses, split costs for group travelers, and optimize savings with AI tariff benchmarks.
+            </p>
           </div>
+
+          <button
+            onClick={handleSaveBudget}
+            className="btn-bounce px-6 py-3.5 rounded-2xl bg-gradient-to-r from-coral-500 to-sunset-500 text-white font-heading font-extrabold text-xs shadow-lg flex items-center gap-2 shrink-0"
+          >
+            {savedSuccess ? <FiCheck /> : <FiSave />}
+            <span>{savedSuccess ? 'Saved to DB!' : 'Save Budget Plan'}</span>
+          </button>
         </div>
 
         {/* Real-Time Stats Overview Cards */}

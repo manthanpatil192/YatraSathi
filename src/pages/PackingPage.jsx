@@ -77,53 +77,53 @@ export default function PackingPage() {
 
   return (
     <div className="min-h-screen pt-28 pb-32 text-white relative z-10 animate-fade-in">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+      
+      {/* Pic 5 Fix: Full Viewport Screen Background Photo */}
+      <img 
+        src="https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?auto=format&fit=crop&w=1600&q=80" 
+        alt="Full Screen Mountain Hiker Background" 
+        className="fixed inset-0 w-full h-full object-cover filter brightness-[0.22] pointer-events-none z-0" 
+      />
+
+      {/* Pic 5 Fix: Full Viewport Screen Width Container */}
+      <div className="w-full max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 space-y-8 relative z-10">
         
-        {/* Header Card with Clean Travel Background Image */}
-        <div className="relative overflow-hidden rounded-3xl p-6 sm:p-10 border border-slate-700/80 shadow-2xl space-y-4 min-h-[220px] flex flex-col justify-end">
-          <img 
-            src="https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?auto=format&fit=crop&w=1600&q=80" 
-            alt="Mountain Traveler Background" 
-            className="absolute inset-0 w-full h-full object-cover object-center filter brightness-[0.4] transform scale-105 pointer-events-none"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent"></div>
+        {/* Header Card */}
+        <div className="bg-slate-900/90 backdrop-blur-2xl rounded-3xl p-6 sm:p-10 border border-slate-700/80 shadow-2xl space-y-4">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/30 text-xs font-bold uppercase tracking-wider">
+            <FiCheckSquare />
+            <span>AI Destination Packing Assistant</span>
+          </div>
 
-          <div className="relative z-10 space-y-3">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/30 text-xs font-bold uppercase tracking-wider">
-              <FiCheckSquare />
-              <span>AI Destination Packing Assistant</span>
-            </div>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-heading font-extrabold text-white leading-tight">
+            Smart Packing Assistant
+          </h1>
 
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-heading font-extrabold text-white leading-tight">
-              Smart Packing Assistant
-            </h1>
+          <p className="text-slate-200 text-xs sm:text-sm font-medium max-w-2xl leading-relaxed">
+            Select your destination vibe to load custom itemized packing suggestions tailored for weather and geography.
+          </p>
 
-            <p className="text-slate-200 text-xs sm:text-sm font-medium max-w-2xl leading-relaxed">
-              Select your destination vibe to load custom itemized packing suggestions tailored for weather and geography.
-            </p>
-
-            {/* Destination Vibe Tabs */}
-            <div className="flex items-center gap-3 pt-2 overflow-x-auto scrollbar-hide">
-              {[
-                { id: 'Beach', icon: '🏖️' },
-                { id: 'Mountain', icon: '🏔️' },
-                { id: 'Heritage', icon: '🏰' },
-                { id: 'Nature', icon: '🌿' }
-              ].map(vibe => (
-                <button
-                  key={vibe.id}
-                  onClick={() => handleVibeChange(vibe.id)}
-                  className={`px-5 py-2.5 rounded-2xl font-heading font-extrabold text-xs flex items-center gap-2 transition-all whitespace-nowrap ${
-                    selectedVibe === vibe.id
-                      ? 'bg-amber-400 text-slate-950 shadow-md font-black scale-105'
-                      : 'bg-slate-950/90 border border-slate-700 text-slate-300 hover:bg-slate-800'
-                  }`}
-                >
-                  <span>{vibe.icon}</span>
-                  <span>{vibe.id} Packing</span>
-                </button>
-              ))}
-            </div>
+          {/* Destination Vibe Tabs */}
+          <div className="flex items-center gap-3 pt-2 overflow-x-auto scrollbar-hide">
+            {[
+              { id: 'Beach', icon: '🏖️' },
+              { id: 'Mountain', icon: '🏔️' },
+              { id: 'Heritage', icon: '🏰' },
+              { id: 'Nature', icon: '🌿' }
+            ].map(vibe => (
+              <button
+                key={vibe.id}
+                onClick={() => handleVibeChange(vibe.id)}
+                className={`px-5 py-2.5 rounded-2xl font-heading font-extrabold text-xs flex items-center gap-2 transition-all whitespace-nowrap ${
+                  selectedVibe === vibe.id
+                    ? 'bg-amber-400 text-slate-950 shadow-md font-black scale-105'
+                    : 'bg-slate-950/90 border border-slate-700 text-slate-300 hover:bg-slate-800'
+                }`}
+              >
+                <span>{vibe.icon}</span>
+                <span>{vibe.id} Packing</span>
+              </button>
+            ))}
           </div>
         </div>
 
