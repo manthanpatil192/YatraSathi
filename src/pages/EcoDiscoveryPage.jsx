@@ -115,6 +115,7 @@ export default function EcoDiscoveryPage() {
       likes: '45.2K',
       embedUrl: 'https://www.instagram.com/reel/DFhrG2rJoVm/embed/',
       videoFallback: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
+      poster: 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=600&q=80',
       tag: '🏖️ Goa Stories',
       desc: 'Beautiful hidden lagoons, waterfalls, and tropical beaches of Goa.'
     },
@@ -125,6 +126,7 @@ export default function EcoDiscoveryPage() {
       likes: '32.1K',
       embedUrl: 'https://www.instagram.com/reel/DXZT0PhE17M/embed/',
       videoFallback: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
+      poster: 'https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=600&q=80',
       tag: '🗺️ Scenic Route',
       desc: 'Breathtaking driving passes and scenic viewpoints across India.'
     },
@@ -135,6 +137,7 @@ export default function EcoDiscoveryPage() {
       likes: '29.7K',
       embedUrl: 'https://www.instagram.com/reel/DWBtZmrEYfj/embed/',
       videoFallback: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+      poster: 'https://images.unsplash.com/photo-1598091383021-15ddea10925d?auto=format&fit=crop&w=600&q=80',
       tag: '🏰 Historic India',
       desc: 'Discovering ancient architectural wonders and sacred temples.'
     }
@@ -279,6 +282,8 @@ export default function EcoDiscoveryPage() {
                     ref={videoRef}
                     key={ecoReels[activeReelIndex].id}
                     src={ecoReels[activeReelIndex].videoFallback} 
+                    poster={ecoReels[activeReelIndex].poster}
+                    preload="auto"
                     autoPlay
                     loop
                     muted={isMuted}
