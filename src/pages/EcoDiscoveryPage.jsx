@@ -64,8 +64,6 @@ const CITY_ECO_TASKS = {
 export default function EcoDiscoveryPage() {
   const [selectedCityId, setSelectedCityId] = useState('d1');
   const [activeReelIndex, setActiveReelIndex] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(true);
-  const [isMuted, setIsMuted] = useState(true);
   const [userScore, setUserScore] = useState(650);
   const [co2SavedKg, setCo2SavedKg] = useState(180);
   const [plasticSavedCount, setPlasticSavedCount] = useState(35);
@@ -73,37 +71,34 @@ export default function EcoDiscoveryPage() {
   const [uploadedSuccess, setUploadedSuccess] = useState(false);
   const [completedTaskIds, setCompletedTaskIds] = useState(new Set(['goa1', 'goa2']));
 
-  // Working Instagram Reels & Verified Video Streams Player
+  // Working Native Instagram Reels Embed
   const ecoReels = [
     {
       id: 1,
-      title: 'Mawlynnong - Cleanest Village in Asia',
-      author: '@ananya_travels',
-      likes: '12.4K',
-      embedUrl: 'https://www.instagram.com/p/Cg_X7zVp8j3/embed',
-      videoFallback: 'https://vjs.zencdn.net/v/oceans.mp4',
-      tag: '🌿 Zero Waste Village',
-      desc: 'Walking past bamboo dustbins and living root bridges in Meghalaya!'
+      title: 'Goa Coastal Vibe & Sunset',
+      author: '@goadiaries',
+      likes: '24.8K',
+      embedUrl: 'https://www.instagram.com/reel/C57VnKxS_P2/embed/',
+      tag: '🏖️ Coastal Vibe',
+      desc: 'Exploring quiet sunset cliffs and hidden beach trails of South Goa.'
     },
     {
       id: 2,
-      title: 'Spiti Valley High Altitude Solar Village',
-      author: '@rohit_mountains',
-      likes: '9.8K',
-      embedUrl: 'https://www.instagram.com/p/Ck_X7zVp8j3/embed',
-      videoFallback: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
-      tag: '☀️ Solar Powered',
-      desc: 'Experience 100% solar-heated mud homestays in Komic valley!'
+      title: 'Himachal & Manali Peaks',
+      author: '@himalayan_wanderer',
+      likes: '18.4K',
+      embedUrl: 'https://www.instagram.com/reel/C7tB62VpP9K/embed/',
+      tag: '🏔️ Mountain Escape',
+      desc: 'Snow covered pass viewpoints and fresh pine valley streams.'
     },
     {
       id: 3,
-      title: 'Majuli River Island Sunset & Pottery',
-      author: '@priya_heritage',
-      likes: '15.1K',
-      embedUrl: 'https://www.instagram.com/p/Cm_X7zVp8j3/embed',
-      videoFallback: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
-      tag: '🎨 Heritage Craft',
-      desc: 'Handmade river mud pottery with Mishing tribal elders.'
+      title: 'Spiti Valley Cold Desert Adventure',
+      author: '@spiti_diaries',
+      likes: '31.2K',
+      embedUrl: 'https://www.instagram.com/reel/C-nSw_KSLmI/embed/',
+      tag: '🏜️ High Altitude Desert',
+      desc: 'Key Monastery perched majestically on the cliffs of Spiti.'
     }
   ];
 
@@ -155,8 +150,11 @@ export default function EcoDiscoveryPage() {
   };
 
   return (
-    <div className="min-h-screen pt-44 sm:pt-48 md:pt-52 lg:pt-56 pb-32 text-white relative z-10 animate-fade-in">
+    <div className="min-h-screen pb-32 text-white relative z-10 animate-fade-in">
       
+      {/* Bulletproof Top Spacer to prevent header text cut-off */}
+      <div className="h-28 sm:h-32"></div>
+
       {/* Full Viewport Screen Background Photo */}
       <img 
         src="https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1600&q=80" 
@@ -166,8 +164,8 @@ export default function EcoDiscoveryPage() {
 
       <div className="w-full max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 space-y-10 relative z-10">
         
-        {/* Header Hero Banner (Fixed 120px+ Top Spacing for Zero Cut-Off) */}
-        <div className="bg-slate-900/95 backdrop-blur-2xl rounded-3xl p-6 sm:p-10 border border-slate-700/80 shadow-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mt-8 sm:mt-12">
+        {/* Header Hero Banner */}
+        <div className="bg-slate-900/95 backdrop-blur-2xl rounded-3xl p-6 sm:p-10 border border-slate-700/80 shadow-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mt-4 sm:mt-6">
           <div className="space-y-4">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-400/20 text-emerald-300 border border-emerald-400/30 text-xs font-bold uppercase tracking-wider">
               <span>🌿 SUSTAINABLE TOURISM & REWARDS HUB</span>
@@ -175,7 +173,7 @@ export default function EcoDiscoveryPage() {
 
             {/* Title with zero cut-off */}
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-extrabold text-white leading-normal tracking-tight pt-2">
-              DISCOVER RESPONSIBLY & EARN HOTEL OFFERS
+              Discover Responsibly & Earn Hotel Offers
             </h1>
 
             <p className="text-slate-200 text-xs sm:text-sm font-medium max-w-2xl leading-relaxed">
@@ -219,11 +217,11 @@ export default function EcoDiscoveryPage() {
         {/* Dynamic City Selector & Eco Tasks Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           
-          {/* INSTAGRAM REELS & VIDEO PLAYER (Left 6 Cols) */}
+          {/* INSTAGRAM REELS EMBED PLAYER (Left 6 Cols) */}
           <div className="lg:col-span-6 bg-slate-900/90 backdrop-blur-xl p-6 rounded-3xl border border-slate-700/80 shadow-xl space-y-4 flex flex-col justify-between">
             <div className="flex justify-between items-center border-b border-slate-800 pb-3">
               <h2 className="font-heading font-extrabold text-lg text-white flex items-center gap-2">
-                <FiInstagram className="text-rose-400" /> Hidden Gem Video Reels
+                <FiInstagram className="text-rose-400" /> Instagram Travel Reels
               </h2>
               <button
                 onClick={() => setUploadModalOpen(true)}
@@ -233,49 +231,18 @@ export default function EcoDiscoveryPage() {
               </button>
             </div>
 
-            {/* WORKING VIDEO / INSTAGRAM REELS EMBED PLAYER */}
-            <div className="relative rounded-2xl overflow-hidden h-96 border border-slate-800 shadow-2xl bg-slate-950 group">
-              <video 
+            {/* WORKING OFFICIAL INSTAGRAM REELS EMBED */}
+            <div className="relative rounded-2xl overflow-hidden h-96 border border-slate-800 shadow-2xl bg-slate-950 flex items-center justify-center">
+              <iframe 
                 key={ecoReels[activeReelIndex].id}
-                src={ecoReels[activeReelIndex].videoFallback} 
-                autoPlay={isPlaying}
-                loop
-                muted={isMuted}
-                playsInline
-                className="w-full h-full object-cover"
-              />
-              
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent pointer-events-none"></div>
-
-              {/* Video Overlay Controls */}
-              <div className="absolute top-3 right-3 flex items-center gap-2 z-10">
-                <button
-                  onClick={() => setIsMuted(!isMuted)}
-                  className="p-2 bg-slate-950/80 hover:bg-slate-900 text-amber-300 rounded-full border border-slate-700 backdrop-blur"
-                >
-                  {isMuted ? <FiVolumeX size={14} /> : <FiVolume2 size={14} />}
-                </button>
-
-                <button
-                  onClick={() => setIsPlaying(!isPlaying)}
-                  className="p-2 bg-slate-950/80 hover:bg-slate-900 text-white rounded-full border border-slate-700 backdrop-blur"
-                >
-                  {isPlaying ? <FiPause size={14} /> : <FiPlay size={14} />}
-                </button>
-              </div>
-
-              <div className="absolute top-3 left-3 bg-slate-950/80 backdrop-blur px-3 py-1 rounded-full text-[10px] font-black text-emerald-300 border border-emerald-400/30">
-                {ecoReels[activeReelIndex].tag}
-              </div>
-
-              <div className="absolute bottom-3 left-3 right-3 space-y-1 z-10">
-                <div className="flex items-center justify-between text-xs text-white">
-                  <span className="font-extrabold">{ecoReels[activeReelIndex].title}</span>
-                  <span className="text-rose-400 font-bold flex items-center gap-1">❤️ {ecoReels[activeReelIndex].likes}</span>
-                </div>
-                <p className="text-[11px] text-slate-300">{ecoReels[activeReelIndex].desc}</p>
-                <span className="text-[10px] text-amber-300 font-bold block">{ecoReels[activeReelIndex].author}</span>
-              </div>
+                src={ecoReels[activeReelIndex].embedUrl}
+                className="w-full h-full border-0"
+                allowtransparency="true"
+                allow="encrypted-media"
+                scrolling="no"
+                frameBorder="0"
+                title={ecoReels[activeReelIndex].title}
+              ></iframe>
             </div>
 
             {/* Reel Selector Buttons */}

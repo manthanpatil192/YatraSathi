@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FiCalendar, FiPlus, FiTrash2, FiClock, FiMapPin, FiSave, FiCheck, FiLayers, FiCompass } from 'react-icons/fi';
 import { destinations } from '../data/destinations';
 
@@ -6,38 +6,97 @@ export default function ItineraryPage() {
   const [selectedCityId, setSelectedCityId] = useState('d1');
   const [tripTitle, setTripTitle] = useState('My India Adventure');
   const [savedSuccess, setSavedSuccess] = useState(false);
-
-  const [days, setDays] = useState([
-    {
-      dayNumber: 1,
-      title: 'Arrival, Heritage Landmarks & Sunset Walk',
-      stops: [
-        { id: 's1', time: '10:00 AM', duration: '2 hrs', title: 'Hotel Check-in & Rest' },
-        { id: 's2', time: '02:00 PM', duration: '3 hrs', title: 'Historic Heritage Exploration Walk' },
-        { id: 's3', time: '06:30 PM', duration: '2 hrs', title: 'Sunset Promenade & Local Dinner' }
-      ]
-    },
-    {
-      dayNumber: 2,
-      title: 'Top Attractions & Local Food Tasting Tour',
-      stops: [
-        { id: 's4', time: '09:00 AM', duration: '3 hrs', title: 'Famous Cultural Landmark Visit' },
-        { id: 's5', time: '01:00 PM', duration: '2 hrs', title: 'Iconic Regional Food & Street Feast' }
-      ]
-    }
-  ]);
+  const [days, setDays] = useState([]);
 
   const selectedCity = destinations.find(d => String(d.id) === String(selectedCityId)) || destinations[0];
 
+  // Dynamically generate the itinerary whenever the chosen city changes
+  useEffect(() => {
+    const dests = selectedCity.travelDestinationsInCity || [];
+    const foods = selectedCity.foodSpecialties || [];
+    const gems = selectedCity.hiddenGems || [];
+
+    const d1Stops = [
+      { id: 's1', time: '10:00 AM', duration: '2 hrs', title: 'Hotel Check-in & Rest' }
+    ];
+    if (dests.length > 0) {
+      d1Stops.push({ id: 's2', time: '02:00 PM', duration: '3 hrs', title: `Sightseeing at ${dests[0].name} - ${dests[0].desc}` });
+    } else {
+      d1Stops.push({ id: 's2', time: '02:00 PM', duration: '3 hrs', title: 'City Exploration & Local Walking Tour' });
+    }
+    if (foods.length > 0) {
+      d1Stops.push({ id: 's3', time: '07:00 PM', duration: '2 hrs', title: `Dinner: Savor local ${foods[0].name} (${foods[0].desc})` });
+    }
+
+    const d2Stops = [];
+    if (dests.length > 1) {
+      d2Stops.push({ id: 's4', time: '09:00 AM', duration: '3 hrs', title: `Explore Heritage Site: ${dests[1].name} (${dests[1].desc})` });
+    } else {
+      d2Stops.push({ id: 's4', time: '09:00 AM', duration: '3 hrs', title: 'Visit Local Bazaars & Traditional Markets' });
+    }
+    if (foods.length > 1) {
+      d2Stops.push({ id: 's5', time: '01:00 PM', duration: '2 hrs', title: `Lunch: Try local ${foods[1].name} (${foods[1].desc})` });
+    }
+    if (dests.length > 2) {
+      d2Stops.push({ id: 's6', time: '04:00 PM', duration: '2 hrs', title: `Visit Landmark: ${dests[2].name} (${dests[2].desc})` });
+    } else if (gems.length > 0) {
+      d2Stops.push({ id: 's6', time: '04:00 PM', duration: '2 hrs', title: `Explore Offbeat Gem: ${gems[0]}` });
+    }
+
+    setDays([
+      {
+        dayNumber: 1,
+        title: `Arrival & ${dests[0]?.name || 'City'} Discovery`,
+        stops: d1Stops
+      },
+      {
+        dayNumber: 2,
+        title: `${dests[1]?.name || 'Local'} & Culinary Walk`,
+        stops: d2Stops
+      }
+    ]);
+  }, [selectedCityId]);
+
   const handleAddDay = () => {
     const nextDayNum = days.length + 1;
+    const dests = selectedCity.travelDestinationsInCity || [];
+    const foods = selectedCity.foodSpecialties || [];
+    const gems = selectedCity.hiddenGems || [];
+    const acts = selectedCity.activities || [];
+
+    const stops = [];
+
+    // Stop 1: Morning
+    let morningTitle = `Explore local scenic points & neighborhood walking trails`;
+    if (dests.length > nextDayNum) {
+      morningTitle = `Visit ${dests[nextDayNum].name} - ${dests[nextDayNum].desc}`;
+    } else if (gems.length > nextDayNum - 2) {
+      morningTitle = `Discover Hidden Spot: ${gems[nextDayNum - 2]}`;
+    }
+    stops.push({ id: `stop-${Date.now()}-1`, time: '09:30 AM', duration: '3 hrs', title: morningTitle });
+
+    // Stop 2: Lunch
+    let lunchTitle = `Lunch: Taste local street food delicacies`;
+    const foodIdx = nextDayNum % (foods.length || 1);
+    if (foods.length > foodIdx) {
+      lunchTitle = `Lunch: Try ${foods[foodIdx].name} (${foods[foodIdx].desc})`;
+    }
+    stops.push({ id: `stop-${Date.now()}-2`, time: '01:30 PM', duration: '1.5 hrs', title: lunchTitle });
+
+    // Stop 3: Evening
+    let eveningTitle = `Relax at local cafes & shopping bazaars`;
+    const actIdx = nextDayNum % (acts.length || 1);
+    if (acts.length > actIdx) {
+      eveningTitle = `Activity: ${acts[actIdx].name} (Duration: ${acts[actIdx].duration})`;
+    } else if (gems.length > nextDayNum) {
+      eveningTitle = `Visit secret spot: ${gems[nextDayNum]}`;
+    }
+    stops.push({ id: `stop-${Date.now()}-3`, time: '04:00 PM', duration: '2 hrs', title: eveningTitle });
+
     setDays([...days, {
       dayNumber: nextDayNum,
-      title: `Day ${nextDayNum}: Sightseeing & Scenic Exploration`,
-      stops: [
-        { id: `stop-${Date.now()}-1`, time: '10:00 AM', duration: '2.5 hrs', title: 'Morning Scenic Landmark Visit' },
-        { id: `stop-${Date.now()}-2`, time: '02:30 PM', duration: '2 hrs', title: 'Local Cuisine Lunch & Market Stroll' }
-      ]
+      title: `Day ${nextDayNum}: Local Culture & Hidden Treasures`,
+      stops
     }]);
   };
 
@@ -64,8 +123,11 @@ export default function ItineraryPage() {
   };
 
   return (
-    <div className="min-h-screen pt-44 sm:pt-48 lg:pt-52 pb-32 text-white relative z-10 animate-fade-in">
+    <div className="min-h-screen pb-32 text-white relative z-10 animate-fade-in">
       
+      {/* Bulletproof Top Spacer to prevent header text cut-off */}
+      <div className="h-28 sm:h-32"></div>
+
       {/* Full Viewport Screen Background Photo */}
       <img 
         src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&q=80" 
@@ -75,7 +137,7 @@ export default function ItineraryPage() {
 
       <div className="w-full max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 space-y-8 relative z-10">
         
-        {/* Header Hero Banner (Spacious Top Clearance to prevent text cut-off) */}
+        {/* Header Hero Banner */}
         <div className="bg-slate-900/90 backdrop-blur-2xl rounded-3xl p-6 sm:p-10 border border-slate-700/80 shadow-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mt-4 sm:mt-6">
           <div className="space-y-3">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/30 text-xs font-bold uppercase tracking-wider">

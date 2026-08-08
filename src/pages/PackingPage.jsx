@@ -76,7 +76,10 @@ export default function PackingPage() {
   const categoriesList = ['Essentials', 'Clothing', 'Toiletries', 'Electronics', 'First Aid'];
 
   return (
-    <div className="min-h-screen pt-44 sm:pt-48 lg:pt-52 pb-32 text-white relative z-10 animate-fade-in">
+    <div className="min-h-screen pb-32 text-white relative z-10 animate-fade-in">
+      
+      {/* Bulletproof Top Spacer to prevent header text cut-off */}
+      <div className="h-28 sm:h-32"></div>
       
       {/* Full Viewport Screen Background Photo */}
       <img 
