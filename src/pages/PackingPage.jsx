@@ -76,26 +76,25 @@ export default function PackingPage() {
   const categoriesList = ['Essentials', 'Clothing', 'Toiletries', 'Electronics', 'First Aid'];
 
   return (
-    <div className="min-h-screen pt-28 pb-32 text-white relative z-10 animate-fade-in">
+    <div className="min-h-screen pt-44 sm:pt-48 lg:pt-52 pb-32 text-white relative z-10 animate-fade-in">
       
-      {/* Pic 5 Fix: Full Viewport Screen Background Photo */}
+      {/* Full Viewport Screen Background Photo */}
       <img 
         src="https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?auto=format&fit=crop&w=1600&q=80" 
         alt="Full Screen Mountain Hiker Background" 
         className="fixed inset-0 w-full h-full object-cover filter brightness-[0.22] pointer-events-none z-0" 
       />
 
-      {/* Pic 5 Fix: Full Viewport Screen Width Container */}
       <div className="w-full max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 space-y-8 relative z-10">
         
-        {/* Header Card */}
-        <div className="bg-slate-900/90 backdrop-blur-2xl rounded-3xl p-6 sm:p-10 border border-slate-700/80 shadow-2xl space-y-4">
+        {/* Header Card (Spacious Top Clearance to prevent text cut-off) */}
+        <div className="bg-slate-900/90 backdrop-blur-2xl rounded-3xl p-6 sm:p-10 border border-slate-700/80 shadow-2xl space-y-4 mt-4 sm:mt-6">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/30 text-xs font-bold uppercase tracking-wider">
             <FiCheckSquare />
-            <span>AI Destination Packing Assistant</span>
+            <span>AI DESTINATION PACKING ASSISTANT</span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-heading font-extrabold text-white leading-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-extrabold text-white leading-normal tracking-tight">
             Smart Packing Assistant
           </h1>
 

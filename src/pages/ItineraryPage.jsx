@@ -64,26 +64,25 @@ export default function ItineraryPage() {
   };
 
   return (
-    <div className="min-h-screen pt-32 sm:pt-36 pb-32 text-white relative z-10 animate-fade-in">
+    <div className="min-h-screen pt-44 sm:pt-48 lg:pt-52 pb-32 text-white relative z-10 animate-fade-in">
       
-      {/* Pic 2 Fix: Full Viewport Screen Background Photo */}
+      {/* Full Viewport Screen Background Photo */}
       <img 
         src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&q=80" 
         alt="Mountain Valley Background" 
         className="fixed inset-0 w-full h-full object-cover filter brightness-[0.22] pointer-events-none z-0" 
       />
 
-      {/* Pic 2 Fix: Full Viewport Screen Width Container & Zero Navbar Overlap Top Padding */}
       <div className="w-full max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 space-y-8 relative z-10">
         
-        {/* Header Hero Banner (Fixed Top Padding Alignment) */}
-        <div className="bg-slate-900/90 backdrop-blur-2xl rounded-3xl p-6 sm:p-10 border border-slate-700/80 shadow-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-          <div className="space-y-2">
+        {/* Header Hero Banner (Spacious Top Clearance to prevent text cut-off) */}
+        <div className="bg-slate-900/90 backdrop-blur-2xl rounded-3xl p-6 sm:p-10 border border-slate-700/80 shadow-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mt-4 sm:mt-6">
+          <div className="space-y-3">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/30 text-xs font-bold uppercase tracking-wider">
               <span>🗺️ GOOGLE TRAVEL STYLE AI ITINERARY</span>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-heading font-extrabold text-white tracking-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-extrabold text-white tracking-tight leading-normal">
               DISCOVERING THE WORLD
             </h1>
 

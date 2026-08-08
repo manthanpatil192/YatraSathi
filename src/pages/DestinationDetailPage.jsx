@@ -25,7 +25,7 @@ export default function DestinationDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen pt-28 pb-32 flex flex-col items-center justify-center text-white">
+      <div className="min-h-screen pt-44 sm:pt-48 pb-32 flex flex-col items-center justify-center text-white">
         <div className="w-12 h-12 border-4 border-slate-700 border-t-amber-400 rounded-full animate-spin mb-4"></div>
         <p className="font-extrabold text-amber-300 animate-pulse">Loading destination details...</p>
       </div>
@@ -34,7 +34,7 @@ export default function DestinationDetailPage() {
 
   if (!destination) {
     return (
-      <div className="min-h-screen pt-28 pb-32 flex flex-col items-center justify-center text-white text-center px-4">
+      <div className="min-h-screen pt-44 sm:pt-48 pb-32 flex flex-col items-center justify-center text-white text-center px-4">
         <h2 className="text-2xl font-heading font-extrabold mb-4">Destination Not Found</h2>
         <button onClick={() => navigate('/explore')} className="px-6 py-3 bg-ocean-600 rounded-2xl font-bold text-xs">
           Return to Explore
@@ -47,7 +47,7 @@ export default function DestinationDetailPage() {
   const photoUrl = destination.photo || destination.image || 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=1200&q=80';
 
   return (
-    <div className="min-h-screen pt-24 pb-32 text-white relative z-10 animate-fade-in">
+    <div className="min-h-screen pt-44 sm:pt-48 lg:pt-52 pb-32 text-white relative z-10 animate-fade-in">
       
       {/* Full Viewport Background Photo */}
       <img 
@@ -58,10 +58,10 @@ export default function DestinationDetailPage() {
 
       <div className="w-full max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 space-y-8 relative z-10">
         
-        {/* Destination Hero Banner */}
-        <div className="bg-slate-900/90 backdrop-blur-2xl rounded-3xl p-6 sm:p-10 border border-slate-700/80 shadow-2xl space-y-6">
+        {/* Destination Hero Banner (Fixed Spacious Top Clearance for zero navbar text cut-off) */}
+        <div className="bg-slate-900/90 backdrop-blur-2xl rounded-3xl p-6 sm:p-10 border border-slate-700/80 shadow-2xl space-y-6 mt-4 sm:mt-6">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 border-b border-slate-800 pb-6">
-            <div className="space-y-2">
+            <div className="space-y-3">
               <div className="flex items-center gap-2">
                 <span className="px-3 py-1 bg-amber-400 text-slate-950 text-xs font-black rounded-full uppercase tracking-wider">
                   {destination.category}
@@ -71,7 +71,8 @@ export default function DestinationDetailPage() {
                 </span>
               </div>
 
-              <h1 className="text-4xl sm:text-5xl font-heading font-black text-white leading-tight">
+              {/* Title with generous leading and zero cut-off */}
+              <h1 className="text-4xl sm:text-5xl md:text-6xl font-heading font-black text-white leading-normal tracking-tight">
                 {destination.name}
               </h1>
 
@@ -90,7 +91,7 @@ export default function DestinationDetailPage() {
             </button>
           </div>
 
-          {/* Pic 1 Fix: 100% Solid High-Contrast Stats Box (No white-on-white transparency) */}
+          {/* Stats Overview */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-2">
             
             <div className="p-4 bg-slate-950 rounded-2xl border border-slate-800 space-y-1">
@@ -125,10 +126,9 @@ export default function DestinationDetailPage() {
           <AudioGuide text={destination.audioGuideText} title={`${destination.name} 1.5-Min Audio Narration`} />
         </div>
 
-        {/* Pic 2 Fix: Solid High Contrast Tabs & 500-1000 Word Content */}
+        {/* High-Contrast Tab Navigation & Content Expansion */}
         <div className="bg-slate-900/90 backdrop-blur-2xl rounded-3xl p-6 sm:p-8 border border-slate-700/80 shadow-2xl space-y-6">
           
-          {/* Tab Navigation Buttons */}
           <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide border-b border-slate-800 pb-4">
             {[
               { id: 'overview', label: '📌 Overview & Attractions' },
@@ -170,7 +170,7 @@ export default function DestinationDetailPage() {
             </div>
           )}
 
-          {/* Tab 2: Full History (Pic 2 500-1000 Word Requirement) */}
+          {/* Tab 2: Full History */}
           {activeTab === 'history' && (
             <div className="space-y-4 text-slate-200 text-sm leading-relaxed">
               <h3 className="font-heading font-extrabold text-xl text-amber-300">Historical Origin & Heritage Legacy</h3>
@@ -182,17 +182,17 @@ export default function DestinationDetailPage() {
           {activeTab === 'food' && (
             <div className="space-y-6">
               <div className="space-y-2">
-                <h3 className="font-heading font-extrabold text-xl text-amber-300">Cultural Identity</h3>
+                <h3 className="font-heading font-extrabold text-xl text-amber-300">Cultural Identity & Traditions</h3>
                 <p className="text-sm text-slate-200 leading-relaxed font-medium">{destination.culturalInfo}</p>
               </div>
 
               <div className="space-y-3">
-                <h3 className="font-heading font-extrabold text-lg text-white">Famous Culinary Specialties</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <h3 className="font-heading font-extrabold text-lg text-white">Famous Regional Culinary Specialties</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {destination.foodSpecialties?.map((food, idx) => (
                     <div key={idx} className="p-4 bg-slate-950 rounded-2xl border border-slate-800 space-y-1">
                       <h4 className="font-extrabold text-teal-300 text-sm">🍲 {food.name}</h4>
-                      <p className="text-xs text-slate-300">{food.desc}</p>
+                      <p className="text-xs text-slate-300 leading-relaxed">{food.desc}</p>
                     </div>
                   ))}
                 </div>
@@ -203,34 +203,36 @@ export default function DestinationDetailPage() {
           {/* Tab 4: How to Reach */}
           {activeTab === 'reach' && (
             <div className="space-y-4 text-slate-200 text-sm leading-relaxed">
-              <h3 className="font-heading font-extrabold text-xl text-amber-300">Transportation & Transit Routes</h3>
-              <p className="whitespace-pre-line leading-relaxed font-medium">{destination.howToReachDetails || destination.gettingThere}</p>
+              <h3 className="font-heading font-extrabold text-xl text-amber-300">Transportation & Step-by-Step Transit Guide</h3>
+              <div className="p-5 bg-slate-950 rounded-2xl border border-slate-800 font-mono text-xs whitespace-pre-line leading-relaxed text-slate-200">
+                {destination.howToReachDetails || destination.gettingThere}
+              </div>
             </div>
           )}
 
-          {/* Tab 5: Offbeat & Safety */}
+          {/* Tab 5: Offbeat Spots & Safety */}
           {activeTab === 'offbeat' && (
             <div className="space-y-6">
               <div className="space-y-3">
-                <h3 className="font-heading font-extrabold text-lg text-white">Hidden Local Gems</h3>
-                <div className="flex flex-wrap gap-2">
+                <h3 className="font-heading font-extrabold text-lg text-amber-300">Hidden Secret Offbeat Spots</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {destination.hiddenGems?.map((gem, idx) => (
-                    <span key={idx} className="px-3.5 py-1.5 bg-slate-950 border border-slate-800 text-amber-300 rounded-full text-xs font-extrabold">
-                      💎 {gem}
-                    </span>
+                    <div key={idx} className="p-3.5 bg-slate-950 border border-slate-800 rounded-2xl text-xs font-extrabold text-amber-200 flex items-center gap-2">
+                      <span>💎</span> {gem}
+                    </div>
                   ))}
                 </div>
               </div>
 
               <div className="space-y-3">
-                <h3 className="font-heading font-extrabold text-lg text-white">Safety Tips & Advisory</h3>
-                <ul className="space-y-2 text-xs font-medium text-slate-300">
+                <h3 className="font-heading font-extrabold text-lg text-white">Tourist Safety Rules & Advisory</h3>
+                <div className="space-y-2">
                   {destination.safetyTips?.map((tip, idx) => (
-                    <li key={idx} className="p-3 bg-slate-950 rounded-xl border border-slate-800 flex items-center gap-2">
+                    <div key={idx} className="p-3.5 bg-slate-950 rounded-xl border border-slate-800 flex items-center gap-2.5 text-xs text-slate-300 font-medium">
                       <span className="text-emerald-400">🛡️</span> {tip}
-                    </li>
+                    </div>
                   ))}
-                </ul>
+                </div>
               </div>
             </div>
           )}

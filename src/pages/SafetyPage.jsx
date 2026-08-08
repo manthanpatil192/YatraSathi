@@ -11,7 +11,6 @@ export default function SafetyPage() {
 
   const selectedCity = destinations.find(d => String(d.id) === String(selectedCityId)) || destinations[0];
 
-  // Complete Live Crowd & Weather Radar Data for ALL 20 Active Destinations
   const crowdRadarData = {
     d1: { level: 'Moderate', density: '62%', status: '🟡 Moderate Footfall', peakTime: '05:00 PM - 09:00 PM', weather: '28°C Sunny', humidity: '68%', wind: '14 km/h' },
     d2: { level: 'High', density: '85%', status: '🔴 High Tourist Rush', peakTime: '11:00 AM - 04:00 PM', weather: '16°C Clear Mist', humidity: '45%', wind: '10 km/h' },
@@ -46,7 +45,7 @@ export default function SafetyPage() {
   };
 
   return (
-    <div className="min-h-screen pt-24 pb-32 text-white relative z-10 animate-fade-in">
+    <div className="min-h-screen pt-44 sm:pt-48 lg:pt-52 pb-32 text-white relative z-10 animate-fade-in">
       
       {/* Full Viewport Screen Background Photo */}
       <img 
@@ -57,16 +56,16 @@ export default function SafetyPage() {
 
       <div className="w-full max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 space-y-8 relative z-10">
         
-        {/* Safety Header */}
-        <div className="bg-slate-900/90 backdrop-blur-2xl rounded-3xl p-6 sm:p-8 border border-slate-700/80 shadow-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-          <div className="space-y-2">
+        {/* Safety Header (Spacious Top Clearance to prevent text cut-off) */}
+        <div className="bg-slate-900/90 backdrop-blur-2xl rounded-3xl p-6 sm:p-10 border border-slate-700/80 shadow-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mt-4 sm:mt-6">
+          <div className="space-y-3">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30 text-xs font-bold uppercase tracking-wider">
               <span>🛡️ 24/7 TOURIST SAFETY RADAR</span>
             </div>
-            <h1 className="text-3xl sm:text-4xl font-heading font-extrabold text-white">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-extrabold text-white leading-normal tracking-tight">
               Emergency SOS & Live Crowd Radar
             </h1>
-            <p className="text-slate-300 text-xs sm:text-sm font-medium max-w-2xl">
+            <p className="text-slate-300 text-xs sm:text-sm font-medium max-w-2xl leading-relaxed">
               Access instant GPS SOS broadcasting, live real-time crowd density meters, weather status, and national helplines across all 20 cities.
             </p>
           </div>
@@ -103,7 +102,7 @@ export default function SafetyPage() {
 
         </div>
 
-        {/* Pic 4 Fix: Live Crowd & Weather Radar Active for ALL 20 Cities */}
+        {/* Live Crowd & Weather Radar */}
         <div className="bg-slate-900/90 backdrop-blur-xl p-6 sm:p-8 rounded-3xl border border-slate-700/80 shadow-xl space-y-6">
           
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">

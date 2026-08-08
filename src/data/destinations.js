@@ -1,4 +1,4 @@
-// Comprehensive All-India Destinations Dataset (20 Cities, 500-1000 words each, 1.5-min Audio Guides)
+// Comprehensive All-India Destinations Dataset (20 Cities, Massive Google Travel Content Expansion)
 export const destinations = [
   // 1. Goa (Beaches)
   {
@@ -6,7 +6,7 @@ export const destinations = [
     name: 'Goa',
     state: 'Goa',
     region: 'West',
-    description: 'A coastal paradise known for its pristine beaches, vibrant nightlife, Portuguese heritage churches, spice plantations, and serene backwaters.',
+    description: 'A tropical coastal paradise known for golden beaches, Portuguese colonial cathedrals, palm-fringed backwaters, vibrant night markets, spice farms, and seafood culinary heritage.',
     image: '/images/destinations/goa.svg',
     photo: 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=1200&q=80',
     category: 'Beaches',
@@ -17,7 +17,7 @@ export const destinations = [
     safetyRating: 'Very Safe',
     coordinates: { lat: 15.2993, lng: 74.1240 },
 
-    audioGuideText: `Welcome to Goa, India’s coastal crown jewel along the Arabian Sea. As you step onto Goa's golden sands, feel the warm tropical sea breeze and hear the rhythmic crash of gentle ocean waves. Goa’s recorded history stretches back over two millennia, flourishing under Mauryan rule, Kadamba kings, and centuries of Portuguese colonial rule starting from Afonso de Albuquerque’s conquest in 1510. For 451 years, Goa served as the capital of the Portuguese empire in the East, creating a unique synthesis of Indian and Iberian cultures seen nowhere else in Asia. Walk through Old Goa to marvel at UNESCO World Heritage monuments like the Basilica of Bom Jesus, holding the sacred relics of Saint Francis Xavier, and the soaring Se Cathedral with its famous Golden Bell. Beyond history, Goa is a sanctuary of natural beauty—from the palm-fringed coastlines of Baga, Calangute, and Anjuna to the cascading milky-white waters of Dudhsagar Waterfalls standing 310 meters high amidst the lush Western Ghats. Savor authentic Goan fish curry cooked with freshly ground coconut and fiery red chillies, paired with local Cashew Feni. Enjoy your journey through this enchanting land of sun, sea, and eternal tropical harmony.`,
+    audioGuideText: `Welcome to Goa, India’s coastal crown jewel along the Arabian Sea. Feel the warm tropical breeze and hear the rhythmic crash of gentle ocean waves. Goa’s recorded history stretches back over two millennia, flourishing under Mauryan rule, Kadamba kings, and 451 years of Portuguese colonial rule starting from Afonso de Albuquerque’s conquest in 1510. Walk through Old Goa to marvel at UNESCO World Heritage monuments like the Basilica of Bom Jesus, holding the sacred relics of Saint Francis Xavier, and the soaring Se Cathedral with its famous Golden Bell. Beyond history, Goa is a sanctuary of natural beauty—from the palm-fringed coastlines of Baga, Calangute, and Anjuna to the cascading milky-white waters of Dudhsagar Waterfalls standing 310 meters high amidst the lush Western Ghats. Savor authentic Goan fish curry cooked with freshly ground coconut and fiery red chillies, paired with local Cashew Feni. Enjoy your journey through this enchanting land of sun, sea, and eternal tropical harmony.`,
 
     fullHistory: `Goa's documented history dates back to the 3rd century BC under the Mauryan Empire, followed by the Shatavahanas, Bhojas, and the flourishing Kadamba dynasty who established Goa Gapakapattana as an international trading port. In 1510, Afonso de Albuquerque defeated the Bijapur Sultanate and established Portuguese India. For 451 years, Goa was governed from Lisbon, introducing Mannerist and Baroque church architecture, Latin Christian traditions, and European trade networks. On December 19, 1961, Operation Vijay by the Indian Armed Forces liberated Goa, incorporating it into the Indian Union. Today, Goa preserves its dual Indo-Portuguese heritage through protected archaeological monuments, Latin Quarter neighborhoods like Fontainhas, and ancestral mansions.`,
 
@@ -27,20 +27,36 @@ export const destinations = [
       { name: 'Goan Fish Curry Rice', desc: 'Tangy coconut and raw mango kingfish curry served with hot local red unpolished rice.' },
       { name: 'Pork Vindaloo', desc: 'Heritage Goan-Portuguese dish marinating pork in palm vinegar, garlic, and fiery Kashmiri chillies.' },
       { name: 'Chicken Xacuti', desc: 'Rich chicken gravy prepared with complex roasted spices, white poppy seeds, and grated coconut.' },
-      { name: 'Bebinca', desc: 'Traditional 7-layer baked Goan dessert made from fresh coconut milk, ghee, sugar, and egg yolks.' }
+      { name: 'Bebinca', desc: 'Traditional 7-layer baked Goan dessert made from fresh coconut milk, ghee, sugar, and egg yolks.' },
+      { name: 'Prawn Balchão', desc: 'Fiery & tangy prawn pickle dish served with warm local Poi bread.' },
+      { name: 'Goan Feni & Sol Kadi', desc: 'Distilled cashew liquor paired with digestive pink kokum-coconut drink.' }
     ],
 
-    howToReachDetails: `• By Air: Manohar International Airport at Mopa (GOX) & Dabolim Airport (GOI) with direct flights from all major Indian metro cities.\n• By Rail: Madgaon Junction (MAO) and Thivim (THVM) served by Konkan Railway and Vande Bharat Express.\n• By Road: Connected via NH-66 from Mumbai (580 km) and Bengaluru (560 km) with luxury Volvo bus services.`,
+    howToReachDetails: `✈️ BY AIR:\n• Manohar International Airport at Mopa (GOX) & Dabolim Airport (GOI) connected with direct daily flights from Delhi, Mumbai, Bengaluru, and Hyderabad.\n\n🚆 BY RAILWAY:\n• Madgaon Junction (MAO) and Thivim (THVM) served by Konkan Railway network. Vande Bharat Express runs daily from Mumbai (CSMT) taking just 7.5 hours.\n\n🚌 BY ROAD & HIGHWAY:\n• Connected via 4-lane NH-66 highway from Mumbai (580 km) and Pune (450 km). Luxury sleeper Volvo buses operate overnight from major metros.\n\n🚕 LOCAL TRANSIT:\n• Self-drive rental cars and yellow-plate scooters/bikes are available at airports & railway stations (₹400-800/day). Goa Miles app provides regulated taxi bookings.`,
 
     travelDestinationsInCity: [
-      { name: 'Basilica of Bom Jesus', desc: '16th-century UNESCO World Heritage Baroque church.' },
-      { name: 'Baga & Calangute Beaches', desc: 'Vibrant beach stretch famous for water sports and shacks.' },
-      { name: 'Dudhsagar Waterfalls', desc: 'Four-tiered white milky waterfall standing 310 meters tall.' },
-      { name: 'Fort Aguada', desc: '17th-century Portuguese lighthouse and fort overlooking Arabian Sea.' }
+      { name: 'Basilica of Bom Jesus', desc: '16th-century UNESCO World Heritage Baroque church holding St. Francis Xavier relics.' },
+      { name: 'Baga & Calangute Beaches', desc: 'Vibrant beach stretch famous for water sports, parasailing, and shacks.' },
+      { name: 'Dudhsagar Waterfalls', desc: 'Four-tiered white milky waterfall standing 310 meters tall inside Bhagwan Mahavir Sanctuary.' },
+      { name: 'Fort Aguada & Lighthouse', desc: '17th-century Portuguese lighthouse and fort overlooking the Arabian Sea.' }
     ],
 
-    hiddenGems: ['Kakolem Secret Cove', 'Chorao Island Bird Sanctuary', 'Netravali Bubble Lake'],
-    safetyTips: ['Do not swim during red flag warnings.', 'Rent yellow-plate two-wheelers from registered vendors.'],
+    hiddenGems: [
+      'Kakolem Secret Cove Beach (Tiger Beach)',
+      'Chorao Island Dr. Salim Ali Bird Sanctuary',
+      'Netravali Bubble Lake & Wildlife Sanctuary',
+      'Fontainhas Latin Quarter Walking Trail',
+      'Harvalem Rock-Cut Caves & Waterfall'
+    ],
+
+    safetyTips: [
+      'Strictly avoid entering sea waters during red flag warnings or monsoon months (June-Sept).',
+      'Always rent yellow-plate commercial two-wheelers with valid helmet and insurance.',
+      'Use official GoaMiles taxi app or negotiate fare before boarding local cabs.',
+      'Keep emergency helpline numbers saved: Tourist Helpline (1363) and Police (100).',
+      'Drink bottled water and purchase sunblock SPF 50+ for beach exposure.',
+      'Respect sacred decorum inside Catholic basilicas and Hindu temples.'
+    ],
 
     highlights: ['Baga Beach', 'Dudhsagar Waterfalls', 'Basilica of Bom Jesus', 'Fort Aguada'],
     activities: [
@@ -57,7 +73,7 @@ export const destinations = [
     name: 'Manali',
     state: 'Himachal Pradesh',
     region: 'North',
-    description: 'A high-altitude Himalayan resort town known as an adventure center and honeymoon destination surrounded by snow-capped peaks and pine forests.',
+    description: 'A high-altitude Himalayan resort town known as an adventure hub and honeymoon destination surrounded by snow-capped peaks, pine forests, and Beas river streams.',
     image: '/images/destinations/manali.svg',
     photo: 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=1200&q=80',
     category: 'Mountains',
@@ -68,27 +84,44 @@ export const destinations = [
     safetyRating: 'Safe',
     coordinates: { lat: 32.2396, lng: 77.1887 },
 
-    audioGuideText: `Welcome to Manali, the Valley of Gods nestled at 6,726 feet in the heart of the snow-capped Himachal Himalayas. Take a deep breath of the crisp, pine-scented mountain air as the majestic Beas River rushes beside you. Legend tells us that Manali derives its name from Sage Manu, the Hindu progenitor of humanity, who stepped off his celestial ark at this spot after the great deluge to recreate life. For centuries, Manali remained an isolated trading village along the ancient trade route to Ladakh and Tibet, until British officers established apple orchards here in the late 19th century. Walk inside the ancient cedar forest of Dhungri Van Vihar to behold Hadimba Devi Temple, a four-tiered wooden pagoda constructed in 1553 with intricate wood carvings of mythological beasts. Journey up to Solang Valley for exhilarating paragliding and snow sports, or drive through the marvel of engineering, the 9.02 km Atal Tunnel beneath Rohtang Pass, opening into the stark high-altitude desert of Lahaul. Taste authentic Himachali Dham cooked by Botis, and savor Siddu filled with spiced poppy paste. Manali invites you to experience eternal mountain tranquility and adventurous spirit.`,
+    audioGuideText: `Welcome to Manali, the Valley of Gods nestled at 6,726 feet in the heart of the Himachal Himalayas. Take a deep breath of crisp, pine-scented mountain air as the majestic Beas River rushes beside you. Legend tells us that Manali derives its name from Sage Manu, the progenitor of humanity, who stepped off his ark here after the great deluge. Walk inside the ancient deodar forest to behold Hadimba Devi Temple, a four-tiered wooden pagoda constructed in 1553. Solang Valley offers exhilarating paragliding and snow sports, while the 9.02 km Atal Tunnel opens into the high-altitude desert of Lahaul. Taste authentic Himachali Dham and Siddu dipped in pure ghee. Manali invites you to experience eternal mountain tranquility.`,
 
-    fullHistory: `Manali is steeped in ancient Indian mythology as the home of Sage Manu. Historically part of the Kullu Kingdom, the region was governed by local Thakurs and Ranas until integrated under King Jagat Singh of Kullu in 1660. During British colonial administration, Manali became popular as a summer retreat and agricultural center, famous for British-introduced English apple orchards. Post-independence, the construction of mountain roads connected Manali to Chandigarh and Delhi, turning it into India's premier mountain resort. The completion of the Atal Tunnel in 2020 revolutionized accessibility to Lahaul and Spiti Valley.`,
+    fullHistory: `Manali is steeped in ancient Indian mythology as the sacred abode of Sage Manu. Historically part of the Kullu Kingdom, the region was governed by local Thakurs until integrated under King Jagat Singh of Kullu in 1660. British administrators introduced English apple orchards in the late 19th century. Post-independence road connectivity transformed Manali into India's premier mountain gateway, elevated further by the engineering marvel of the Atal Tunnel in 2020.`,
 
-    culturalInfo: `Kullu Valley culture is famous for Kath-Kuni timber-and-stone earthquake-resistant architecture, handwoven Kullu shawls, and communal devta worship. The annual Kullu Dasara festival brings hundreds of village deities in grand palanquins. Local folk dances include Naati and Lalhar.`,
+    culturalInfo: `Kullu Valley culture is renowned for Kath-Kuni timber-and-stone earthquake-resistant architecture, handwoven Kullu shawls, and devta god palanquin processions during Kullu Dasara. Folk dances include Naati and Lalhar.`,
 
     foodSpecialties: [
-      { name: 'Himachali Dham', desc: 'Traditional festive feast cooked by Botis serving Madra, Sepu Badi, and Meetha Chawal.' },
-      { name: 'Siddu', desc: 'Steamed wheat flour bread stuffed with spiced poppy seed paste and dipped in pure ghee.' }
+      { name: 'Himachali Dham', desc: 'Festive vegetarian meal serving Rajma Madra, Sepu Badi, and Meetha Chawal.' },
+      { name: 'Siddu', desc: 'Steamed wheat flour dough stuffed with spiced poppy seed paste and dipped in hot ghee.' },
+      { name: 'Trout Fish Fry', desc: 'Fresh river trout marinated in local Himalayan herbs and shallow fried.' },
+      { name: 'Mittha', desc: 'Sweet rice dessert garnished with dry fruits and saffron.' },
+      { name: 'Babru', desc: 'Deep-fried stuffed flatbread served with black chickpea curry.' }
     ],
 
-    howToReachDetails: `• By Air: Bhuntar Airport (KUU, 50 km) with daily flights from Delhi and Chandigarh.\n• By Road: Overnight Volvo buses from Delhi Kashmiri Gate ISBT (530 km, 12 hours) via Chandigarh and Mandi.\n• By Rail: Broad gauge rail head at Chandigarh (310 km) or Ambala Cantt.`,
+    howToReachDetails: `✈️ BY AIR:\n• Bhuntar Airport (KUU, 50 km) receives daily flights from New Delhi and Chandigarh.\n\n🚆 BY RAILWAY:\n• Nearest broad gauge rail stations are Chandigarh Railway Station (310 km) and Ambala Cantt (340 km).\n\n🚌 BY ROAD & HIGHWAY:\n• NH-21 connects Manali to Delhi (530 km) and Chandigarh (280 km). Overnight luxury AC Volvo buses run daily from Delhi Kashmiri Gate ISBT (12-14 hours).\n\n🚕 LOCAL TRANSIT:\n• Local auto-rickshaws, taxis, and rental 4x4 vehicles operate from Mall Road auto stand.`,
 
     travelDestinationsInCity: [
-      { name: 'Solang Valley', desc: 'Adventure sports hub for paragliding, skiing, and quad biking.' },
+      { name: 'Solang Valley', desc: 'Adventure sports hub for paragliding, skiing, zorbing, and quad biking.' },
       { name: 'Rohtang Pass (13,058 ft)', desc: 'High mountain pass offering year-round snow landscapes.' },
-      { name: 'Hadimba Temple', desc: '16th-century wooden pagoda temple inside deodar forest.' }
+      { name: 'Hadimba Temple', desc: '16th-century wooden pagoda temple surrounded by cedar forest.' },
+      { name: 'Atal Tunnel (Lahaul Gateway)', desc: '9.02 km world longest highway tunnel above 10,000 feet.' }
     ],
 
-    hiddenGems: ['Sethan Igloo Village', 'Jogini Waterfall Trek'],
-    safetyTips: ['Check Rohtang Pass permit requirements online.', 'Wear thermals in winter.'],
+    hiddenGems: [
+      'Sethan Igloo Village & Snow Trek',
+      'Jogini Waterfall Trek from Vashisht',
+      'Naggar Castle & Roerich Art Gallery',
+      'Sissu Waterfall & Lahaul Valley',
+      'Hampta Pass Base Camp Trek'
+    ],
+
+    safetyTips: [
+      'Apply online Rohtang Pass permits 24 hours in advance at Himachal Tourism portal.',
+      'Wear warm thermal layers and waterproof gloves during winter snow sports.',
+      'Acclimate to mountain altitude; avoid heavy alcohol consumption on arrival day.',
+      'Check weather advisory during July-August heavy monsoon rainfall.',
+      'Drive carefully on mountain hairpin bends; use low gear during downhill descent.'
+    ],
 
     highlights: ['Rohtang Pass', 'Solang Valley', 'Hadimba Temple'],
     activities: [
@@ -99,13 +132,13 @@ export const destinations = [
     bestTimeToVisit: 'October to June'
   },
 
-  // 3. Jaipur (Plains / Heritage)
+  // 3. Jaipur (Heritage)
   {
     id: 'd3',
     name: 'Jaipur',
     state: 'Rajasthan',
     region: 'West',
-    description: 'The Pink City of India, known for its royal palaces, majestic hilltop forts, and rich Rajputana culture.',
+    description: 'The Pink City of India, known for royal Rajputana palaces, hilltop forts, bustling bazaars, and heritage gastronomy.',
     image: '/images/destinations/jaipur.svg',
     photo: 'https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=1200&q=80',
     category: 'Heritage',
@@ -116,44 +149,56 @@ export const destinations = [
     safetyRating: 'Moderate',
     coordinates: { lat: 26.9124, lng: 75.7873 },
 
-    audioGuideText: `Welcome to Jaipur, the legendary Pink City of Rajasthan. As you gaze upon Jaipur's terracotta pink avenues and soaring fort ramparts, prepare to step into the regal world of Rajput kings. Founded in 1727 by the visionary astronomer-king Maharaja Sawai Jai Singh II, Jaipur was India’s first planned city, engineered according to Shilpa Shastra grid architecture. In 1876, Maharaja Ram Singh ordered the entire city painted in warm terracotta pink to welcome the Prince of Wales, establishing Jaipur's iconic hue. Climb up to Amer Fort to admire the Sheesh Mahal, where thousands of mirror tiles catch a single candle flame to illuminate an entire royal hall. Look upon the honeycombed façade of Hawa Mahal, the Palace of Winds, built with 953 delicate latticed jharokha windows allowing royal women to observe city festivals unseen. Taste iconic Dal Baati Churma cooked in pure desi ghee and fiery Laal Maas made with Mathania chillies. Jaipur invites you to experience royal grandeur and timeless Rajasthani hospitality.`,
+    audioGuideText: `Welcome to Jaipur, the Pink City of Rajasthan. Founded in 1727 by Maharaja Sawai Jai Singh II, Jaipur was India’s first planned city engineered according to Vastu Shastra grid principles. In 1876, the entire city was painted in terracotta pink to welcome the Prince of Wales. Climb up to Amer Fort to admire the mirror-paneled Sheesh Mahal. Gaze upon Hawa Mahal, the Palace of Winds, constructed with 953 latticed windows allowing royal women to observe city street festivals unseen. Taste iconic Dal Baati Churma and fiery Laal Maas. Jaipur invites you to experience royal grandeur and timeless Rajasthani hospitality.`,
 
-    fullHistory: `Founded on November 18, 1727, by Maharaja Sawai Jai Singh II after shifting the Kachhwaha Rajput capital from Amer due to water scarcity and growing population. Architect Vidyadhar Bhattacharya designed the city into nine rectangular sectors. Jaipur served as a leading Princely State under British alliance and joined the Union of India in 1949, becoming the capital of Rajasthan. In 2019, UNESCO inscribed the walled city of Jaipur as a World Heritage Site.`,
+    fullHistory: `Founded on November 18, 1727, by Maharaja Sawai Jai Singh II after shifting the capital from Amer. Designed by architect Vidyadhar Bhattacharya into nine grid sectors. Jaipur joined the Indian Union in 1949 as the capital of Rajasthan and was declared a UNESCO World Heritage Site in 2019.`,
 
-    culturalInfo: `Rajput royalty, Ghoomar and Kalbelia folk dances, Block printing (Sanganeri & Bagru), Bandhani tie-dye silk, and Jaipur Blue Pottery. Major cultural festivals include the Jaipur Literature Festival and Elephant Festival during Holi.`,
+    culturalInfo: `Rajput royalty, Ghoomar & Kalbelia folk dance, Sanganeri block printing, Bandhani silk tie-dye, and Jaipur Blue Pottery craft.`,
 
     foodSpecialties: [
-      { name: 'Dal Baati Churma', desc: 'Crispy baked wheat balls served with 5-lentil dal and sweet wheat churma.' },
+      { name: 'Dal Baati Churma', desc: 'Hard baked wheat balls served with 5-lentil dal and sweet wheat churma.' },
       { name: 'Laal Maas', desc: 'Fiery Rajput mutton curry cooked with garlic and Mathania red chillies.' },
-      { name: 'Ghevar', desc: 'Disc-shaped sweet cake soaked in sugar syrup and topped with rabri and pistachios.' }
+      { name: 'Ghevar', desc: 'Disc-shaped honeycomb sweet cake soaked in syrup and rabri.' },
+      { name: 'Pyaaz Kachori', desc: 'Crispy fried pastry stuffed with spiced onion filling.' }
     ],
 
-    howToReachDetails: `• By Air: Jaipur International Airport (JAI) with direct domestic and international flights.\n• By Rail: Jaipur Junction (JP) connected by Vande Bharat Express and Shatabdi from Delhi.\n• By Road: Connected via NH-48 6-lane expressway from Delhi (260 km, 4.5 hours).`,
+    howToReachDetails: `✈️ BY AIR:\n• Jaipur International Airport (JAI, 12 km) operates daily domestic and direct international flights.\n\n🚆 BY RAILWAY:\n• Jaipur Junction (JP) connected by Vande Bharat Express and Shatabdi Express from New Delhi (4.5 hours).\n\n🚌 BY ROAD & HIGHWAY:\n• Connected via 6-lane NH-48 Expressway from Delhi (260 km, 4.5 hours) with regular RSRTC super deluxe buses.`,
 
     travelDestinationsInCity: [
       { name: 'Amer Fort', desc: 'Majestic hilltop fort with Sheesh Mahal mirror palace.' },
       { name: 'Hawa Mahal', desc: 'Palace of Winds with 953 honeycomb windows.' },
-      { name: 'City Palace', desc: 'Royal residence with Chandra Mahal museum.' }
+      { name: 'City Palace Jaipur', desc: 'Royal residence with Chandra Mahal museum.' },
+      { name: 'Jantar Mantar', desc: 'UNESCO astronomical observatory with world largest stone sundial.' }
     ],
 
-    hiddenGems: ['Panna Meena Stepwell', 'Galtaji Monkey Temple'],
-    safetyTips: ['Negotiate auto fares in advance.', 'Drink bottled water.'],
+    hiddenGems: [
+      'Panna Meena ka Kund Geometric Stepwell',
+      'Galtaji Temple (Monkey Temple & Holy Springs)',
+      'Nahargarh Fort Sunset View Point',
+      'Anokhi Museum of Hand Printing',
+      'Patrika Gate Cultural Mural Arch'
+    ],
+
+    safetyTips: [
+      'Negotiate e-rickshaw and auto fares before starting your trip.',
+      'Beware of unauthorized street guides outside Amer Fort and Hawa Mahal.',
+      'Drink bottled water and carry sun umbrellas during sunny afternoons.',
+      'Store valuables securely inside crowded Johari Bazaar markets.'
+    ],
 
     highlights: ['Amer Fort', 'Hawa Mahal', 'City Palace'],
-    activities: [
-      { name: 'Hot Air Balloon Ride over Amer Fort', duration: '2 hours', cost: 12000 }
-    ],
+    activities: [{ name: 'Hot Air Balloon Ride over Amer Fort', duration: '2 hours', cost: 12000 }],
     gettingThere: 'Fly into Jaipur Airport (JAI) or take Vande Bharat Express from New Delhi.',
     bestTimeToVisit: 'October to March'
   },
 
-  // 4. Munnar (Mountains)
+  // 4. Munnar (Nature)
   {
     id: 'd4',
     name: 'Munnar',
     state: 'Kerala',
     region: 'South',
-    description: 'A serene hill station famous for its endless expanse of tea plantations, mist-covered valleys, and rare Nilgiri Tahr mountain goats.',
+    description: 'A serene hill station famous for endless expanses of tea plantations, mist-covered shola valleys, and rare Nilgiri Tahr mountain goats.',
     image: '/images/destinations/munnar.svg',
     photo: 'https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=1200&q=80',
     category: 'Nature',
@@ -164,27 +209,38 @@ export const destinations = [
     safetyRating: 'Very Safe',
     coordinates: { lat: 10.0889, lng: 77.0595 },
 
-    audioGuideText: `Welcome to Munnar, the emerald tea garden capital of God’s Own Country. Situated at 5,200 feet at the confluence of three mountain streams—Mudrapuzha, Nallathanni, and Kundala—Munnar greets you with rolling hills draped in endless green carpets of tea bushes. During British rule in the late 19th century, British planters recognized Munnar's perfect high-altitude climate for tea cultivation, founding estates that thrive to this day. Explore Eravikulam National Park, sanctuary to the endangered Nilgiri Tahr mountain goat grazing on high shola grasslands beneath Anamudi Peak, South India’s highest summit. Munnar is also home to the legendary Neelakurinji flower, blooming once every 12 years to cover entire hillsides in vibrant violet-blue blossom. Taste warm Kerala Appam served with coconut milk stew, and sample freshly processed High Range black tea. Relax and let Munnar’s tranquil misty valleys refresh your spirit.`,
+    audioGuideText: `Welcome to Munnar, the emerald tea garden capital of God’s Own Country. Situated at 5,200 feet at the confluence of three mountain streams, Munnar greets you with rolling hills draped in green carpets of tea bushes. British planters established tea estates here in the late 19th century. Explore Eravikulam National Park to spot the endangered Nilgiri Tahr mountain goat below Anamudi Peak, South India’s highest summit. Munnar is also home to the Neelakurinji flower, blooming once every 12 years. Taste Kerala Appam with coconut stew, and savor freshly processed High Range black tea.`,
 
-    fullHistory: `Historically inhabited by tribal communities like the Muthuvans. In 1877, British officer John Daniel Munro leased land from the Rohini Thirunal Royal Family of Poonjar for tea and spice plantations. Kannan Devar Hills Produce Company was established in 1897, laying the foundation of Munnar's global tea export industry.`,
+    fullHistory: `Inhabited by indigenous Muthuvan tribes. In 1877, British officer John Daniel Munro leased High Range land from Poonjar Royal Dynasty to start tea plantations. Kannan Devar Hills Produce Company was established in 1897, founding Munnar tea industry.`,
 
-    culturalInfo: `Planters' heritage, Kathakali dance performances, Kalaripayattu martial arts demonstrations, and Ayurvedic wellness treatments.`,
+    culturalInfo: `Tea planter heritage, Kathakali dance art, Kalaripayattu martial arts, and Ayurvedic herbal wellness retreats.`,
 
     foodSpecialties: [
       { name: 'Kerala Appam & Stew', desc: 'Lacy rice pancakes served with aromatic coconut vegetable stew.' },
-      { name: 'Malabar Parotta & Beef/Mushroom Roast', desc: 'Flaky layered bread served with spicy roasted curry.' }
+      { name: 'Malabar Parotta & Mushroom Roast', desc: 'Flaky layered bread served with spicy roasted gravy.' },
+      { name: 'Ela Ada', desc: 'Steamed rice parcel stuffed with jaggery and grated coconut inside banana leaf.' }
     ],
 
-    howToReachDetails: `• By Air: Cochin International Airport (COK, 110 km).\n• By Road: Drive up Western Ghats via Aluva-Munnar Road.\n• By Rail: Ernakulam Junction (ERS, 120 km).`,
+    howToReachDetails: `✈️ BY AIR:\n• Cochin International Airport (COK, 110 km, 3.5 hours drive).\n\n🚆 BY RAILWAY:\n• Ernakulam Junction (ERS, 120 km) or Aluva Railway Station (110 km).\n\n🚌 BY ROAD & HIGHWAY:\n• Drive up Western Ghats via Aluva-Munnar Road (NH-85). Regular KSRTC buses run from Kochi and Madurai.`,
 
     travelDestinationsInCity: [
-      { name: 'Eravikulam National Park', desc: 'Home to rare Nilgiri Tahr mountain goats.' },
-      { name: 'Tea Museum', desc: 'Historic Tata tea processing museum.' },
-      { name: 'Mattupetty Dam', desc: 'Scenic lake with speed boating.' }
+      { name: 'Eravikulam National Park', desc: 'Sanctuary for rare Nilgiri Tahr goats and Anamudi Peak.' },
+      { name: 'Tata Tea Museum', desc: 'Historic tea processing museum showcasing heritage machinery.' },
+      { name: 'Mattupetty Dam & Lake', desc: 'Scenic lake offering speed boating and elephant sightings.' }
     ],
 
-    hiddenGems: ['Kolukkumalai Sunrise Point', 'Lockhart Gap'],
-    safetyTips: ['Drive slowly on foggy mountain bends.'],
+    hiddenGems: [
+      'Kolukkumalai Sunrise Point (World Highest Tea Estate)',
+      'Lockhart Gap Viewpoint & Valley',
+      'Meesapulimala Trekking Peak',
+      'Anayirankal Dam & Spice Gardens'
+    ],
+
+    safetyTips: [
+      'Drive carefully on foggy mountain bends during early morning hours.',
+      'Book Eravikulam safari entry tickets online to avoid long ticket counter queues.',
+      'Carry light rain jackets as mountain showers occur unannounced.'
+    ],
 
     highlights: ['Eravikulam National Park', 'Tea Museum', 'Mattupetty Dam'],
     activities: [{ name: 'Tea Estate Guided Walking Tour', duration: '2 hours', cost: 500 }],
@@ -192,13 +248,13 @@ export const destinations = [
     bestTimeToVisit: 'September to March'
   },
 
-  // 5. Udaipur (Plains / Heritage)
+  // 5. Udaipur (Heritage)
   {
     id: 'd6',
     name: 'Udaipur',
     state: 'Rajasthan',
     region: 'West',
-    description: 'The City of Lakes, celebrated for its fairy-tale palaces, tranquil lakes, and romantic Mewari royal grandeur.',
+    description: 'The City of Lakes, celebrated for fairy-tale marble palaces, tranquil lakes, and romantic Mewari royal heritage.',
     image: '/images/destinations/udaipur.svg',
     photo: 'https://images.unsplash.com/photo-1615836245337-f5b9b2303f10?auto=format&fit=crop&w=1200&q=80',
     category: 'Heritage',
@@ -209,26 +265,26 @@ export const destinations = [
     safetyRating: 'Safe',
     coordinates: { lat: 24.5854, lng: 73.7125 },
 
-    audioGuideText: `Welcome to Udaipur, the Venice of the East and capital of romantic Mewar. Gaze across the shimmering waters of Lake Pichola to see grand marble palaces floating like mirages. Founded in 1559 by Maharana Udai Singh II, Udaipur was built following the fall of Chittorgarh to Mughal forces. Surrounded by the protective Aravalli Range, Mewar kings created a series of interconnected artificial lakes. Wander through City Palace, built over 400 years with marble balconies, mirror work, and peacock mosaics. Take a sunset boat cruise to Jag Mandir island palace, where Prince Khurram sought refuge before becoming Emperor Shah Jahan. Udaipur offers an unforgettable royal escape.`,
+    audioGuideText: `Welcome to Udaipur, the Venice of the East and capital of Mewar. Gaze across Lake Pichola to see marble palaces floating like mirages. Founded in 1559 by Maharana Udai Singh II, Udaipur was built following the fall of Chittorgarh. Wander through City Palace, built over 400 years with marble balconies, mirror work, and peacock mosaics. Take a boat cruise to Jag Mandir island palace. Udaipur offers an unforgettable royal escape.`,
 
-    fullHistory: `Founded in 1559 by Maharana Udai Singh II as the capital of Mewar Kingdom. Unlike other Rajput states, Mewar maintained independence for centuries. In 1818, Udaipur signed a treaty with the British and joined Rajasthan state in 1949.`,
+    fullHistory: `Founded in 1559 by Maharana Udai Singh II as the capital of Mewar Kingdom. Maintained independence for centuries before signing a British treaty in 1818 and joining Rajasthan state in 1949.`,
 
-    culturalInfo: `Mewari miniature paintings, glass mosaic work, Bagore Ki Haveli folk dance, and Gangaur festival processions.`,
+    culturalInfo: `Mewari miniature paintings, glass mosaic work, Bagore Ki Haveli Dharohar folk dance, and Gangaur festival.`,
 
     foodSpecialties: [
-      { name: 'Mewari Thali', desc: 'Royal Rajasthani thali served with gatte ki sabzi and churma.' },
-      { name: 'Kachori with Kadhi', desc: 'Crispy fried lentil pastry served with tangy yogurt gravy.' }
+      { name: 'Mewari Royal Thali', desc: 'Royal meal serving Gatte ki Sabzi, Ker Sangri, and Bajra Roti.' },
+      { name: 'Kachori with Kadhi', desc: 'Crispy fried lentil pastry served with tangy spicy yogurt gravy.' }
     ],
 
-    howToReachDetails: `• By Air: Maharana Pratap Airport (UDR, 22 km).\n• By Rail: Udaipur City Railway Station connected to Delhi and Mumbai.`,
+    howToReachDetails: `✈️ BY AIR: Maharana Pratap Airport (UDR, 22 km).\n🚆 BY RAILWAY: Udaipur City Railway Station connected to Delhi and Mumbai.`,
 
     travelDestinationsInCity: [
       { name: 'City Palace Udaipur', desc: 'Vast palace complex overlooking Lake Pichola.' },
       { name: 'Lake Pichola', desc: 'Romantic lake with boat rides to Jag Mandir.' }
     ],
 
-    hiddenGems: ['Saheliyon Ki Bari', 'Sajjangarh Monsoon Palace'],
-    safetyTips: ['Book Lake Pichola sunset boat ride early.'],
+    hiddenGems: ['Saheliyon Ki Bari', 'Sajjangarh Monsoon Palace', 'Ambrai Ghat Sunset View'],
+    safetyTips: ['Pre-book sunset boat rides on Lake Pichola.'],
 
     highlights: ['City Palace', 'Lake Pichola', 'Jag Mandir'],
     activities: [{ name: 'Lake Pichola Sunset Boat Cruise', duration: '1 hour', cost: 500 }],
@@ -242,7 +298,7 @@ export const destinations = [
     name: 'Srinagar & Kashmir',
     state: 'Jammu & Kashmir',
     region: 'North',
-    description: 'The summer capital of J&K, famous for its romantic Shikara rides on Dal Lake, Mughal Gardens, and snow-topped mountain backdrop.',
+    description: 'Paradise on Earth, famous for Shikara rides on Dal Lake, Mughal terraced gardens, houseboats, and snow-capped Zabarwan mountains.',
     image: '/images/destinations/srinagar.svg',
     photo: 'https://images.unsplash.com/photo-1598091383021-15ddea10925d?auto=format&fit=crop&w=1200&q=80',
     category: 'Mountains',
@@ -253,9 +309,9 @@ export const destinations = [
     safetyRating: 'Safe',
     coordinates: { lat: 34.0837, lng: 74.7973 },
 
-    audioGuideText: `Welcome to Srinagar, the paradise on Earth. Glide across Dal Lake in a wooden Shikara boat as snow-capped Zabarwan peaks reflect in calm waters. Mughal Emperors built terraced gardens here like Shalimar Bagh and Nishat Bagh with fountains and chinar trees. Explore floating markets, stay on historic carved houseboats, and sip saffron Kahwa tea. Srinagar is a soul-stirring Himalayan dream.`,
+    audioGuideText: `Welcome to Srinagar, paradise on Earth. Glide across Dal Lake in a wooden Shikara boat as snow-capped Zabarwan peaks reflect in calm waters. Mughal Emperors built terraced gardens here like Shalimar Bagh and Nishat Bagh with fountains and chinar trees. Explore floating markets, stay on historic carved houseboats, and sip saffron Kahwa tea.`,
 
-    fullHistory: `Srinagar dates back to Emperor Ashoka in 3rd century BC. Ruled by Hindu kings, Sultan Sikandar, Mughal Emperors, Afghan Durranis, and Maharaja Gulab Singh before joining India in 1947.`,
+    fullHistory: `Dates back to Emperor Ashoka in 3rd century BC. Ruled by Hindu kings, Sultan Sikandar, Mughal Emperors, Afghan Durranis, and Maharaja Gulab Singh before joining India in 1947.`,
 
     culturalInfo: `Shikara boat culture, Pashmina shawl weaving, Walnut wood carving, and 36-course Wazwan royal feast.`,
 
@@ -264,14 +320,14 @@ export const destinations = [
       { name: 'Kahwa Tea', desc: 'Green tea brewed with saffron, almonds, and cardamom.' }
     ],
 
-    howToReachDetails: `• By Air: Srinagar Sheikh ul-Alam Airport (SXR).\n• By Road: NH-44 highway from Jammu via Chenani-Nashri Tunnel.`,
+    howToReachDetails: `✈️ BY AIR: Srinagar Sheikh ul-Alam Airport (SXR).\n🚆 BY ROAD: NH-44 highway from Jammu via Chenani-Nashri Tunnel.`,
 
     travelDestinationsInCity: [
       { name: 'Dal Lake', desc: 'Famous lake with floating houseboats & Shikaras.' },
       { name: 'Shalimar Bagh', desc: 'Mughal terraced garden built by Jahangir.' }
     ],
 
-    hiddenGems: ['Nigeen Lake', 'Pari Mahal Sunset View'],
+    hiddenGems: ['Nigeen Lake Quiet Haven', 'Pari Mahal Sunset View Point'],
     safetyTips: ['Confirm houseboats near Boulevard Road.'],
 
     highlights: ['Dal Lake', 'Shalimar Bagh', 'Nishat Bagh'],
@@ -280,13 +336,13 @@ export const destinations = [
     bestTimeToVisit: 'April to October'
   },
 
-  // 7. Agra (Plains / Heritage)
+  // 7. Agra (Heritage)
   {
     id: 'd14',
     name: 'Agra',
     state: 'Uttar Pradesh',
     region: 'North',
-    description: 'The historic Mughal capital home to the eternal monument of love — Taj Mahal, one of the Seven Wonders of the World.',
+    description: 'The historic Mughal imperial capital home to the eternal monument of love — Taj Mahal, one of the Seven Wonders of the World.',
     image: '/images/destinations/agra.svg',
     photo: 'https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=1200&q=80',
     category: 'Heritage',
@@ -308,7 +364,7 @@ export const destinations = [
       { name: 'Mughlai Biryani', desc: 'Aromatic basmati rice cooked with whole spices.' }
     ],
 
-    howToReachDetails: `• By Rail: Gatimaan Express from Delhi (100 mins).\n• By Road: Yamuna Expressway (2 hours drive from Delhi).`,
+    howToReachDetails: `✈️ BY RAIL: Gatimaan Express from Delhi (100 mins).\n🚗 BY ROAD: Yamuna Expressway (2 hours drive from Delhi).`,
 
     travelDestinationsInCity: [
       { name: 'Taj Mahal', desc: 'UNESCO Wonder of the World in white marble.' },
@@ -324,7 +380,7 @@ export const destinations = [
     bestTimeToVisit: 'October to March'
   },
 
-  // 8. Delhi (Plains)
+  // 8. Delhi (Heritage)
   {
     id: 'd15',
     name: 'Delhi',
@@ -352,7 +408,7 @@ export const destinations = [
       { name: 'Chandni Chowk Paranthas', desc: 'Stuffed fried flatbreads served with chutneys.' }
     ],
 
-    howToReachDetails: `• By Air: Indira Gandhi International Airport (DEL).\n• Metro: Delhi Metro network connecting all zones.`,
+    howToReachDetails: `✈️ BY AIR: Indira Gandhi International Airport (DEL).\n🚇 METRO: Delhi Metro network connecting all zones.`,
 
     travelDestinationsInCity: [
       { name: 'Red Fort', desc: 'Mughal sandstone fortress.' },
@@ -395,7 +451,7 @@ export const destinations = [
       { name: 'Chana Khatta', desc: 'Tangy Himachali black chickpea curry.' }
     ],
 
-    howToReachDetails: `• By Rail: UNESCO Kalka-Shimla Toy Train.\n• By Road: 3.5 hours drive from Chandigarh.`,
+    howToReachDetails: `🚆 BY RAIL: UNESCO Kalka-Shimla Toy Train.\n🚗 BY ROAD: 3.5 hours drive from Chandigarh.`,
 
     travelDestinationsInCity: [
       { name: 'The Ridge & Christ Church', desc: 'Promenade with Neo-Gothic church.' },
@@ -411,7 +467,7 @@ export const destinations = [
     bestTimeToVisit: 'October to June'
   },
 
-  // 10. Kolkata (Plains)
+  // 10. Kolkata (Heritage)
   {
     id: 'd17',
     name: 'Kolkata',
@@ -439,7 +495,7 @@ export const destinations = [
       { name: 'Rosogolla & Mishti Doi', desc: 'Spongy sweet balls & sweet baked yogurt.' }
     ],
 
-    howToReachDetails: `• By Air: Netaji Subhash Chandra Bose Airport (CCU).\n• By Rail: Howrah (HWH) & Sealdah (SDAH).`,
+    howToReachDetails: `✈️ BY AIR: Netaji Subhash Chandra Bose Airport (CCU).\n🚆 BY RAIL: Howrah (HWH) & Sealdah (SDAH).`,
 
     travelDestinationsInCity: [
       { name: 'Victoria Memorial', desc: 'Marble palace dedicated to Queen Victoria.' },
@@ -455,7 +511,7 @@ export const destinations = [
     bestTimeToVisit: 'October to March'
   },
 
-  // 11. Mysore (Plains / Heritage)
+  // 11. Mysore (Heritage)
   {
     id: 'd18',
     name: 'Mysore',
@@ -483,7 +539,7 @@ export const destinations = [
       { name: 'Mysore Masala Dosa', desc: 'Crispy crepe with garlic chilli chutney.' }
     ],
 
-    howToReachDetails: `• By Rail: Vande Bharat Express from Bengaluru (2 hours).\n• By Road: 10-lane Bengaluru-Mysuru Expressway.`,
+    howToReachDetails: `🚆 BY RAIL: Vande Bharat Express from Bengaluru (2 hours).\n🚗 BY ROAD: 10-lane Bengaluru-Mysuru Expressway.`,
 
     travelDestinationsInCity: [
       { name: 'Mysore Palace', desc: 'Royal residence illuminated by 100,000 bulbs.' },
@@ -499,7 +555,7 @@ export const destinations = [
     bestTimeToVisit: 'October to March'
   },
 
-  // 12. Madurai (Plains / Heritage)
+  // 12. Madurai (Heritage)
   {
     id: 'd22',
     name: 'Madurai',
@@ -526,7 +582,7 @@ export const destinations = [
       { name: 'Madurai Jigarthanda', desc: 'Cooling dessert drink with almond gum & basundi.' }
     ],
 
-    howToReachDetails: `• By Air: Madurai Airport (IXM).\n• By Rail: Madurai Junction (MDU) Vande Bharat.`,
+    howToReachDetails: `✈️ BY AIR: Madurai Airport (IXM).\n🚆 BY RAIL: Madurai Junction (MDU) Vande Bharat.`,
 
     travelDestinationsInCity: [
       { name: 'Meenakshi Amman Temple', desc: '14-towered Dravidian temple.' },
@@ -542,7 +598,7 @@ export const destinations = [
     bestTimeToVisit: 'October to March'
   },
 
-  // 13. Alleppey (Beaches / Backwaters)
+  // 13. Alleppey (Beaches)
   {
     id: 'd24',
     name: 'Alleppey (Alappuzha)',
@@ -569,7 +625,7 @@ export const destinations = [
       { name: 'Karimeen Pollichathu', desc: 'Pearl spot fish marinated & fried inside banana leaves.' }
     ],
 
-    howToReachDetails: `• By Air: Cochin Airport (COK, 75 km).\n• By Rail: Alappuzha Railway Station (ALLP).`,
+    howToReachDetails: `✈️ BY AIR: Cochin Airport (COK, 75 km).\n🚆 BY RAIL: Alappuzha Railway Station (ALLP).`,
 
     travelDestinationsInCity: [
       { name: 'Alleppey Backwaters', desc: 'Network of palm-fringed canals.' },
@@ -612,7 +668,7 @@ export const destinations = [
       { name: 'French Croissant & Quiche', desc: 'Authentic French bakeries serving pain au chocolat.' }
     ],
 
-    howToReachDetails: `• By Road: 3-hour drive along East Coast Road (ECR) from Chennai.`,
+    howToReachDetails: `🚗 BY ROAD: 3-hour drive along East Coast Road (ECR) from Chennai.`,
 
     travelDestinationsInCity: [
       { name: 'Promenade Beach', desc: 'Seaside walking boulevard.' },
@@ -628,7 +684,7 @@ export const destinations = [
     bestTimeToVisit: 'October to March'
   },
 
-  // 15. Mumbai (Plains)
+  // 15. Mumbai (Heritage)
   {
     id: 'd26',
     name: 'Mumbai',
@@ -655,7 +711,7 @@ export const destinations = [
       { name: 'Vada Pav & Pav Bhaji', desc: 'Iconic street food spicy potato patty in soft bread.' }
     ],
 
-    howToReachDetails: `• By Air: Chhatrapati Shivaji International Airport (BOM).\n• By Rail: CSMT & Mumbai Central.`,
+    howToReachDetails: `✈️ BY AIR: Chhatrapati Shivaji International Airport (BOM).\n🚆 BY RAIL: CSMT & Mumbai Central.`,
 
     travelDestinationsInCity: [
       { name: 'Gateway of India', desc: '1924 waterfront arch monument.' },
@@ -698,7 +754,7 @@ export const destinations = [
       { name: 'Assamese Thali', desc: 'Traditional rice meal served with Joha rice and Duck curry.' }
     ],
 
-    howToReachDetails: `• By Road: Drive along NH-37 from Guwahati (217 km, 4.5 hours).`,
+    howToReachDetails: `🚗 BY ROAD: Drive along NH-37 from Guwahati (217 km, 4.5 hours).`,
 
     travelDestinationsInCity: [
       { name: 'One-Horned Rhino Safari Zone', desc: 'Tall elephant grass wildlife sanctuary.' },
@@ -741,7 +797,7 @@ export const destinations = [
       { name: 'Coastal Fish Thali', desc: 'Fresh Arabian sea fish fried with spicy Byadgi chillies.' }
     ],
 
-    howToReachDetails: `• By Rail: Gokarna Road Station (GOK).\n• By Road: Drive from Goa along NH-66.`,
+    howToReachDetails: `🚆 BY RAIL: Gokarna Road Station (GOK).\n🚗 BY ROAD: Drive from Goa along NH-66.`,
 
     travelDestinationsInCity: [
       { name: 'Om Beach', desc: 'Natural beach shaped like holy Om symbol.' },
@@ -757,7 +813,7 @@ export const destinations = [
     bestTimeToVisit: 'October to March'
   },
 
-  // 18. Kanyakumari (Beaches / Coastal)
+  // 18. Kanyakumari (Beaches)
   {
     id: 'd31',
     name: 'Kanyakumari',
@@ -784,7 +840,7 @@ export const destinations = [
       { name: 'Kanyakumari Fish Curry', desc: 'Spicy Tamil coastal fish curry cooked with tamarind and coconut.' }
     ],
 
-    howToReachDetails: `• By Rail: Kanyakumari Station (CAPE).\n• By Air: Trivandrum Airport (TRV, 90 km).`,
+    howToReachDetails: `🚆 BY RAIL: Kanyakumari Station (CAPE).\n✈️ BY AIR: Trivandrum Airport (TRV, 90 km).`,
 
     travelDestinationsInCity: [
       { name: 'Vivekananda Rock Memorial', desc: 'Rock island memorial in middle of 3 oceans.' },
@@ -824,18 +880,19 @@ export const destinations = [
     culturalInfo: `Tibetan Buddhist monasteries, prayer flags, fossil villages, and Yak butter tea.`,
 
     foodSpecialties: [
-      { name: 'Spiti Butter Tea & Tsampa', desc: 'Salted yak butter tea served with roasted barley flour.' }
+      { name: 'Spiti Butter Tea & Tsampa', desc: 'Salted yak butter tea served with roasted barley flour.' },
+      { name: 'Momo Dumplings & Thukpa', desc: 'Steamed vegetable dumplings served with hot noodle broth.' }
     ],
 
-    howToReachDetails: `• By Road: Drive 4x4 SUV from Manali via Atal Tunnel & Kunzum Pass (June to September).`,
+    howToReachDetails: `🚗 BY ROAD: Drive 4x4 SUV from Manali via Atal Tunnel & Kunzum Pass (June to September) or Shimla-Kinnaur route year round.`,
 
     travelDestinationsInCity: [
       { name: 'Key Monastery', desc: '1,000-year-old fortress monastery on cliff.' },
       { name: 'Chandratal Lake', desc: 'Crescent-shaped high-altitude glacial lake.' }
     ],
 
-    hiddenGems: ['Langza Fossil Village', 'Komic Village'],
-    safetyTips: ['Travel in 4x4 vehicles with mountain drivers.'],
+    hiddenGems: ['Langza Fossil Village', 'Komic Village (World Highest Motorable Village)', 'Dhankar Lake Trek'],
+    safetyTips: ['Travel in 4x4 vehicles with mountain drivers.', 'Acclimate for high altitude.'],
 
     highlights: ['Key Monastery', 'Chandratal Lake', 'Hikkim Post Office'],
     activities: [{ name: 'Chandratal Lake High-Altitude Camping', duration: 'Overnight', cost: 2500 }],
@@ -870,7 +927,7 @@ export const destinations = [
       { name: 'Skyu & Thukpa', desc: 'Traditional Ladakhi noodle & vegetable stew.' }
     ],
 
-    howToReachDetails: `• By Air: Leh Kushok Bakula Rimpoche Airport (IXL).\n• By Road: Manali-Leh or Srinagar-Leh Highway in summer.`,
+    howToReachDetails: `✈️ BY AIR: Leh Kushok Bakula Rimpoche Airport (IXL).\n🚗 BY ROAD: Manali-Leh or Srinagar-Leh Highway in summer.`,
 
     travelDestinationsInCity: [
       { name: 'Pangong Tso Lake', desc: 'Endorheic salt lake changing colors from blue to emerald.' },
