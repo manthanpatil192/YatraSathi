@@ -8,7 +8,6 @@ export default function ExplorePage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [sortBy, setSortBy] = useState('rating');
-  const [viewMode, setViewMode] = useState('grid');
 
   const filteredDestinations = useMemo(() => {
     return destinations
@@ -28,7 +27,7 @@ export default function ExplorePage() {
   }, [searchTerm, selectedCategory, sortBy]);
 
   return (
-    <div className="min-h-screen pt-32 sm:pt-36 pb-32 text-white relative z-10 animate-fade-in">
+    <div className="min-h-screen pt-40 sm:pt-44 md:pt-48 pb-32 text-white relative z-10 animate-fade-in">
       
       {/* Full Viewport Screen Background Photo */}
       <img 
@@ -39,31 +38,31 @@ export default function ExplorePage() {
 
       <div className="w-full max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 space-y-8 relative z-10">
         
-        {/* Explore Hero Banner (Fixed Top Alignment for Zero Navbar Overlap) */}
-        <div className="bg-slate-900/90 backdrop-blur-2xl rounded-3xl p-6 sm:p-10 border border-slate-700/80 shadow-2xl space-y-6">
-          <div className="space-y-2">
+        {/* Explore Hero Banner (Spacious Top Clearance to prevent text cut-off) */}
+        <div className="bg-slate-900/90 backdrop-blur-2xl rounded-3xl p-6 sm:p-10 border border-slate-700/80 shadow-2xl space-y-6 mt-4 sm:mt-6">
+          <div className="space-y-3">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/30 text-xs font-bold uppercase tracking-wider">
               <span>🏰 ALL-INDIA EXPLORE HUB</span>
             </div>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-heading font-extrabold text-white tracking-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-black text-white tracking-tight leading-normal">
               EXPLORE THE BEAUTY OF INDIA
             </h1>
-            <p className="text-slate-300 text-xs sm:text-sm font-medium max-w-2xl">
+            <p className="text-slate-300 text-xs sm:text-sm font-medium max-w-2xl leading-relaxed">
               Browse 20 iconic destinations with real-time budget, safety ratings, 1.5-minute web audio guides, and travel highlights.
             </p>
           </div>
 
           {/* Category Quick Badges */}
-          <div className="grid grid-cols-3 gap-3 pt-2">
-            <div className="p-3 bg-slate-950 rounded-2xl border border-slate-800 text-center">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+            <div className="p-3.5 bg-slate-950 rounded-2xl border border-slate-800 text-center">
               <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider block">THE COASTAL</span>
               <span className="text-sm font-extrabold text-teal-300">Goa, Alleppey, Gokarna</span>
             </div>
-            <div className="p-3 bg-slate-950 rounded-2xl border border-slate-800 text-center">
+            <div className="p-3.5 bg-slate-950 rounded-2xl border border-slate-800 text-center">
               <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider block">THE HERITAGE</span>
               <span className="text-sm font-extrabold text-amber-300">Jaipur, Udaipur, Agra</span>
             </div>
-            <div className="p-3 bg-slate-950 rounded-2xl border border-slate-800 text-center">
+            <div className="p-3.5 bg-slate-950 rounded-2xl border border-slate-800 text-center">
               <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider block">THE MOUNTAIN</span>
               <span className="text-sm font-extrabold text-sky-300">Manali, Leh-Ladakh, Spiti</span>
             </div>

@@ -9,7 +9,7 @@ export default function RouteOptimizerPage() {
 
   const selectedDests = destinations.filter(d => selectedDestIds.includes(String(d.id)));
 
-  const totalDistance = 688; // Fixed unrounded integer distance
+  const totalDistance = 688;
   const totalCost = transportMode === 'flight' ? 8500 : transportMode === 'train' ? 2400 : 1800;
   const totalDuration = transportMode === 'flight' ? '2.5 hrs' : transportMode === 'train' ? '11 hrs' : '14 hrs';
 
@@ -29,7 +29,7 @@ export default function RouteOptimizerPage() {
   };
 
   return (
-    <div className="min-h-screen pt-32 sm:pt-36 pb-32 text-white relative z-10 animate-fade-in">
+    <div className="min-h-screen pt-40 sm:pt-44 md:pt-48 pb-32 text-white relative z-10 animate-fade-in">
       
       {/* Full Viewport Screen Background Photo */}
       <img 
@@ -40,19 +40,19 @@ export default function RouteOptimizerPage() {
 
       <div className="w-full max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 space-y-8 relative z-10">
         
-        {/* Header Hero Banner (Fixed Top Alignment) */}
-        <div className="bg-slate-900/90 backdrop-blur-2xl rounded-3xl p-6 sm:p-10 border border-slate-700/80 shadow-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-          <div className="space-y-2">
+        {/* Header Hero Banner (Spacious Top Clearance to prevent text cut-off) */}
+        <div className="bg-slate-900/90 backdrop-blur-2xl rounded-3xl p-6 sm:p-10 border border-slate-700/80 shadow-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mt-4 sm:mt-6">
+          <div className="space-y-3">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30 text-xs font-bold uppercase tracking-wider">
               <FiZap />
               <span>AI ROUTE & FARE OPTIMIZER</span>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-heading font-extrabold text-white">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-extrabold text-white leading-normal tracking-tight">
               Smart Transit & Fare Optimizer
             </h1>
 
-            <p className="text-slate-300 text-xs sm:text-sm font-medium max-w-2xl">
+            <p className="text-slate-300 text-xs sm:text-sm font-medium max-w-2xl leading-relaxed">
               Calculate optimal travel sequences, integer total distances, transport costs, and speed benchmarks across Indian cities.
             </p>
           </div>

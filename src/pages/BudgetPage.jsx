@@ -86,28 +86,28 @@ export default function BudgetPage() {
   };
 
   return (
-    <div className="min-h-screen pt-28 pb-32 text-white relative z-10 animate-fade-in">
+    <div className="min-h-screen pt-40 sm:pt-44 md:pt-48 pb-32 text-white relative z-10 animate-fade-in">
       
-      {/* Pic 3 Fix: Full Viewport Screen Background Photo */}
+      {/* Full Viewport Screen Background Photo */}
       <img 
         src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1600&q=80" 
         alt="Full Screen Lake Background" 
         className="fixed inset-0 w-full h-full object-cover filter brightness-[0.22] pointer-events-none z-0" 
       />
 
-      {/* Pic 3 Fix: Full Viewport Screen Width Container */}
+      {/* Full Viewport Screen Width Container */}
       <div className="w-full max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 space-y-8 relative z-10">
         
-        {/* Header Card */}
-        <div className="bg-slate-900/90 backdrop-blur-2xl rounded-3xl p-6 sm:p-10 border border-slate-700/80 shadow-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-          <div className="space-y-2">
+        {/* Header Card (Spacious Top Clearance to prevent text cut-off) */}
+        <div className="bg-slate-900/90 backdrop-blur-2xl rounded-3xl p-6 sm:p-10 border border-slate-700/80 shadow-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mt-4 sm:mt-6">
+          <div className="space-y-3">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-400/20 text-emerald-300 border border-emerald-400/30 text-xs font-bold uppercase tracking-wider">
               <span>🏆 AI FINANCIAL ENGINE</span>
             </div>
-            <h1 className="text-3xl sm:text-4xl font-heading font-extrabold text-white leading-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-heading font-extrabold text-white leading-normal">
               Trip Budget & Group Cost Planner
             </h1>
-            <p className="text-slate-200 text-xs sm:text-sm font-medium max-w-2xl">
+            <p className="text-slate-200 text-xs sm:text-sm font-medium max-w-2xl leading-relaxed">
               Calculate running trip expenses, split costs for group travelers, and optimize savings with AI tariff benchmarks.
             </p>
           </div>
