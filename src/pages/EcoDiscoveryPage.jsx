@@ -225,14 +225,19 @@ export default function EcoDiscoveryPage() {
           
           {/* INSTAGRAM REELS EMBED PLAYER (Left 6 Cols) */}
           <div className="lg:col-span-6 bg-slate-900/90 backdrop-blur-xl p-6 rounded-3xl border border-slate-700/80 shadow-xl space-y-4 flex flex-col justify-between">
-            <div className="flex justify-between items-center border-b border-slate-800 pb-3">
-              <h2 className="font-heading font-extrabold text-lg text-white flex items-center gap-2">
-                <FiInstagram className="text-rose-400" /> Travel Video Reels
-              </h2>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
+              <div>
+                <h2 className="font-heading font-extrabold text-xl text-white flex items-center gap-2">
+                  <span>💎</span> Hidden Gems & Community Reels
+                </h2>
+                <p className="text-xs text-slate-300 font-medium leading-snug mt-1 max-w-md">
+                  Anyone can upload their local photos & reels! Other travelers will see your shared hidden gems when exploring Goa or any destination across India.
+                </p>
+              </div>
               
               <button
                 onClick={() => setUploadModalOpen(true)}
-                className="px-3 py-1.5 bg-amber-400 hover:bg-amber-300 text-slate-950 rounded-xl font-bold text-xs flex items-center gap-1 shadow-md transition-colors"
+                className="px-4 py-2.5 bg-amber-400 hover:bg-amber-300 text-slate-950 rounded-2xl font-heading font-black text-xs flex items-center gap-1.5 shadow-lg transition-colors shrink-0"
               >
                 <FiUploadCloud /> Upload Reel (+150 Pts)
               </button>

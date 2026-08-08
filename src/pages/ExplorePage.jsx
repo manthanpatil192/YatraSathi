@@ -188,16 +188,16 @@ export default function ExplorePage() {
 
       </div>
 
-      {/* INDIA MAP MODAL OVERLAY */}
+      {/* INDIA & WORLD GOOGLE MAP MODAL OVERLAY */}
       {mapModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-md animate-fade-in">
-          <div className="bg-slate-900 border border-slate-700 p-6 sm:p-8 rounded-3xl max-w-5xl w-full space-y-6 max-h-[90vh] overflow-y-auto shadow-2xl relative">
+          <div className="bg-slate-900 border border-slate-700 p-6 sm:p-8 rounded-3xl max-w-5xl w-full space-y-6 max-h-[92vh] overflow-y-auto shadow-2xl relative">
             <div className="flex justify-between items-center border-b border-slate-800 pb-4">
               <div>
                 <h3 className="text-2xl font-heading font-black text-white flex items-center gap-2">
-                  <FiMap className="text-teal-400" /> All-India Destination Pin Map
+                  <FiMap className="text-teal-400" /> Interactive Google Map — India & World Explorer
                 </h3>
-                <p className="text-xs text-slate-300 font-medium">Click any city pin marker to view destination guide</p>
+                <p className="text-xs text-slate-300 font-medium">Explore live satellite map pins across India and the whole world</p>
               </div>
 
               <button
@@ -208,12 +208,29 @@ export default function ExplorePage() {
               </button>
             </div>
 
+            {/* Live Interactive Google Maps View container */}
+            <div className="w-full h-72 sm:h-96 rounded-2xl overflow-hidden border border-slate-700/80 shadow-2xl bg-slate-950 relative">
+              <iframe
+                title="Google Maps India & World View"
+                src={`https://maps.google.com/maps?q=${encodeURIComponent(selectedMapDest ? selectedMapDest.name + ', ' + selectedMapDest.state + ', India' : 'India')}&t=&z=6&ie=UTF8&iwloc=&output=embed`}
+                className="w-full h-full border-0 filter brightness-95 contrast-105"
+                allowFullScreen=""
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              ></iframe>
+
+              <div className="absolute top-3 left-3 bg-slate-950/90 backdrop-blur px-3 py-1.5 rounded-full text-xs font-extrabold text-amber-300 border border-amber-400/40 shadow-lg flex items-center gap-2">
+                <span>🗺️ Live Google Maps View:</span>
+                <span className="text-white font-black">{selectedMapDest ? `${selectedMapDest.name}, ${selectedMapDest.state}` : 'All India'}</span>
+              </div>
+            </div>
+
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
               
               {/* City Pins Grid */}
               <div className="lg:col-span-7 bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-4">
-                <span className="text-xs font-extrabold text-amber-300 block border-b border-slate-900 pb-2">📍 Select Destination Pin:</span>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 max-h-[380px] overflow-y-auto pr-1">
+                <span className="text-xs font-extrabold text-amber-300 block border-b border-slate-900 pb-2">📍 Select Destination to Center Google Map:</span>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 max-h-[260px] overflow-y-auto pr-1">
                   {filteredDestinations.map((dest) => (
                     <button
                       key={dest.id}
@@ -238,7 +255,7 @@ export default function ExplorePage() {
               <div className="lg:col-span-5 bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-4">
                 {selectedMapDest && (
                   <>
-                    <div className="h-40 relative rounded-xl overflow-hidden bg-slate-900">
+                    <div className="h-32 relative rounded-xl overflow-hidden bg-slate-900">
                       <img
                         src={selectedMapDest.photo || selectedMapDest.image}
                         alt={selectedMapDest.name}
@@ -252,7 +269,7 @@ export default function ExplorePage() {
                     <div className="space-y-1">
                       <h4 className="text-xl font-heading font-black text-white">{selectedMapDest.name}</h4>
                       <p className="text-xs text-coral-400 font-bold">📍 {selectedMapDest.state}, India</p>
-                      <p className="text-xs text-slate-300 line-clamp-3">{selectedMapDest.description}</p>
+                      <p className="text-xs text-slate-300 line-clamp-2">{selectedMapDest.description}</p>
                     </div>
 
                     <button
