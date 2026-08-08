@@ -64,7 +64,7 @@ const CITY_ECO_TASKS = {
 export default function EcoDiscoveryPage() {
   const [selectedCityId, setSelectedCityId] = useState('d1');
   const [activeReelIndex, setActiveReelIndex] = useState(0);
-  const [playerMode, setPlayerMode] = useState('native'); // 'native' | 'instagram'
+  const [playerMode, setPlayerMode] = useState('instagram'); // Default to 'instagram' so user immediately sees the Insta Reel on web
   const [isPlaying, setIsPlaying] = useState(true);
   const [isMuted, setIsMuted] = useState(true);
   const [userScore, setUserScore] = useState(650);
