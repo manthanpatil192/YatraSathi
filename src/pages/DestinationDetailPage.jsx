@@ -14,20 +14,10 @@ export default function DestinationDetailPage() {
   const [activeTab, setActiveTab] = useState('overview');
 
   useEffect(() => {
-    let isMounted = true;
-    setLoading(true);
-    // Instant local sync
+    // Instant bulletproof local sync — authoritative 6+ points dataset
     const local = fallbackDestinations.find(d => String(d.id) === String(id));
     setDestination(local);
     setLoading(false);
-
-    // Optional API sync
-    apiService.getDestinationById(id).then(data => {
-      if (isMounted && data) {
-        setDestination(data);
-      }
-    });
-    return () => { isMounted = false; };
   }, [id]);
 
   const targetDestination = destination || fallbackDestinations.find(d => String(d.id) === String(id));
