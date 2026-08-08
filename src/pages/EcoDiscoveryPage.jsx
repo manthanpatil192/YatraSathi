@@ -71,7 +71,7 @@ export default function EcoDiscoveryPage() {
   const [uploadedSuccess, setUploadedSuccess] = useState(false);
   const [completedTaskIds, setCompletedTaskIds] = useState(new Set(['goa1', 'goa2']));
 
-  // Prior Dual-Mode Video Reels Dataset
+  // Single Featured Video Reel Dataset
   const ecoReels = [
     {
       id: 1,
@@ -83,28 +83,6 @@ export default function EcoDiscoveryPage() {
       poster: 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=800&q=80',
       tag: '🏖️ THIS IS GOA',
       desc: 'Exploring quiet ocean cliffs, golden coastlines, and tropical vistas in South Goa.'
-    },
-    {
-      id: 2,
-      title: 'Himalayan Snow Trek & High Mountain Peak',
-      author: '@mohd.sinann',
-      likes: '42.1K',
-      embedUrl: 'https://www.instagram.com/reel/DXZT0PhE17M/embed/',
-      videoFallback: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
-      poster: 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=800&q=80',
-      tag: '🏔️ Mountain Escape',
-      desc: 'Panoramic snow mountain pass views and high-altitude Himalayan valley trails.'
-    },
-    {
-      id: 3,
-      title: 'Heritage & Offbeat Architectural Wonders',
-      author: '@heritage_explorer',
-      likes: '29.7K',
-      embedUrl: 'https://www.instagram.com/reel/DWBtZmrEYfj/embed/',
-      videoFallback: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
-      poster: 'https://images.unsplash.com/photo-1598091383021-15ddea10925d?auto=format&fit=crop&w=800&q=80',
-      tag: '🏰 Historic India',
-      desc: 'Discovering ancient temple stone carvings and sacred royal monuments.'
     }
   ];
 
@@ -259,20 +237,17 @@ export default function EcoDiscoveryPage() {
               </div>
             </div>
 
-            {/* Reel Selector Buttons */}
-            <div className="grid grid-cols-3 gap-2 pt-2">
-              {ecoReels.map((reel, idx) => (
-                <button
-                  key={reel.id}
-                  onClick={() => setActiveReelIndex(idx)}
-                  className={`p-2.5 rounded-xl border text-left text-[10px] font-bold transition-all flex items-center gap-1 ${
-                    activeReelIndex === idx ? 'bg-amber-400 text-slate-950 border-amber-400 font-black' : 'bg-slate-950 text-slate-300 border-slate-800'
-                  }`}
-                >
+            {/* Featured Reel Author Pill */}
+            <div className="pt-2">
+              <div className="p-3 rounded-2xl bg-amber-400/10 border border-amber-400/30 flex items-center justify-between text-xs text-amber-300 font-extrabold">
+                <span className="flex items-center gap-2">
                   <span>🎥</span>
-                  <span className="truncate">Reel {idx + 1}: {reel.author}</span>
-                </button>
-              ))}
+                  <span>Featured Reel: {ecoReels[0].title}</span>
+                </span>
+                <span className="px-2.5 py-1 bg-amber-400 text-slate-950 rounded-xl text-[10px] font-black uppercase">
+                  {ecoReels[0].author}
+                </span>
+              </div>
             </div>
           </div>
 
