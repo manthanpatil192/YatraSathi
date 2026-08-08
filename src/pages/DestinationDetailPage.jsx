@@ -155,15 +155,17 @@ export default function DestinationDetailPage() {
           {/* Tab 1: Overview */}
           {activeTab === 'overview' && (
             <div className="space-y-6 text-slate-200 text-sm leading-relaxed">
-              <p className="text-base leading-relaxed font-medium">{destination.description}</p>
+              <p className="text-base leading-relaxed font-medium bg-slate-950/80 p-5 rounded-2xl border border-slate-800">{destination.description}</p>
 
               <div className="space-y-3">
-                <h3 className="font-heading font-extrabold text-lg text-white">Iconic Attractions & Landmarks</h3>
+                <h3 className="font-heading font-extrabold text-lg text-amber-300">Iconic Attractions & Key Highlights</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {destination.travelDestinationsInCity?.map((place, idx) => (
+                  {(destination.travelDestinationsInCity || destination.highlights || []).map((place, idx) => (
                     <div key={idx} className="p-4 bg-slate-950 rounded-2xl border border-slate-800 space-y-1">
-                      <h4 className="font-extrabold text-amber-300 text-sm">📍 {place.name}</h4>
-                      <p className="text-xs text-slate-300">{place.desc}</p>
+                      <h4 className="font-extrabold text-amber-300 text-sm flex items-center gap-1.5">
+                        <span>📍</span> {typeof place === 'string' ? place : place.name}
+                      </h4>
+                      {place.desc && <p className="text-xs text-slate-300">{place.desc}</p>}
                     </div>
                   ))}
                 </div>
@@ -175,7 +177,9 @@ export default function DestinationDetailPage() {
           {activeTab === 'history' && (
             <div className="space-y-4 text-slate-200 text-sm leading-relaxed">
               <h3 className="font-heading font-extrabold text-xl text-amber-300">Historical Origin & Heritage Legacy</h3>
-              <p className="whitespace-pre-line leading-relaxed font-medium">{destination.fullHistory || destination.description}</p>
+              <div className="p-6 bg-slate-950 rounded-2xl border border-slate-800 leading-relaxed font-medium space-y-3">
+                <p className="whitespace-pre-line text-sm text-slate-200 leading-relaxed">{destination.fullHistory || destination.description}</p>
+              </div>
             </div>
           )}
 
@@ -183,17 +187,21 @@ export default function DestinationDetailPage() {
           {activeTab === 'food' && (
             <div className="space-y-6">
               <div className="space-y-2">
-                <h3 className="font-heading font-extrabold text-xl text-amber-300">Cultural Identity & Traditions</h3>
-                <p className="text-sm text-slate-200 leading-relaxed font-medium">{destination.culturalInfo}</p>
+                <h3 className="font-heading font-extrabold text-xl text-amber-300">Cultural Identity & Local Traditions</h3>
+                <p className="text-sm text-slate-200 leading-relaxed font-medium bg-slate-950 p-5 rounded-2xl border border-slate-800">
+                  {destination.culturalInfo || `${destination.name} represents rich regional traditions, iconic folk music, local festivals, and heritage craftsmanship.`}
+                </p>
               </div>
 
               <div className="space-y-3">
                 <h3 className="font-heading font-extrabold text-lg text-white">Famous Regional Culinary Specialties</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {destination.foodSpecialties?.map((food, idx) => (
+                  {(destination.foodSpecialties || []).map((food, idx) => (
                     <div key={idx} className="p-4 bg-slate-950 rounded-2xl border border-slate-800 space-y-1">
-                      <h4 className="font-extrabold text-teal-300 text-sm">🍲 {food.name}</h4>
-                      <p className="text-xs text-slate-300 leading-relaxed">{food.desc}</p>
+                      <h4 className="font-extrabold text-teal-300 text-sm flex items-center gap-1.5">
+                        <span>🍲</span> {typeof food === 'string' ? food : food.name}
+                      </h4>
+                      {food.desc && <p className="text-xs text-slate-300 leading-relaxed">{food.desc}</p>}
                     </div>
                   ))}
                 </div>
@@ -205,8 +213,8 @@ export default function DestinationDetailPage() {
           {activeTab === 'reach' && (
             <div className="space-y-4 text-slate-200 text-sm leading-relaxed">
               <h3 className="font-heading font-extrabold text-xl text-amber-300">Transportation & Step-by-Step Transit Guide</h3>
-              <div className="p-5 bg-slate-950 rounded-2xl border border-slate-800 font-mono text-xs whitespace-pre-line leading-relaxed text-slate-200">
-                {destination.howToReachDetails || destination.gettingThere}
+              <div className="p-6 bg-slate-950 rounded-2xl border border-slate-800 font-mono text-xs whitespace-pre-line leading-relaxed text-slate-200 shadow-inner">
+                {destination.howToReachDetails || destination.gettingThere || `Fly into nearest airport or take direct passenger trains to ${destination.name}. Local cabs, auto-rickshaws, and public transit connect all major attractions.`}
               </div>
             </div>
           )}
@@ -217,9 +225,12 @@ export default function DestinationDetailPage() {
               <div className="space-y-3">
                 <h3 className="font-heading font-extrabold text-lg text-amber-300">Hidden Secret Offbeat Spots</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {destination.hiddenGems?.map((gem, idx) => (
-                    <div key={idx} className="p-3.5 bg-slate-950 border border-slate-800 rounded-2xl text-xs font-extrabold text-amber-200 flex items-center gap-2">
-                      <span>💎</span> {gem}
+                  {(destination.hiddenGems || ['Local Secret Viewpoint', 'Artisan Village Walk', 'Sunset Heritage Sanctuary']).map((gem, idx) => (
+                    <div key={idx} className="p-4 bg-slate-950 border border-slate-800 rounded-2xl text-xs text-amber-200 space-y-1">
+                      <div className="font-extrabold flex items-center gap-2">
+                        <span>💎</span> <span>{typeof gem === 'string' ? gem : gem.name || gem.title}</span>
+                      </div>
+                      {typeof gem === 'object' && gem.desc && <p className="text-slate-300 text-[11px] font-normal">{gem.desc}</p>}
                     </div>
                   ))}
                 </div>
@@ -227,10 +238,15 @@ export default function DestinationDetailPage() {
 
               <div className="space-y-3">
                 <h3 className="font-heading font-extrabold text-lg text-white">Tourist Safety Rules & Advisory</h3>
-                <div className="space-y-2">
-                  {destination.safetyTips?.map((tip, idx) => (
-                    <div key={idx} className="p-3.5 bg-slate-950 rounded-xl border border-slate-800 flex items-center gap-2.5 text-xs text-slate-300 font-medium">
-                      <span className="text-emerald-400">🛡️</span> {tip}
+                <div className="space-y-2.5">
+                  {(destination.safetyTips || [
+                    'Keep emergency contacts saved: Tourist Helpline (1363) & Police (100).',
+                    'Use registered taxis and auto-rickshaws with metered fares.',
+                    'Keep digital copies of IDs and travel vouchers.'
+                  ]).map((tip, idx) => (
+                    <div key={idx} className="p-4 bg-slate-950 rounded-2xl border border-slate-800 flex items-center gap-3 text-xs text-slate-200 font-bold">
+                      <span className="text-emerald-400 text-sm">🛡️</span>
+                      <span>{typeof tip === 'string' ? tip : tip.title || tip.text}</span>
                     </div>
                   ))}
                 </div>

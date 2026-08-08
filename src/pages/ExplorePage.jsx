@@ -8,6 +8,8 @@ export default function ExplorePage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [sortBy, setSortBy] = useState('rating');
+  const [viewMode, setViewMode] = useState('grid'); // 'grid' | 'map'
+  const [selectedMapDest, setSelectedMapDest] = useState(destinations[0]);
 
   const filteredDestinations = useMemo(() => {
     return destinations
@@ -27,8 +29,11 @@ export default function ExplorePage() {
   }, [searchTerm, selectedCategory, sortBy]);
 
   return (
-    <div className="min-h-screen pt-40 sm:pt-44 md:pt-48 pb-32 text-white relative z-10 animate-fade-in">
+    <div className="min-h-screen pb-32 text-white relative z-10 animate-fade-in">
       
+      {/* Bulletproof Top Spacer to prevent header text cut-off under navbar */}
+      <div className="h-28 sm:h-32 md:h-36"></div>
+
       {/* Full Viewport Screen Background Photo */}
       <img 
         src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1600&q=80" 
@@ -39,17 +44,41 @@ export default function ExplorePage() {
       <div className="w-full max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 space-y-8 relative z-10">
         
         {/* Explore Hero Banner (Spacious Top Clearance to prevent text cut-off) */}
-        <div className="bg-slate-900/90 backdrop-blur-2xl rounded-3xl p-6 sm:p-10 border border-slate-700/80 shadow-2xl space-y-6 mt-4 sm:mt-6">
-          <div className="space-y-3">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/30 text-xs font-bold uppercase tracking-wider">
-              <span>🏰 ALL-INDIA EXPLORE HUB</span>
+        <div className="bg-slate-900/90 backdrop-blur-2xl rounded-3xl p-6 sm:p-10 border border-slate-700/80 shadow-2xl space-y-6 mt-2">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+            <div className="space-y-2">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/30 text-xs font-bold uppercase tracking-wider">
+                <span>🏰 ALL-INDIA EXPLORE HUB</span>
+              </div>
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-black text-white tracking-tight leading-normal">
+                EXPLORE THE BEAUTY OF INDIA
+              </h1>
+              <p className="text-slate-300 text-xs sm:text-sm font-medium max-w-2xl leading-relaxed">
+                Browse 20 iconic destinations with real-time budget, safety ratings, 1.5-minute web audio guides, and interactive map pins.
+              </p>
             </div>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-black text-white tracking-tight leading-normal">
-              EXPLORE THE BEAUTY OF INDIA
-            </h1>
-            <p className="text-slate-300 text-xs sm:text-sm font-medium max-w-2xl leading-relaxed">
-              Browse 20 iconic destinations with real-time budget, safety ratings, 1.5-minute web audio guides, and travel highlights.
-            </p>
+
+            {/* View Mode Toggle Buttons */}
+            <div className="flex items-center gap-2 shrink-0 bg-slate-950 p-1.5 rounded-2xl border border-slate-800">
+              <button
+                onClick={() => setViewMode('grid')}
+                className={`px-4 py-2.5 rounded-xl text-xs font-heading font-extrabold flex items-center gap-2 transition-all ${
+                  viewMode === 'grid' ? 'bg-amber-400 text-slate-950 shadow-md font-black' : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <FiGrid />
+                <span>Grid View</span>
+              </button>
+              <button
+                onClick={() => setViewMode('map')}
+                className={`px-4 py-2.5 rounded-xl text-xs font-heading font-extrabold flex items-center gap-2 transition-all ${
+                  viewMode === 'map' ? 'bg-teal-400 text-slate-950 shadow-md font-black' : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <FiMap />
+                <span>Interactive Map View</span>
+              </button>
+            </div>
           </div>
 
           {/* Category Quick Badges */}
@@ -115,6 +144,118 @@ export default function ExplorePage() {
 
           </div>
         </div>
+
+        {/* INTERACTIVE ALL-INDIA MAP VIEW */}
+        {viewMode === 'map' && (
+          <div className="bg-slate-900/90 backdrop-blur-2xl rounded-3xl p-6 sm:p-8 border border-slate-700/80 shadow-2xl space-y-6">
+            <div className="flex justify-between items-center border-b border-slate-800 pb-4">
+              <div>
+                <h3 className="text-xl font-heading font-extrabold text-white flex items-center gap-2">
+                  <FiMap className="text-teal-400" /> Interactive All-India Destination Pin Map
+                </h3>
+                <p className="text-xs text-slate-400">Click any city pin marker to preview destination stats and audio guide</p>
+              </div>
+
+              <span className="px-3.5 py-1 bg-teal-400/20 text-teal-300 font-mono text-xs font-bold rounded-full border border-teal-400/30">
+                {filteredDestinations.length} Cities Plotted
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+              
+              {/* Interactive Stylized Pin Grid Map (Left 7 Cols) */}
+              <div className="lg:col-span-7 bg-slate-950 p-6 rounded-3xl border border-slate-800 shadow-inner relative min-h-[480px] flex flex-col justify-between space-y-6">
+                <div className="flex items-center justify-between text-xs font-bold text-slate-400 border-b border-slate-900 pb-3">
+                  <span>📍 Click Pin to Select City</span>
+                  <span>Coordinates Grid (8°N - 35°N)</span>
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  {filteredDestinations.map((dest) => {
+                    const isSelected = selectedMapDest?.id === dest.id;
+                    return (
+                      <button
+                        key={dest.id}
+                        onClick={() => setSelectedMapDest(dest)}
+                        className={`p-3.5 rounded-2xl border text-left transition-all flex flex-col justify-between gap-2 ${
+                          isSelected
+                            ? 'bg-gradient-to-br from-amber-400/20 to-teal-400/20 border-amber-400 shadow-lg scale-105'
+                            : 'bg-slate-900/80 border-slate-800 hover:border-slate-700 text-slate-300'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="text-base">📍</span>
+                          <span className="text-[10px] font-black text-amber-300 bg-slate-950 px-2 py-0.5 rounded-md border border-slate-800">
+                            ⭐ {dest.rating}
+                          </span>
+                        </div>
+
+                        <div>
+                          <h4 className="font-heading font-extrabold text-xs text-white truncate">{dest.name}</h4>
+                          <span className="text-[10px] font-medium text-slate-400 block">{dest.state}</span>
+                        </div>
+
+                        <div className="flex items-center justify-between text-[10px] font-bold border-t border-slate-800/80 pt-1.5">
+                          <span className="text-teal-300">₹{dest.averageCostPerDay}/day</span>
+                          <span className="text-emerald-400">{dest.safetyRating}</span>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Selected Destination Preview Card (Right 5 Cols) */}
+              <div className="lg:col-span-5 bg-slate-950 p-6 rounded-3xl border border-slate-800 shadow-2xl space-y-5">
+                {selectedMapDest && (
+                  <>
+                    <div className="h-48 relative rounded-2xl overflow-hidden bg-slate-900">
+                      <img
+                        src={selectedMapDest.photo || selectedMapDest.image}
+                        alt={selectedMapDest.name}
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute top-3 right-3 bg-slate-950/85 backdrop-blur px-3 py-1 rounded-full text-xs font-black text-amber-300 border border-amber-400/30">
+                        ⭐ {selectedMapDest.rating} Rating
+                      </div>
+                      <div className="absolute bottom-3 left-3 bg-slate-950/85 backdrop-blur px-3 py-1 rounded-full text-[10px] font-black text-teal-300 uppercase border border-teal-400/30">
+                        {selectedMapDest.category}
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <h3 className="text-2xl font-heading font-black text-white">{selectedMapDest.name}</h3>
+                      <p className="text-xs font-bold text-coral-400 flex items-center gap-1">
+                        <FiMapPin /> {selectedMapDest.state}, India
+                      </p>
+                      <p className="text-xs text-slate-300 leading-relaxed font-medium">{selectedMapDest.description}</p>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-3 pt-2">
+                      <div className="p-3 bg-slate-900 rounded-xl border border-slate-800 space-y-0.5">
+                        <span className="text-[10px] font-black text-slate-400 block">AVG DAILY COST</span>
+                        <span className="text-base font-black text-amber-300 block">₹{selectedMapDest.averageCostPerDay}/day</span>
+                      </div>
+                      <div className="p-3 bg-slate-900 rounded-xl border border-slate-800 space-y-0.5">
+                        <span className="text-[10px] font-black text-slate-400 block">SAFETY RATING</span>
+                        <span className="text-base font-black text-emerald-400 block">{selectedMapDest.safetyRating}</span>
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={() => navigate(`/destination/${selectedMapDest.id}`)}
+                      className="btn-bounce w-full py-3.5 rounded-2xl bg-gradient-to-r from-amber-400 to-teal-400 text-slate-950 font-heading font-black text-xs uppercase tracking-wider shadow-lg flex items-center justify-center gap-2"
+                    >
+                      <span>View Full Destination Guide & Audio Narration</span>
+                      <FiCompass />
+                    </button>
+                  </>
+                )}
+              </div>
+
+            </div>
+          </div>
+        )}
 
         {/* Destination Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">

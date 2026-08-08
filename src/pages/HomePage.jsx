@@ -19,8 +19,11 @@ export default function HomePage() {
   ];
 
   return (
-    <div className="min-h-screen pt-32 sm:pt-36 pb-32 text-white relative z-10 animate-fade-in">
+    <div className="min-h-screen pb-32 text-white relative z-10 animate-fade-in">
       
+      {/* Bulletproof Top Spacer to prevent header text cut-off */}
+      <div className="h-28 sm:h-32 md:h-36"></div>
+
       {/* Full Viewport Screen Background Photo (Covering entire Home Landing Page with perfect transparency) */}
       <img 
         src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&q=80" 
@@ -31,7 +34,7 @@ export default function HomePage() {
       <div className="w-full max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 space-y-12 relative z-10">
         
         {/* Welcome Header (Fixed Top Padding Alignment for zero navbar cutoff) */}
-        <section className="bg-slate-900/85 backdrop-blur-2xl p-8 sm:p-10 rounded-3xl border border-slate-700/80 shadow-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+        <section className="bg-slate-900/85 backdrop-blur-2xl p-8 sm:p-10 rounded-3xl border border-slate-700/80 shadow-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mt-2">
           <div className="space-y-2">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-amber-400/20 text-amber-300 border border-amber-400/30 rounded-full text-xs font-black uppercase tracking-wider">
               <span>✨ Welcome to YatraSathi</span>
