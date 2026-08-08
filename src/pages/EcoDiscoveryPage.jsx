@@ -64,6 +64,9 @@ const CITY_ECO_TASKS = {
 export default function EcoDiscoveryPage() {
   const [selectedCityId, setSelectedCityId] = useState('d1');
   const [activeReelIndex, setActiveReelIndex] = useState(0);
+  const [playerMode, setPlayerMode] = useState('native'); // 'native' or 'instagram'
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [isMuted, setIsMuted] = useState(true);
   const [userScore, setUserScore] = useState(650);
   const [co2SavedKg, setCo2SavedKg] = useState(180);
   const [plasticSavedCount, setPlasticSavedCount] = useState(35);
@@ -71,7 +74,7 @@ export default function EcoDiscoveryPage() {
   const [uploadedSuccess, setUploadedSuccess] = useState(false);
   const [completedTaskIds, setCompletedTaskIds] = useState(new Set(['goa1', 'goa2']));
 
-  // Working Native Instagram Reels Embed
+  // Working Native Instagram Reels & Immersive Video Player
   const ecoReels = [
     {
       id: 1,
@@ -79,6 +82,7 @@ export default function EcoDiscoveryPage() {
       author: '@goa_stories',
       likes: '45.2K',
       embedUrl: 'https://www.instagram.com/reel/DFhrG2rJoVm/embed/',
+      videoFallback: 'https://assets.mixkit.co/videos/preview/mixkit-waterfall-in-forest-2213-large.mp4',
       tag: '🏖️ Goa Stories',
       desc: 'Beautiful hidden lagoons, waterfalls, and tropical beaches of Goa.'
     },
@@ -88,6 +92,7 @@ export default function EcoDiscoveryPage() {
       author: '@travel_india',
       likes: '32.1K',
       embedUrl: 'https://www.instagram.com/reel/DXZT0PhE17M/embed/',
+      videoFallback: 'https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-a-mountain-valley-41537-large.mp4',
       tag: '🗺️ Scenic Route',
       desc: 'Breathtaking driving passes and scenic viewpoints across India.'
     },
@@ -97,6 +102,7 @@ export default function EcoDiscoveryPage() {
       author: '@heritage_explorer',
       likes: '29.7K',
       embedUrl: 'https://www.instagram.com/reel/DWBtZmrEYfj/embed/',
+      videoFallback: 'https://assets.mixkit.co/videos/preview/mixkit-sun-setting-over-the-ocean-1128-large.mp4',
       tag: '🏰 Historic India',
       desc: 'Discovering ancient architectural wonders and sacred temples.'
     }
@@ -219,31 +225,94 @@ export default function EcoDiscoveryPage() {
           
           {/* INSTAGRAM REELS EMBED PLAYER (Left 6 Cols) */}
           <div className="lg:col-span-6 bg-slate-900/90 backdrop-blur-xl p-6 rounded-3xl border border-slate-700/80 shadow-xl space-y-4 flex flex-col justify-between">
-            <div className="flex justify-between items-center border-b border-slate-800 pb-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
               <h2 className="font-heading font-extrabold text-lg text-white flex items-center gap-2">
-                <FiInstagram className="text-rose-400" /> Instagram Travel Reels
+                <FiInstagram className="text-rose-400" /> Travel Video Reels
               </h2>
-              <button
-                onClick={() => setUploadModalOpen(true)}
-                className="px-3 py-1.5 bg-amber-400 hover:bg-amber-300 text-slate-950 rounded-xl font-bold text-xs flex items-center gap-1 shadow-md transition-colors"
-              >
-                <FiUploadCloud /> Upload Reel (+150 Pts)
-              </button>
+              
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setPlayerMode('native')}
+                  className={`px-3 py-1.5 rounded-xl text-[10px] font-black uppercase transition-all ${
+                    playerMode === 'native' ? 'bg-teal-400 text-slate-950 shadow-md' : 'bg-slate-950 text-slate-400 border border-slate-800'
+                  }`}
+                >
+                  🎥 Native Full View
+                </button>
+                <button
+                  onClick={() => setPlayerMode('instagram')}
+                  className={`px-3 py-1.5 rounded-xl text-[10px] font-black uppercase transition-all ${
+                    playerMode === 'instagram' ? 'bg-amber-400 text-slate-950 shadow-md' : 'bg-slate-950 text-slate-400 border border-slate-800'
+                  }`}
+                >
+                  📸 Instagram Post
+                </button>
+              </div>
             </div>
 
-            {/* WORKING OFFICIAL INSTAGRAM REELS EMBED */}
+            {/* IMMERSIVE SMARTPHONE PLAYER CONTAINER */}
             <div className="w-full flex justify-center py-2">
-              <div className="relative rounded-3xl overflow-hidden w-full max-w-[340px] h-[580px] border border-slate-800 shadow-2xl bg-slate-950">
-                <iframe 
-                  key={ecoReels[activeReelIndex].id}
-                  src={ecoReels[activeReelIndex].embedUrl}
-                  className="w-full h-full border-0"
-                  allowtransparency="true"
-                  allow="encrypted-media"
-                  scrolling="no"
-                  frameBorder="0"
-                  title={ecoReels[activeReelIndex].title}
-                ></iframe>
+              <div className="relative rounded-[32px] overflow-hidden w-full max-w-[328px] h-[580px] border border-slate-800 shadow-2xl bg-black flex items-center justify-center">
+                
+                {playerMode === 'native' ? (
+                  // Immersive Native Player (Centered, no borders, no bars, perfect 9:16 fit)
+                  <div className="relative w-full h-full">
+                    <video 
+                      key={ecoReels[activeReelIndex].id}
+                      src={ecoReels[activeReelIndex].videoFallback} 
+                      autoPlay={isPlaying}
+                      loop
+                      muted={isMuted}
+                      playsInline
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent pointer-events-none"></div>
+
+                    {/* Media Control Overlays */}
+                    <div className="absolute top-4 right-4 flex items-center gap-2 z-10">
+                      <button
+                        onClick={() => setIsMuted(!isMuted)}
+                        className="p-2.5 bg-slate-950/80 hover:bg-slate-900 text-amber-300 rounded-full border border-slate-700 backdrop-blur"
+                      >
+                        {isMuted ? <FiVolumeX size={15} /> : <FiVolume2 size={15} />}
+                      </button>
+
+                      <button
+                        onClick={() => setIsPlaying(!isPlaying)}
+                        className="p-2.5 bg-slate-950/80 hover:bg-slate-900 text-white rounded-full border border-slate-700 backdrop-blur"
+                      >
+                        {isPlaying ? <FiPause size={15} /> : <FiPlay size={15} />}
+                      </button>
+                    </div>
+
+                    {/* Video Meta Info */}
+                    <div className="absolute top-4 left-4 bg-slate-950/85 backdrop-blur px-3.5 py-1 rounded-full text-[10px] font-black text-emerald-300 border border-emerald-400/30">
+                      {ecoReels[activeReelIndex].tag}
+                    </div>
+
+                    <div className="absolute bottom-4 left-4 right-4 space-y-1.5 z-10">
+                      <div className="flex items-center justify-between text-xs text-white">
+                        <span className="font-extrabold">{ecoReels[activeReelIndex].title}</span>
+                        <span className="text-rose-400 font-bold flex items-center gap-1">❤️ {ecoReels[activeReelIndex].likes}</span>
+                      </div>
+                      <p className="text-[11px] text-slate-300 leading-normal">{ecoReels[activeReelIndex].desc}</p>
+                      <span className="text-[10px] text-amber-300 font-bold block">{ecoReels[activeReelIndex].author}</span>
+                    </div>
+                  </div>
+                ) : (
+                  // Official Instagram Post Embed Card
+                  <iframe 
+                    key={ecoReels[activeReelIndex].id}
+                    src={ecoReels[activeReelIndex].embedUrl}
+                    className="w-full h-full border-0"
+                    allowtransparency="true"
+                    allow="encrypted-media"
+                    scrolling="no"
+                    frameBorder="0"
+                    title={ecoReels[activeReelIndex].title}
+                  ></iframe>
+                )}
+
               </div>
             </div>
 
